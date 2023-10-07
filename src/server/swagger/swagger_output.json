@@ -1,0 +1,421 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Calendar API",
+    "description": "Documentation of the calendar APIs",
+    "version": "1.0.0"
+  },
+  "host": "localhost:9010",
+  "basePath": "/app/",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "apiKeyAuth": {
+      "type": "apiKey",
+      "name": "key",
+      "in": "query"
+    }
+  },
+  "paths": {
+    "/auth/signin": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to login",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": ""
+                },
+                "password": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "required": [
+                "email",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "iss": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "aud": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "auth_time": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "user_id": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "sub": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "iat": {
+                      "type": "number",
+                      "example": 1648474008
+                    },
+                    "exp": {
+                      "type": "number",
+                      "example": 1648477608
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "email_verified": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "firebase": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "object",
+                          "properties": {
+                            "email": {
+                              "type": "array",
+                              "example": [
+                                ""
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "sign_in_provider": {
+                          "type": "string",
+                          "example": "password"
+                        }
+                      }
+                    },
+                    "uid": {
+                      "type": "string",
+                      "example": ""
+                    }
+                  }
+                },
+                "refreshToken": {
+                  "type": "string",
+                  "example": ""
+                },
+                "token": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to signup",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": ""
+                },
+                "password": {
+                  "type": "string",
+                  "example": ""
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "channels": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "remarks": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "phone_number": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "internal": {
+                      "type": "object",
+                      "properties": {
+                        "last_updated_at": {
+                          "type": "object",
+                          "properties": {
+                            "_seconds": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "function"
+                                },
+                                "example": {
+                                  "type": "number",
+                                  "example": 0
+                                }
+                              },
+                              "required": [
+                                "example"
+                              ]
+                            },
+                            "_nanoseconds": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "function"
+                                },
+                                "example": {
+                                  "type": "number",
+                                  "example": 0
+                                }
+                              },
+                              "required": [
+                                "example"
+                              ]
+                            }
+                          }
+                        },
+                        "notification_tokens": {
+                          "type": "array",
+                          "example": [],
+                          "items": {}
+                        },
+                        "created_at": {
+                          "type": "object",
+                          "properties": {
+                            "_seconds": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "function"
+                                },
+                                "example": {
+                                  "type": "number",
+                                  "example": 0
+                                }
+                              },
+                              "required": [
+                                "example"
+                              ]
+                            },
+                            "_nanoseconds": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "function"
+                                },
+                                "example": {
+                                  "type": "number",
+                                  "example": 0
+                                }
+                              },
+                              "required": [
+                                "example"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": ""
+                    }
+                  }
+                }
+              },
+              "required": [
+                "email",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "iss": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "aud": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "auth_time": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "user_id": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "sub": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "iat": {
+                      "type": "number",
+                      "example": 1648474008
+                    },
+                    "exp": {
+                      "type": "number",
+                      "example": 1648477608
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "email_verified": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "firebase": {
+                      "type": "object",
+                      "properties": {
+                        "identities": {
+                          "type": "object",
+                          "properties": {
+                            "email": {
+                              "type": "array",
+                              "example": [
+                                ""
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "sign_in_provider": {
+                          "type": "string",
+                          "example": "password"
+                        }
+                      }
+                    },
+                    "uid": {
+                      "type": "string",
+                      "example": ""
+                    }
+                  }
+                },
+                "refreshToken": {
+                  "type": "string",
+                  "example": ""
+                },
+                "token": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh-token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to refresh access token",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refreshToken": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "required": [
+                "refreshToken"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refreshToken": {
+                  "type": "string",
+                  "example": ""
+                },
+                "token": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "SuccessResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        }
+      }
+    }
+  }
+}
