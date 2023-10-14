@@ -1,6 +1,6 @@
 import { User } from '../Schema';
 
 export interface UserDao {
-    addUser(user: Partial<User>): Promise<Partial<User>>;
-    getUserByEmail(enail: string): Promise<Partial<User> | null>;
+    addUser(user: Partial<User>): Promise<User>;
+    getUserByEmail(email: string): Promise<User | null>;
 }

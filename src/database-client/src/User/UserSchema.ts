@@ -10,7 +10,7 @@ const internalSchema = new Schema(
   { _id: false }
 );
 
-export const schema = new mongoose.Schema(
+export const schema = new Schema(
   {
     _id: {
       type: String,

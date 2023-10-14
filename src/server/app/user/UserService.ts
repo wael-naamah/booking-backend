@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const jwt_secret_key = getEnv().jwt_secret_key;
 const jwt_refresh_secret_key = getEnv().jwt_refresh_secret_key;
 
-export class ServicesService {
+export class AuthService {
   constructor(private userDao: UserDaoMongo) {}
 
   async signupUser(user: User) {
@@ -67,6 +67,34 @@ export class ServicesService {
   async verifyIdToken(token: string) {
     try {
       const decodedToken = jwt.verify(token, jwt_secret_key);
+
+      return decodedToken;
+    } catch (error) {
+      throw new ClientError("Unauthorized", 401);
+    }
+  }
+
+  async refreshToken(refreshToken: string){ 
+    try {
+      const decodedToken = jwt.verify(refreshToken, jwt_refresh_secret_key);
+
+      if(decodedToken){
+        const token = jwt.sign({ userId: decodedToken.userId }, jwt_secret_key, {
+          expiresIn: "8h",
+        });
+        const refreshToken = jwt.sign(
+          { userId: decodedToken.userId },
+          jwt_refresh_secret_key,
+          { expiresIn: "7d" }
+        );
+
+        const newTokens = {
+          token,
+          refreshToken,
+        };
+
+        return newTokens;
+      }
 
       return decodedToken;
     } catch (error) {

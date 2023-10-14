@@ -10,14 +10,14 @@ export class UserDaoMongo implements UserDao {
     this.model = mongo.model<Document<User>>("User", schema);
   }
 
-  async addUser(user: Partial<User>): Promise<Partial<User>> {
+  async addUser(user: Partial<User>): Promise<User> {
     const newUser = new this.model(user);
     return newUser.save().then((res) => {
-      return res as unknown as Partial<User>;
+      return res as unknown as User;
     });
   }
 
-  async getUserByEmail(email: string): Promise<Partial<User> | null> {
+  async getUserByEmail(email: string): Promise<User | null> {
     return this.model.findOne({ email })
   }
 }
