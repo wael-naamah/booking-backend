@@ -4,7 +4,7 @@ import { json, urlencoded } from "body-parser";
 import { rateLimiterUsingThirdParty } from "./middlewares/rateLimiter";
 
 import { configure as authApi } from "./user/resource";
-import { configure as serviceApi } from "./services/resource";
+import { configure as serviceApi } from "./category/resource";
 
 import helmet from "helmet";
 
