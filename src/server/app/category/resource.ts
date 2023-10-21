@@ -9,7 +9,7 @@ export const configure = (app: express.Router) => {
   app.post(
     "/categories",
     injectService,
-    ValidateSchema.prepare(schemas.addCategoriesSchema),
+    ValidateSchema.prepare(schemas.addCategorySchema),
     CategoriesControllers.addCategory
   );
   app.get(
@@ -23,7 +23,7 @@ export const configure = (app: express.Router) => {
   app.put(
     "/categories/:categoryId",
     injectService,
-    ValidateSchema.prepare(schemas.updateCategoriesSchema),
+    ValidateSchema.prepare(schemas.updateCategorySchema),
     CategoriesControllers.updateCategory
   );
   app.delete(

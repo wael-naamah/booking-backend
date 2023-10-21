@@ -4,7 +4,8 @@ import { json, urlencoded } from "body-parser";
 import { rateLimiterUsingThirdParty } from "./middlewares/rateLimiter";
 
 import { configure as authApi } from "./user/resource";
-import { configure as serviceApi } from "./category/resource";
+import { configure as categoryApi } from "./category/resource";
+import { configure as appointmentApi } from "./appointment/resource";
 
 import helmet from "helmet";
 
@@ -44,7 +45,8 @@ app.get("/", (req, res) => {
 const appScoped = express.Router();
 
 authApi(appScoped);
-serviceApi(appScoped);
+categoryApi(appScoped);
+appointmentApi(appScoped);
 
 app.use(`/`, appScoped);
 

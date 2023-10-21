@@ -1,8 +1,15 @@
-export type Sort = "sorted" | "unsorted";
-export type DisplayStatus = "show" | "hide";
+export enum SortDirection {
+  DESC = "desc",
+  ASC = "asc",
+}
+
+export enum DisplayStatus {
+  SHOW = "show",
+  HIDE = "hide",
+}
 
 export interface CategorySettings {
-  sorting_order: Sort;
+  sorting_order?: SortDirection;
   show_performance_in_summary: boolean;
   show_service_in_email: boolean;
   info_display_type: string;
@@ -10,6 +17,7 @@ export interface CategorySettings {
 }
 
 export interface Service {
+  _id?: string;
   name: string;
   description: string;
   duration: number;

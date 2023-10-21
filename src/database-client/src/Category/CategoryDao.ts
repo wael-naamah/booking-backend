@@ -1,4 +1,4 @@
-import { Category } from "../Schema";
+import { Category, Service } from "../Schema";
 
 export interface CategoryDao {
   getCategories(
@@ -7,8 +7,11 @@ export interface CategoryDao {
     search?: string
   ): Promise<Category[]>;
   getCategoryById(id: string): Promise<Category | null>;
+  getServiceByCategoryIdAndServiceId(
+    categoryId: string,
+    serviceId: string
+  ): Promise<Service | null>;
   addCategory(category: Partial<Category>): Promise<Category>;
   updateCategory(id: string, newCategory: Partial<Category>): Promise<Category>;
   deleteCategory(id: string): Promise<Category | null>;
-
 }

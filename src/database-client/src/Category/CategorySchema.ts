@@ -4,9 +4,8 @@ const settingsSchema = new Schema(
   {
     sorting_order: {
       type: String,
-      required: true,
-      enum: ['sorted', 'unsorted'],
-      default: 'show',
+      required: false,
+      enum: ['asc', 'desc'],
     },
     show_performance_in_summary: Boolean,
     show_service_in_email: Boolean,
@@ -16,7 +15,7 @@ const settingsSchema = new Schema(
   { _id: false }
 );
 
-const servicesSchema = new Schema(
+const serviceSchema = new Schema(
   {
     name: {
       type: String,
@@ -38,8 +37,7 @@ const servicesSchema = new Schema(
       type: Number,
       required: true,
     }
-  },
-  { _id: false }
+  }
 );
 
 export const schema = new mongoose.Schema(
@@ -105,7 +103,7 @@ export const schema = new mongoose.Schema(
       required: true,
     },
     services: [{
-      type: servicesSchema,
+      type: serviceSchema,
       required: false,
     }],
   },

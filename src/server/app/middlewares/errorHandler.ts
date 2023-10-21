@@ -1,6 +1,6 @@
 import { ErrorRequestHandler } from 'express';
 import httpErrors from 'http-errors';
-import { AppError, ClientError, ValidationError } from '../../utils/exceptions';
+import { ClientError, ValidationError } from '../../utils/exceptions';
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     const status = err.status
@@ -20,13 +20,6 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
         Object.assign(response, { message: httpError.message });
         Object.assign(response, { errorValidation: err.validationErrors });
     } else if (err instanceof ClientError) {
-        Object.assign(response, { message: errorMessage });
-        console.error(response)
-        // getLogger().info(errorMessage, {
-        //     url: req.originalUrl,
-        //     method: req.method,
-        // });
-    } else if (err instanceof AppError) {
         Object.assign(response, { message: errorMessage });
         console.error(response)
         // getLogger().info(errorMessage, {

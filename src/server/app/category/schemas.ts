@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { DisplayStatus } from "../../../database-client";
 
 const getCategoriesSchema = Joi.object().keys({
   search: Joi.string().trim().optional().allow(""),
@@ -22,7 +23,7 @@ const settingsSchema = Joi.object({
   show_performance_on: Joi.string().required(),
 }).required();
 
-const addCategoriesSchema = Joi.object().keys({
+const addCategorySchema = Joi.object().keys({
   name: Joi.string().required(),
   category: Joi.string().required(),
   choices: Joi.string().optional(),
@@ -35,15 +36,17 @@ const addCategoriesSchema = Joi.object().keys({
   online_booking: Joi.boolean().optional(),
   remarks: Joi.string().optional(),
   unique_id: Joi.number().required(),
-  display_status: Joi.string().optional(),
+  display_status:  Joi.string()
+  .valid(...Object.values(DisplayStatus))
+  .optional(),
   advanced_settings: settingsSchema,
   services: Joi.array().items(servicesListSchema).required().min(1),
 });
 
-const updateCategoriesSchema = addCategoriesSchema
+const updateCategorySchema = addCategorySchema
 
 export default {
   getCategoriesSchema,
-  addCategoriesSchema,
-  updateCategoriesSchema,
+  addCategorySchema,
+  updateCategorySchema,
 };

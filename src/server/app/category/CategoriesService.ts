@@ -1,4 +1,5 @@
 import { CategoryDaoMongo, Category } from "../../../database-client";
+import { ClientError } from "../../utils/exceptions";
 
 export class CategoryService {
   constructor(private categoryDao: CategoryDaoMongo) {}
@@ -9,7 +10,12 @@ export class CategoryService {
       .then((data) => {
         return data;
       })
-      .catch((err) => {console.log(err)});
+      .catch((err) => {
+        throw new ClientError(
+          "Something went wrong while add the category",
+          500
+        );
+      });
   }
 
   async getCategoryById(id: string) {
@@ -27,7 +33,12 @@ export class CategoryService {
       .then((data) => {
         return data;
       })
-      .catch((err) => null);
+      .catch((err) => {
+        throw new ClientError(
+          "Something went wrong while update the category",
+          500
+        );
+      });
   }
 
   async getCategories(page: number, limit: number, search?: string) {
@@ -49,6 +60,11 @@ export class CategoryService {
       .then((data) => {
         return data;
       })
-      .catch((err) => null);
+      .catch((err) => {
+        throw new ClientError(
+          "Something went wrong while delete the category",
+          500
+        );
+      });
   }
 }

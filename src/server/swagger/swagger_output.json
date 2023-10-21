@@ -1108,18 +1108,71 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Category"
+        ],
+        "description": "Endpoint to delete all category",
         "parameters": [
           {
             "name": "categoryId",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": ""
+                },
+                "password": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "required": [
+                "email",
+                "password"
+              ]
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "iss": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "aud": {
+                      "type": "string",
+                      "example": ""
+                    }
+                  }
+                },
+                "refreshToken": {
+                  "type": "string",
+                  "example": ""
+                },
+                "token": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }

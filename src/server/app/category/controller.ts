@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from "express";
 import tryCatchErrorDecorator from "../../utils/tryCatchErrorDecorator";
 import { ServiceContainer } from "../clients";
-import { Category, PaginatedForm } from "../../../database-client/src/Schema";
+import { Category, DisplayStatus, PaginatedForm } from "../../../database-client/src/Schema";
 import { PaginatedResponse } from "./dto";
 
 class CategoriesControllers {
@@ -188,7 +188,7 @@ class CategoriesControllers {
       online_booking: "online_booking" in form ? form.online_booking : true,
       remarks: form.remarks || "",
       unique_id: form.unique_id,
-      display_status: "display_status" in form ? form.display_status : "show",
+      display_status: "display_status" in form ? form.display_status : DisplayStatus.SHOW,
       advanced_settings: form.advanced_settings,
       services: form.services,
     };
@@ -288,7 +288,7 @@ class CategoriesControllers {
       online_booking: "online_booking" in form ? form.online_booking : true,
       remarks: form.remarks || "",
       unique_id: form.unique_id,
-      display_status: "display_status" in form ? form.display_status : "show",
+      display_status: "display_status" in form ? form.display_status : DisplayStatus.SHOW,
       advanced_settings: form.advanced_settings,
       services: form.services,
     };
@@ -306,6 +306,28 @@ class CategoriesControllers {
     res: Response,
     next: NextFunction
   ) {
+        // #swagger.tags = ['Category'];
+
+    /*
+        #swagger.description = 'Endpoint to delete all category';
+         #swagger.parameters['obj'] = {
+                     in: 'body',
+                     schema: {
+                        $email: '',
+                        $password: '',
+                    },
+        }
+        #swagger.responses[200] = {
+            schema: {
+                user: {
+                    iss: "",
+                    aud: "",
+                },
+                refreshToken: '',
+                token: '',
+             }
+        }
+        */
     const service = (request as any).service as ServiceContainer;
     const data = await service.categoryService.deleteCategory(
       request.params.categoryId

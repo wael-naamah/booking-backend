@@ -1,6 +1,6 @@
 import { schema } from "./CategorySchema";
-import { Model, Document, Connection } from "mongoose";
-import { Category } from "../Schema";
+import { Model, Document, Connection, isValidObjectId } from "mongoose";
+import { Category, Service } from "../Schema";
 import { CategoryDao } from "./CategoryDao";
 import { isEmptyObject, isValidNumber } from "../utils";
 
@@ -19,7 +19,21 @@ export class CategoryDaoMongo implements CategoryDao {
   }
 
   async getCategoryById(id: string): Promise<Category | null> {
+    if(!isValidObjectId(id) ) return null
+
     return this.model.findById(id);
+  }
+
+  async getServiceByCategoryIdAndServiceId(
+    categoryId: string,
+    serviceId: string
+  ): Promise<Service | null> {
+    if(!isValidObjectId(categoryId) || !isValidObjectId(serviceId) ) return null
+
+    return this.model.findOne(
+      { _id: categoryId, "services._id": serviceId },
+      { "services.$": 1 }
+    );
   }
 
   async getCategories(
