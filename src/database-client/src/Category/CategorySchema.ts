@@ -36,6 +36,7 @@ const serviceSchema = new Schema(
     abbreviation_id: {
       type: Number,
       required: true,
+      unique: true,
     }
   }
 );
@@ -91,6 +92,7 @@ export const schema = new mongoose.Schema(
     unique_id: {
       type: Number,
       required: true,
+      unique: true,
     },
     display_status: {
       type: String,

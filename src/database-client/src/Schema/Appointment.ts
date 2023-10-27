@@ -1,16 +1,10 @@
-export enum Salutation {
-  WOMAN = "woman",
-  MISTER = "mister",
-  COMPANY = "company",
-}
-
 export interface Appointment {
   _id?: string;
   service_abbreviation_id: number;
   start_date: Date;
   end_date: Date;
   assign_to?: string;
-  salutation: Salutation;
+  // salutation: Salutation;
   first_name: string;
   last_name: string;
   address: string;

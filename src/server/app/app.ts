@@ -6,6 +6,7 @@ import { rateLimiterUsingThirdParty } from "./middlewares/rateLimiter";
 import { configure as authApi } from "./user/resource";
 import { configure as categoryApi } from "./category/resource";
 import { configure as appointmentApi } from "./appointment/resource";
+import { configure as contactApi } from "./contact/resource";
 
 import helmet from "helmet";
 
@@ -47,6 +48,7 @@ const appScoped = express.Router();
 authApi(appScoped);
 categoryApi(appScoped);
 appointmentApi(appScoped);
+contactApi(appScoped);
 
 app.use(`/`, appScoped);
 

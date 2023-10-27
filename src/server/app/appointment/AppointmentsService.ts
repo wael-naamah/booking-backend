@@ -20,16 +20,12 @@ export class AppointmentsService {
     );
 
     if (servise) {
-      console.log('servise', servise)
-
       // @ts-ignore
       const serviceAbbreviationId = servise.services[0].abbreviation_id;
       const savedData: Appointment = {
         ...appointment,
         service_abbreviation_id: serviceAbbreviationId,
       };
-
-      console.log('savedData', savedData)
       
       return this.appointmentDao
         .addAppointment(savedData)
@@ -37,7 +33,6 @@ export class AppointmentsService {
           return data;
         })
         .catch((err) => {
-          console.log('err', err)
           throw new ClientError(
             "Something went wrong while add the appointment",
             500
