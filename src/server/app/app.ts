@@ -7,6 +7,7 @@ import { configure as authApi } from "./user/resource";
 import { configure as categoryApi } from "./category/resource";
 import { configure as appointmentApi } from "./appointment/resource";
 import { configure as contactApi } from "./contact/resource";
+import { configure as calendarApi } from "./calendar/resource";
 
 import helmet from "helmet";
 
@@ -49,6 +50,7 @@ authApi(appScoped);
 categoryApi(appScoped);
 appointmentApi(appScoped);
 contactApi(appScoped);
+calendarApi(appScoped)
 
 app.use(`/`, appScoped);
 
