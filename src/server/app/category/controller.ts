@@ -20,57 +20,10 @@ class CategoriesControllers {
                      schema: {
                         $email: '',
                         $password: '',
-                        user: {
-                            channels: {},
-                            remarks: '',
-                            phone_number: '',
-                            internal: {
-                                last_updated_at: {
-                                    _seconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    },
-                                    _nanoseconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    },
-                                },
-                                notification_tokens: [],
-                                created_at: {
-                                    _seconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    },
-                                    _nanoseconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    }
-                                }
-                            },
-                            name: '',
-                        }
                     },
         }
         #swagger.responses[200] = {
             schema: {
-                user: {
-                    iss: "",
-                    aud: "",
-                    auth_time: "",
-                    user_id: "",
-                    sub: "",
-                    iat: 1648474008,
-                    exp: 1648477608,
-                    email: "",
-                    email_verified: false,
-                    firebase: {
-                        identities: {
-                            email: [""]
-                        },
-                        sign_in_provider: "password"
-                    },
-                    uid: ""
-                },
                 refreshToken: '',
                 token: '',
              }
@@ -113,57 +66,10 @@ class CategoriesControllers {
                      schema: {
                         $email: '',
                         $password: '',
-                        user: {
-                            channels: {},
-                            remarks: '',
-                            phone_number: '',
-                            internal: {
-                                last_updated_at: {
-                                    _seconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    },
-                                    _nanoseconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    },
-                                },
-                                notification_tokens: [],
-                                created_at: {
-                                    _seconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    },
-                                    _nanoseconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    }
-                                }
-                            },
-                            name: '',
-                        }
                     },
         }
         #swagger.responses[200] = {
             schema: {
-                user: {
-                    iss: "",
-                    aud: "",
-                    auth_time: "",
-                    user_id: "",
-                    sub: "",
-                    iat: 1648474008,
-                    exp: 1648477608,
-                    email: "",
-                    email_verified: false,
-                    firebase: {
-                        identities: {
-                            email: [""]
-                        },
-                        sign_in_provider: "password"
-                    },
-                    uid: ""
-                },
                 refreshToken: '',
                 token: '',
              }
@@ -212,57 +118,10 @@ class CategoriesControllers {
                      schema: {
                         $email: '',
                         $password: '',
-                        user: {
-                            channels: {},
-                            remarks: '',
-                            phone_number: '',
-                            internal: {
-                                last_updated_at: {
-                                    _seconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    },
-                                    _nanoseconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    },
-                                },
-                                notification_tokens: [],
-                                created_at: {
-                                    _seconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    },
-                                    _nanoseconds: {
-                                        type: Number,
-                                        $example: 0,
-                                    }
-                                }
-                            },
-                            name: '',
-                        }
                     },
         }
         #swagger.responses[200] = {
             schema: {
-                user: {
-                    iss: "",
-                    aud: "",
-                    auth_time: "",
-                    user_id: "",
-                    sub: "",
-                    iat: 1648474008,
-                    exp: 1648477608,
-                    email: "",
-                    email_verified: false,
-                    firebase: {
-                        identities: {
-                            email: [""]
-                        },
-                        sign_in_provider: "password"
-                    },
-                    uid: ""
-                },
                 refreshToken: '',
                 token: '',
              }
@@ -338,6 +197,36 @@ class CategoriesControllers {
     } else {
       res.json({ status: "faild" });
     }
+  }
+
+  @tryCatchErrorDecorator
+  static async getServices(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    // #swagger.tags = ['Category'];
+
+    /*
+        #swagger.description = 'Endpoint to get all services';
+         #swagger.parameters['obj'] = {
+                     in: 'body',
+                     schema: {
+                        $email: '',
+                        $password: '',
+                    },
+        }
+        #swagger.responses[200] = {
+            schema: {
+                refreshToken: '',
+                token: '',
+             }
+        }
+        */
+    const service = (request as any).service as ServiceContainer;
+    const data = await service.categoryService.getServices();
+
+    res.status(200).json(data);
   }
 }
 

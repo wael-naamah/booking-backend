@@ -31,4 +31,11 @@ export const configure = (app: express.Router) => {
     injectService,
     CategoriesControllers.deleteCategory
   );
+  app.get(
+    "/categories/services",
+    injectService,
+    // validateToken,
+    // checkAuth,
+    CategoriesControllers.getServices
+  );
 };

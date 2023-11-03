@@ -4,6 +4,7 @@ import {
   AppointmentDaoMongo,
   ContactDaoMongo,
   CalendarDaoMongo,
+  ScheduleDaoMongo
 } from "../../../database-client";
 
 import { getMongo } from "./mongodb/mongo";
@@ -12,6 +13,7 @@ import { CategoryService } from "../category/CategoriesService";
 import { AppointmentsService } from "../appointment/AppointmentsService";
 import { ContactsService } from "../contact/ContactsService";
 import { CalendarsService } from "../calendar/CalendarsService";
+import { SchedulesService } from "../schedule/SchedulesService";
 
 export interface ServiceContainer {
   authService: AuthService;
@@ -19,6 +21,7 @@ export interface ServiceContainer {
   appointmentService: AppointmentsService;
   contactService: ContactsService;
   calendarService: CalendarsService;
+  scheduleService: SchedulesService;
 }
 
 const createContainer = () => {
@@ -27,11 +30,13 @@ const createContainer = () => {
   const appointmentDao = new AppointmentDaoMongo(getMongo());
   const contactDao = new ContactDaoMongo(getMongo());
   const calendarDao = new CalendarDaoMongo(getMongo());
+  const scheduleDao = new ScheduleDaoMongo(getMongo());
 
   const authService = new AuthService(userDao);
 
   const categoryService = new CategoryService(categoryDao);
   const calendarService = new CalendarsService(calendarDao);
+  const scheduleService = new SchedulesService(scheduleDao);
 
   
 
@@ -46,7 +51,8 @@ const createContainer = () => {
     categoryService,
     appointmentService,
     contactService,
-    calendarService
+    calendarService,
+    scheduleService
   };
   return container;
 };

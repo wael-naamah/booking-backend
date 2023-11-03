@@ -67,4 +67,12 @@ export class CategoryService {
         );
       });
   }
+
+  async getServices() {
+    const data = await this.categoryDao.getServices().then((data) => {
+      return data;
+    });
+
+    return data;
+  }
 }

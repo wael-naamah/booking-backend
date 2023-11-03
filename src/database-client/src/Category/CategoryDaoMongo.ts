@@ -19,7 +19,7 @@ export class CategoryDaoMongo implements CategoryDao {
   }
 
   async getCategoryById(id: string): Promise<Category | null> {
-    if(!isValidObjectId(id) ) return null
+    if (!isValidObjectId(id)) return null;
 
     return this.model.findById(id);
   }
@@ -28,7 +28,8 @@ export class CategoryDaoMongo implements CategoryDao {
     categoryId: string,
     serviceId: string
   ): Promise<Service | null> {
-    if(!isValidObjectId(categoryId) || !isValidObjectId(serviceId) ) return null
+    if (!isValidObjectId(categoryId) || !isValidObjectId(serviceId))
+      return null;
 
     return this.model.findOne(
       { _id: categoryId, "services._id": serviceId },
@@ -93,6 +94,32 @@ export class CategoryDaoMongo implements CategoryDao {
   async deleteCategory(id: string) {
     return this.model.findByIdAndDelete(id).then((res) => {
       return res as unknown as Category;
+    });
+  }
+
+  async getServices(): Promise<Service[] | null> {
+    const query = [
+      {
+        $unwind: "$services",
+      },
+      {
+        $group: {
+          _id: null,
+          services: { $push: "$services" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          services: 1,
+        },
+      },
+    ];
+
+    return this.model.aggregate(query).then((res) => {
+      if (res && res.length) {
+        return res[0].services as unknown as Service[];
+      } else return [];
     });
   }
 }

@@ -14,4 +14,5 @@ export interface CategoryDao {
   addCategory(category: Partial<Category>): Promise<Category>;
   updateCategory(id: string, newCategory: Partial<Category>): Promise<Category>;
   deleteCategory(id: string): Promise<Category | null>;
+  getServices(): Promise<Service[] | null>;
 }

@@ -426,107 +426,6 @@
                 "password": {
                   "type": "string",
                   "example": ""
-                },
-                "user": {
-                  "type": "object",
-                  "properties": {
-                    "channels": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "remarks": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "phone_number": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "internal": {
-                      "type": "object",
-                      "properties": {
-                        "last_updated_at": {
-                          "type": "object",
-                          "properties": {
-                            "_seconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            },
-                            "_nanoseconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            }
-                          }
-                        },
-                        "notification_tokens": {
-                          "type": "array",
-                          "example": [],
-                          "items": {}
-                        },
-                        "created_at": {
-                          "type": "object",
-                          "properties": {
-                            "_seconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            },
-                            "_nanoseconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": ""
-                    }
-                  }
                 }
               },
               "required": [
@@ -542,74 +441,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "user": {
-                  "type": "object",
-                  "properties": {
-                    "iss": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "aud": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "auth_time": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "user_id": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "sub": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "iat": {
-                      "type": "number",
-                      "example": 1648474008
-                    },
-                    "exp": {
-                      "type": "number",
-                      "example": 1648477608
-                    },
-                    "email": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "email_verified": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "firebase": {
-                      "type": "object",
-                      "properties": {
-                        "identities": {
-                          "type": "object",
-                          "properties": {
-                            "email": {
-                              "type": "array",
-                              "example": [
-                                ""
-                              ],
-                              "items": {
-                                "type": "string"
-                              }
-                            }
-                          }
-                        },
-                        "sign_in_provider": {
-                          "type": "string",
-                          "example": "password"
-                        }
-                      }
-                    },
-                    "uid": {
-                      "type": "string",
-                      "example": ""
-                    }
-                  }
-                },
                 "refreshToken": {
                   "type": "string",
                   "example": ""
@@ -645,107 +476,6 @@
                 "password": {
                   "type": "string",
                   "example": ""
-                },
-                "user": {
-                  "type": "object",
-                  "properties": {
-                    "channels": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "remarks": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "phone_number": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "internal": {
-                      "type": "object",
-                      "properties": {
-                        "last_updated_at": {
-                          "type": "object",
-                          "properties": {
-                            "_seconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            },
-                            "_nanoseconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            }
-                          }
-                        },
-                        "notification_tokens": {
-                          "type": "array",
-                          "example": [],
-                          "items": {}
-                        },
-                        "created_at": {
-                          "type": "object",
-                          "properties": {
-                            "_seconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            },
-                            "_nanoseconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": ""
-                    }
-                  }
                 }
               },
               "required": [
@@ -763,31 +493,6 @@
             "name": "schema",
             "in": "query",
             "type": "string"
-          },
-          {
-            "name": "remarks",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "phone_number",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "internal",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "_nanoseconds",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "sign_in_provider",
-            "in": "query",
-            "type": "string"
           }
         ],
         "responses": {
@@ -796,74 +501,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "user": {
-                  "type": "object",
-                  "properties": {
-                    "iss": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "aud": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "auth_time": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "user_id": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "sub": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "iat": {
-                      "type": "number",
-                      "example": 1648474008
-                    },
-                    "exp": {
-                      "type": "number",
-                      "example": 1648477608
-                    },
-                    "email": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "email_verified": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "firebase": {
-                      "type": "object",
-                      "properties": {
-                        "identities": {
-                          "type": "object",
-                          "properties": {
-                            "email": {
-                              "type": "array",
-                              "example": [
-                                ""
-                              ],
-                              "items": {
-                                "type": "string"
-                              }
-                            }
-                          }
-                        },
-                        "sign_in_provider": {
-                          "type": "string",
-                          "example": "password"
-                        }
-                      }
-                    },
-                    "uid": {
-                      "type": "string",
-                      "example": ""
-                    }
-                  }
-                },
                 "refreshToken": {
                   "type": "string",
                   "example": ""
@@ -907,107 +544,6 @@
                 "password": {
                   "type": "string",
                   "example": ""
-                },
-                "user": {
-                  "type": "object",
-                  "properties": {
-                    "channels": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "remarks": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "phone_number": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "internal": {
-                      "type": "object",
-                      "properties": {
-                        "last_updated_at": {
-                          "type": "object",
-                          "properties": {
-                            "_seconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            },
-                            "_nanoseconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            }
-                          }
-                        },
-                        "notification_tokens": {
-                          "type": "array",
-                          "example": [],
-                          "items": {}
-                        },
-                        "created_at": {
-                          "type": "object",
-                          "properties": {
-                            "_seconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            },
-                            "_nanoseconds": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "function"
-                                },
-                                "example": {
-                                  "type": "number",
-                                  "example": 0
-                                }
-                              },
-                              "required": [
-                                "example"
-                              ]
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": ""
-                    }
-                  }
                 }
               },
               "required": [
@@ -1023,74 +559,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "user": {
-                  "type": "object",
-                  "properties": {
-                    "iss": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "aud": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "auth_time": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "user_id": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "sub": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "iat": {
-                      "type": "number",
-                      "example": 1648474008
-                    },
-                    "exp": {
-                      "type": "number",
-                      "example": 1648477608
-                    },
-                    "email": {
-                      "type": "string",
-                      "example": ""
-                    },
-                    "email_verified": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "firebase": {
-                      "type": "object",
-                      "properties": {
-                        "identities": {
-                          "type": "object",
-                          "properties": {
-                            "email": {
-                              "type": "array",
-                              "example": [
-                                ""
-                              ],
-                              "items": {
-                                "type": "string"
-                              }
-                            }
-                          }
-                        },
-                        "sign_in_provider": {
-                          "type": "string",
-                          "example": "password"
-                        }
-                      }
-                    },
-                    "uid": {
-                      "type": "string",
-                      "example": ""
-                    }
-                  }
-                },
                 "refreshToken": {
                   "type": "string",
                   "example": ""
@@ -1160,6 +628,58 @@
                     }
                   }
                 },
+                "refreshToken": {
+                  "type": "string",
+                  "example": ""
+                },
+                "token": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/services": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "description": "Endpoint to get all services",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": ""
+                },
+                "password": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "required": [
+                "email",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
                 "refreshToken": {
                   "type": "string",
                   "example": ""
