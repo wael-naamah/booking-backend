@@ -1,6 +1,6 @@
 import { schema } from "./ScheduleSchema";
 import { Model, Document, Connection } from "mongoose";
-import { Schedule } from "../Schema";
+import { Schedule, ScheduleType, WeekDay } from "../Schema";
 import { ScheduleDao } from "./ScheduleDao";
 
 export class ScheduleDaoMongo implements ScheduleDao {
@@ -21,10 +21,7 @@ export class ScheduleDaoMongo implements ScheduleDao {
     return this.model.findById(id);
   }
 
-  async getSchedules(
-    page: number,
-    limit: number,
-  ): Promise<Schedule[]> {
+  async getSchedules(page: number, limit: number): Promise<Schedule[]> {
     return this.model
       .find()
       .limit(limit)
@@ -50,5 +47,29 @@ export class ScheduleDaoMongo implements ScheduleDao {
     return this.model.findByIdAndDelete(id).then((res) => {
       return res as unknown as Schedule;
     });
+  }
+
+  async getScheduleByDate(date: Date): Promise<Schedule[]> {
+    return this.model
+      .find({
+        $or: [
+          {
+            working_hours_type: ScheduleType.Weekly,
+            weekday: WeekDay[
+              new Date(date).toLocaleDateString("en-US", {
+                weekday: "long",
+              }) as WeekDay
+            ],
+          },
+          {
+            working_hours_type: ScheduleType.Certain,
+            date_from: { $lte: date },
+            date_to: { $gte: date },
+          },
+        ],
+      })
+      .then((res) => {
+        return res as unknown as Schedule[];
+      });
   }
 }

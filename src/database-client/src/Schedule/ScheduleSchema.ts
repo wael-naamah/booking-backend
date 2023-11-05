@@ -1,5 +1,5 @@
-import mongoose, { Schema } from "mongoose";
-import { ScheduleType } from "../Schema";
+import mongoose from "mongoose";
+import { ScheduleType, WeekDay } from "../Schema";
 
 export const schema = new mongoose.Schema(
   {
@@ -8,17 +8,19 @@ export const schema = new mongoose.Schema(
       required: true,
       default: () => new mongoose.Types.ObjectId(),
     },
-    calendar_id: {type: Schema.Types.ObjectId, ref: 'Calendars', required: false},
+    calendar_id: {type: String, required: true},
     working_hours_type: {
       type: String,
       enum: ScheduleType,
       default: ScheduleType.Weekly,
       required: true,
     },
-    day: {
+    weekday: {
       type: String,
-      required: true,
+      enum: WeekDay,
     },
+    date_from: Date,
+    date_to: Date,
     time_from: {
       type: String,
       required: true,
@@ -31,9 +33,13 @@ export const schema = new mongoose.Schema(
     deactivate_working_hours: Boolean,
     one_time_appointment_link: String,
     only_internally: Boolean,
-    restricted_to_services: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Categories.services' }],
+    restricted_to_services: [String],
     possible_appointment: Number,
-    active: Boolean,
+    active: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
   },
   {
     timestamps: true,

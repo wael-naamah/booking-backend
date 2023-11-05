@@ -1,11 +1,11 @@
 export enum WeekDay {
-  Monday = "monday",
-  Tuesday = "tuesday",
-  Wednesday = "wednesday",
-  Thursday = "thursday",
-  Friday = "friday",
-  Saturday = "saturday",
-  Sunday = "sunday",
+  Monday = "Monday",
+  Tuesday = "Tuesday",
+  Wednesday = "Wednesday",
+  Thursday = "Thursday",
+  Friday = "Friday",
+  Saturday = "Saturday",
+  Sunday = "Sunday",
 }
 
 export enum ScheduleType {
@@ -17,7 +17,9 @@ export interface Schedule {
   _id?: string;
   calendar_id: string;
   working_hours_type: ScheduleType;
-  day: WeekDay | Date;
+  weekday?: WeekDay;
+  date_from?: Date;
+  date_to?: Date;
   time_from: string;
   time_to: string;
   reason?: string;

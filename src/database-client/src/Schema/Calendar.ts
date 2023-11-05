@@ -106,4 +106,5 @@ export interface Calendar {
   insert_appointments?: InsertAppointmentOption;
   coupling_on_certain_services?: boolean;
   certain_services?: string[];
+  active: boolean;
 }

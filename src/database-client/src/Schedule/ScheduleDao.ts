@@ -10,4 +10,5 @@ export interface ScheduleDao {
   addSchedule(schedule: Partial<Schedule>): Promise<Schedule>;
   updateSchedule(id: string, newSchedule: Partial<Schedule>): Promise<Schedule>;
   deleteSchedule(id: string): Promise<Schedule | null>;
+  getScheduleByDate(date: Date): Promise<Schedule[]>;
 }

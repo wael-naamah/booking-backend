@@ -98,6 +98,10 @@ export const schema = new mongoose.Schema(
     },
     coupling_on_certain_services: Boolean,
     certain_services: [String],
+    active: {
+      type: Boolean,
+      required: true,
+    },
   },
   {
     timestamps: true,

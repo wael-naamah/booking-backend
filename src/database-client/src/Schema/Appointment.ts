@@ -1,26 +1,13 @@
+import { Contact } from "./Contact";
+
 export interface Appointment {
   _id?: string;
-  service_abbreviation_id: number;
+  category_id: string;
+  service_id: string;
+  calendar_id: string;
   start_date: Date;
   end_date: Date;
-  assign_to?: string;
-  // salutation: Salutation;
-  first_name: string;
-  last_name: string;
-  address: string;
-  zip_code: string;
-  location: string;
-  telephone: string;
-  email: string;
-  brand_of_device?: string;
-  model?: string;
-  exhaust_gas_measurement?: boolean;
-  has_maintenance_agreement?: boolean;
-  has_bgas_before?: boolean;
-  year?: string;
-  remarks?: string;
-  attachment?: string;
-  remember_entries?: boolean;
+  contact: Contact;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -32,10 +19,11 @@ export interface AppointmentForm {
 }
 
 export interface AddAppointmentRequest
-  extends Omit<
-    Appointment,
-    "_id" | "service_abbreviation_id" | "createdAt" | "updatedAt"
-  > {
+  extends Omit<Appointment, "_id" | "contact" | "createdAt" | "updatedAt"> {
+    contact_id: string;
+}
+export interface TimeSlotsForm {
+  date: Date;
   category_id: string;
   service_id: string;
 }

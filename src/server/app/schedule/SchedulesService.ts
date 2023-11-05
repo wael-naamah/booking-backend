@@ -15,7 +15,6 @@ export class SchedulesService {
         return data;
       })
       .catch((err) => {
-        console.log('err', err)
         throw new ClientError(
           "Something went wrong while add the schedule",
           500

@@ -71,6 +71,7 @@ const addCalendarSchema = Joi.object().keys({
     .optional(),
   coupling_on_certain_services: Joi.boolean().optional(),
   certain_services: Joi.array().items(Joi.string()).optional(),
+  active: Joi.boolean().required(),
 });
 
 const updateCalendarSchema = addCalendarSchema;

@@ -30,4 +30,10 @@ export const configure = (app: express.Router) => {
     injectService,
     AppointmentsControllers.deleteAppointment
   );
+  app.get(
+    "/appointments/timeslots", 
+    injectService,
+    ValidateSchema.prepare(schemas.getTimeSlotsSchema),
+    AppointmentsControllers.getTimeSlots
+  );
 };

@@ -42,7 +42,9 @@ const createContainer = () => {
 
   const appointmentService = new AppointmentsService(
     appointmentDao,
-    categoryDao
+    categoryDao,
+    calendarDao,
+    scheduleDao
   );
   const contactService = new ContactsService(contactDao);
 

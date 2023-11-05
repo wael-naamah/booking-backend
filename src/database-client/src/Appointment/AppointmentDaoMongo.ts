@@ -1,6 +1,6 @@
 import { schema } from "./AppointmentSchema";
 import { Model, Document, Connection } from "mongoose";
-import { Appointment } from "../Schema";
+import { AddAppointmentRequest, Appointment } from "../Schema";
 import { AppointmentDao } from "./AppointmentDao";
 import { isEmptyObject, isValidNumber } from "../utils";
 
@@ -11,7 +11,7 @@ export class AppointmentDaoMongo implements AppointmentDao {
     this.model = mongo.model<Document<Appointment>>("Appointments", schema);
   }
 
-  async addAppointment(appointment: Partial<Appointment>): Promise<Appointment> {
+  async addAppointment(appointment: AddAppointmentRequest): Promise<Appointment> {
     const newAppointment = new this.model(appointment);
     return newAppointment.save().then((res) => {
       return res as unknown as Appointment;
@@ -53,7 +53,7 @@ export class AppointmentDaoMongo implements AppointmentDao {
       .then((data) => data as unknown as Appointment[]);
   }
 
-  async updateAppointment(id: string, newAppointment: Partial<Appointment>) {
+  async updateAppointment(id: string, newAppointment: AddAppointmentRequest) {
     return this.model
       .findByIdAndUpdate(id, newAppointment, { new: true })
       .then((res) => {

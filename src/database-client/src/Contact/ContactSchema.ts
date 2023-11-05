@@ -48,8 +48,7 @@ export const schema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
-    },
+    }, // unique: true, TODO: need to discuss the requirements
     note_on_address: String,
     brand_of_device: String,
     model: String,
@@ -62,7 +61,7 @@ export const schema = new mongoose.Schema(
   
     remarks: String,
     attachments: [attachmentSchema],
-    categories_permission: [{type: Schema.Types.ObjectId, ref: 'Categories', required: false}]
+    categories_permission: [{type: String, required: false}]
   },
   {
     timestamps: true,

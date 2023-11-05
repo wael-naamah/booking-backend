@@ -1,4 +1,4 @@
-import { Appointment } from "../Schema";
+import { AddAppointmentRequest, Appointment } from "../Schema";
 
 export interface AppointmentDao {
   getAppointments(
@@ -7,8 +7,7 @@ export interface AppointmentDao {
     search?: string
   ): Promise<Appointment[]>;
   getAppointmentById(id: string): Promise<Appointment | null>;
-  addAppointment(appointment: Partial<Appointment>): Promise<Appointment>;
-  updateAppointment(id: string, newAppointment: Partial<Appointment>): Promise<Appointment>;
+  addAppointment(appointment: AddAppointmentRequest): Promise<Appointment>;
+  updateAppointment(id: string, newAppointment: AddAppointmentRequest): Promise<Appointment>;
   deleteAppointment(id: string): Promise<Appointment | null>;
-
 }

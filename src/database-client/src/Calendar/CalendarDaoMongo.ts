@@ -22,6 +22,23 @@ export class CalendarDaoMongo implements CalendarDao {
     return this.model.findById(id);
   }
 
+  async getCalendarsByIds(ids: string[]): Promise<Calendar[]> {
+    const query = {
+      _id: { $in: ids }
+    };
+
+    return this.model.find(query);
+  }
+
+  async getActiveCalendarsByIds(ids: string[]): Promise<Calendar[]> {
+    const query = {
+      _id: { $in: ids },
+      active: true
+    };
+
+    return this.model.find(query);
+  }
+
   async getCalendars(
     page: number,
     limit: number,
