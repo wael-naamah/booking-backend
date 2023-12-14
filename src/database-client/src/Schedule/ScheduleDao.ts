@@ -1,4 +1,4 @@
-import { Schedule } from "../Schema";
+import { ExtendedSchedule, Schedule } from "../Schema";
 
 export interface ScheduleDao {
   getSchedules(
@@ -10,5 +10,5 @@ export interface ScheduleDao {
   addSchedule(schedule: Partial<Schedule>): Promise<Schedule>;
   updateSchedule(id: string, newSchedule: Partial<Schedule>): Promise<Schedule>;
   deleteSchedule(id: string): Promise<Schedule | null>;
-  getScheduleByDate(date: Date): Promise<Schedule[]>;
+  getScheduleByDate(date: Date): Promise<ExtendedSchedule[]>;
 }

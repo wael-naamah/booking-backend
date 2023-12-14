@@ -1,6 +1,6 @@
 import { schema } from "./ScheduleSchema";
 import { Model, Document, Connection } from "mongoose";
-import { Schedule, ScheduleType, WeekDay } from "../Schema";
+import { ExtendedSchedule, Schedule, ScheduleType, WeekDay } from "../Schema";
 import { ScheduleDao } from "./ScheduleDao";
 
 export class ScheduleDaoMongo implements ScheduleDao {
@@ -49,27 +49,57 @@ export class ScheduleDaoMongo implements ScheduleDao {
     });
   }
 
-  async getScheduleByDate(date: Date): Promise<Schedule[]> {
-    return this.model
-      .find({
-        $or: [
-          {
-            working_hours_type: ScheduleType.Weekly,
-            weekday: WeekDay[
-              new Date(date).toLocaleDateString("en-US", {
-                weekday: "long",
-              }) as WeekDay
-            ],
-          },
-          {
-            working_hours_type: ScheduleType.Certain,
-            date_from: { $lte: date },
-            date_to: { $gte: date },
-          },
-        ],
-      })
-      .then((res) => {
-        return res as unknown as Schedule[];
-      });
+  async getScheduleByDate(date: Date): Promise<ExtendedSchedule[]> {
+    const schedules = await this.model.aggregate([
+      {
+        $match: {
+          $or: [
+            {
+              working_hours_type: ScheduleType.Weekly,
+              weekday: WeekDay[date.toLocaleDateString('en-US', { weekday: 'long' }) as WeekDay],
+            },
+            {
+              working_hours_type: ScheduleType.Certain,
+              date_from: { $lte: date },
+              date_to: { $gte: date },
+            },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: 'calendars',
+          localField: 'calendar_id',
+          foreignField: '_id',
+          as: 'calendar',
+        },
+      },
+      {
+        $unwind: '$calendar',
+      },
+      {
+        $project: {
+          _id: 1,
+          time_from: "$time_from",
+          time_to: "$time_to",
+          calendar_id: 1,
+          working_hours_type: "$working_hours_type",
+          restricted_to_services: "$restricted_to_services",
+          weekday: "$weekday",
+          employee_name: '$calendar.employee_name',
+          active: '$calendar.active',
+        },
+      },
+      {
+        $match: {
+          $or: [
+            { 'calendar.active': true },
+            { 'active': true },
+          ]
+        }
+      }
+    ]);
+    
+    return schedules as unknown as ExtendedSchedule[];
   }
 }

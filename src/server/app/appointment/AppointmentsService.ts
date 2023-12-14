@@ -3,9 +3,8 @@ import {
   Appointment,
   CategoryDaoMongo,
   AddAppointmentRequest,
-  CalendarDaoMongo,
   ScheduleDaoMongo,
-  Schedule,
+  ExtendedSchedule,
 } from "../../../database-client";
 import { ClientError } from "../../utils/exceptions";
 
@@ -13,7 +12,6 @@ export class AppointmentsService {
   constructor(
     private appointmentDao: AppointmentDaoMongo,
     private categoryDao: CategoryDaoMongo,
-    private calendarDao: CalendarDaoMongo,
     private scheduleDao: ScheduleDaoMongo
   ) {}
 
@@ -54,9 +52,9 @@ export class AppointmentsService {
       });
   }
 
-  async getAppointments(start: Date, end: Date, search?: string) {
+  async getAppointments(start: string, end: string) {
     return this.appointmentDao
-      .getAppointments(start, end, search)
+      .getAppointments(start, end)
       .then((data) => {
         return data;
       })
@@ -82,70 +80,55 @@ export class AppointmentsService {
       });
   }
 
-  async getTimeSlots(date: Date, category_id: string, service_id: string) {
-    const servise = await this.categoryDao.getServiceByCategoryIdAndServiceId(
-      category_id,
-      service_id
-    );
-
-    if (servise) {
-      // @ts-ignore
-      const serviseDuration = servise.services[0].duration;
-
-      const schedules = await this.scheduleDao.getScheduleByDate(date);
-      if (schedules && schedules.length) {
-        const calendarIDs = schedules.map((el) => el.calendar_id);
-        const uniqueCalendarIDs = [...new Set(calendarIDs)];
-        const activeCalendars = await this.calendarDao.getActiveCalendarsByIds(
-          uniqueCalendarIDs
-        );
-
-        const activeSchedules = schedules.filter(
-          (el) =>
-            el.active &&
-            activeCalendars.some((item) => item._id === el.calendar_id)
-        );
-
-        const timeSlots = await this.calculateTimeSlots(
-          activeSchedules,
-          date,
-          serviseDuration
-        );
-
-        const startDate = new Date(date);
-        startDate.setHours(0, 0, 0, 0);
-        const endDate = new Date(date);
-        endDate.setHours(23, 59, 59, 999);
-        const bookedAppointments = await this.appointmentDao.getAppointments(
-          startDate,
-          endDate
-        );
-
-        const availableTimeSlots =  await this.filterBookedAppointments(timeSlots, bookedAppointments);
-
-
-        return availableTimeSlots;
-      } else {
-        return [];
-      }
-    } else {
-      throw new ClientError(
-        "Cann't find service with Id " +
-          service_id +
-          " and category Id" +
-          category_id,
-        404
+  async getTimeSlots(date: string, category_id?: string, service_id?: string) {
+    let serviseDuration = 60;
+    if (category_id && service_id) {
+      const servise = await this.categoryDao.getServiceByCategoryIdAndServiceId(
+        category_id,
+        service_id
       );
+
+      if (servise) {
+        // @ts-ignore
+        serviseDuration = servise.services[0].duration;
+      }
+    }
+
+    const schedules = await this.scheduleDao.getScheduleByDate(new Date(date));
+    if (schedules && schedules.length) {
+      const timeSlots = await this.calculateTimeSlots(
+        schedules,
+        new Date(date),
+        serviseDuration
+      );
+
+      const startDate = new Date(date);
+      startDate.setHours(0, 0, 0, 0);
+      const endDate = new Date(date);
+      endDate.setHours(23, 59, 59, 999);
+      const bookedAppointments = await this.appointmentDao.getAppointments(
+        startDate.toISOString(),
+        endDate.toISOString()
+      );
+
+      const availableTimeSlots = await this.filterBookedAppointments(
+        timeSlots,
+        bookedAppointments
+      );
+
+      return availableTimeSlots;
+    } else {
+      return [];
     }
   }
 
   async calculateTimeSlots(
-    schedules: Schedule[],
+    schedules: ExtendedSchedule[],
     selectedDate: Date,
     serviceDuration: number
   ) {
     const timeSlots = [];
-    const selectedDay = new Date(selectedDate).toLocaleDateString("en-US", {
+    const selectedDay = selectedDate.toLocaleDateString("en-US", {
       weekday: "long",
     });
 
@@ -196,6 +179,7 @@ export class AppointmentsService {
             start: currentSlot.toISOString(),
             end: slotEndTime.toISOString(),
             calendar_id: weeklySchedule.calendar_id,
+            employee_name: weeklySchedule.employee_name,
           });
         }
 
@@ -233,6 +217,7 @@ export class AppointmentsService {
             start: currentSlot.toISOString(),
             end: slotEndTime.toISOString(),
             calendar_id: certainSchedule.calendar_id,
+            employee_name: certainSchedule.employee_name,
           });
         }
 
@@ -260,32 +245,32 @@ export class AppointmentsService {
     return { hours, minutes };
   }
 
-  async filterBookedAppointments(timeSlots: {start: string; end: string; calendar_id: string}[], bookedAppointments: Appointment[]) {
+  async filterBookedAppointments(
+    timeSlots: { start: string; end: string; calendar_id: string, employee_name: string }[],
+    bookedAppointments: Appointment[]
+  ) {
     const availableTimeSlots = [];
-  
+
     for (const timeSlot of timeSlots) {
       let isBooked = false;
-  
+
       for (const appointment of bookedAppointments) {
         const appointmentStart = new Date(appointment.start_date);
         const appointmentEnd = new Date(appointment.end_date);
         const timeSlotStart = new Date(timeSlot.start);
         const timeSlotEnd = new Date(timeSlot.end);
-  
-        if (
-          timeSlotStart < appointmentEnd &&
-          timeSlotEnd > appointmentStart
-        ) {
+
+        if (timeSlotStart < appointmentEnd && timeSlotEnd > appointmentStart) {
           isBooked = true;
           break;
         }
       }
-  
+
       if (!isBooked) {
         availableTimeSlots.push(timeSlot);
       }
     }
-  
+
     return availableTimeSlots;
   }
 }

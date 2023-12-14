@@ -13,9 +13,8 @@ export interface Appointment {
 }
 
 export interface AppointmentForm {
-  start: Date;
-  end: Date;
-  search?: string;
+  start: string;
+  end: string;
 }
 
 export interface AddAppointmentRequest
@@ -23,7 +22,7 @@ export interface AddAppointmentRequest
     contact_id: string;
 }
 export interface TimeSlotsForm {
-  date: Date;
-  category_id: string;
-  service_id: string;
+  date: string;
+  category_id?: string;
+  service_id?: string;
 }

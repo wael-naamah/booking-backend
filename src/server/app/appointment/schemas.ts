@@ -45,8 +45,8 @@ const updateAppointmentSchema = Joi.object().keys({
 
 const getTimeSlotsSchema = Joi.object().keys({
   date: Joi.date().iso().required(),
-  category_id: Joi.string().required(),
-  service_id: Joi.string().required(),
+  category_id: Joi.string().optional(),
+  service_id: Joi.string().optional(),
 });
 
 export default {

@@ -2,9 +2,8 @@ import { AddAppointmentRequest, Appointment } from "../Schema";
 
 export interface AppointmentDao {
   getAppointments(
-    start: Date,
-    end: Date,
-    search?: string
+    start: string,
+    end: string,
   ): Promise<Appointment[]>;
   getAppointmentById(id: string): Promise<Appointment | null>;
   addAppointment(appointment: AddAppointmentRequest): Promise<Appointment>;

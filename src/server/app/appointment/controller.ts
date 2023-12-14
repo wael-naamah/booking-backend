@@ -102,12 +102,11 @@ class AppointmentsControllers {
              }
         }
         */
-    const { start, end, search } = request.query as unknown as AppointmentForm;
+    const { start, end } = request.query as unknown as AppointmentForm;
     const service = (request as any).service as ServiceContainer;
     const data = await service.appointmentService.getAppointments(
       start,
-      end,
-      search
+      end
     );
 
     res.status(200).json(data);
@@ -233,7 +232,7 @@ class AppointmentsControllers {
         */
 
     const { date, category_id, service_id } =
-      request.body as unknown as TimeSlotsForm;
+      request.query as unknown as TimeSlotsForm;
     const service = (request as any).service as ServiceContainer;
     const data = await service.appointmentService.getTimeSlots(
       date,

@@ -33,7 +33,7 @@ export const configure = (app: express.Router) => {
   app.get(
     "/appointments/timeslots", 
     injectService,
-    ValidateSchema.prepare(schemas.getTimeSlotsSchema),
+    ValidateSchema.prepare(schemas.getTimeSlotsSchema, "query"),
     AppointmentsControllers.getTimeSlots
   );
 };

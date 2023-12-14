@@ -1,7 +1,7 @@
 export enum Salutation {
-  WOMAN = "woman",
-  MISTER = "mister",
-  COMPANY = "company",
+  WOMAN = "Mrs.",
+  MISTER = "Mr",
+  COMPANY = "Company",
 }
 
 export interface Contact {

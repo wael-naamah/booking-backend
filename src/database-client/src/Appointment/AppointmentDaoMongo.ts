@@ -2,7 +2,6 @@ import { schema } from "./AppointmentSchema";
 import { Model, Document, Connection } from "mongoose";
 import { AddAppointmentRequest, Appointment } from "../Schema";
 import { AppointmentDao } from "./AppointmentDao";
-import { isEmptyObject, isValidNumber } from "../utils";
 
 export class AppointmentDaoMongo implements AppointmentDao {
   model: Model<Document<Appointment>>;
@@ -23,30 +22,14 @@ export class AppointmentDaoMongo implements AppointmentDao {
   }
 
   async getAppointments(
-    start: Date,
-    end: Date,
-    search?: string
+    start: string,
+    end: string,
   ): Promise<Appointment[]> {
-    const isValidNo = isValidNumber(search);
 
     let query: any = {
-      start_date: { $gte: start },
-      end_date: { $lte: end },
+      start_date: { $gte: new Date(start) },
+      end_date: { $lte: new Date(end) },
     };
-
-    if (search) {
-      query = {
-        ...query,
-        $or: [
-          { first_name: { $regex: search, $options: "i" } },
-          { last_name: { $regex: search, $options: "i" } },
-          { telephone: { $regex: search, $options: "i" } },
-          { email: { $regex: search, $options: "i" } },
-          { model: { $regex: search, $options: "i" } },
-          isValidNo ? { service_abbreviation_id: Number(search) } : {},
-        ].filter((el) => !isEmptyObject(el)),
-      };
-    }
 
     return this.model
       .find(query)
