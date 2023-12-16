@@ -25,7 +25,7 @@ let connection: mongoose.Connection;
 
 export const getMongo = (): mongoose.Connection => {
     if (!connection) {
-        connection = createConnection(getEnv().mongo.uri)
+        connection = createConnection(getEnv().mongoUri)
     }
     if (connection) {
         return connection;

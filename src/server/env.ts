@@ -2,12 +2,10 @@ import * as fs from "fs";
 
 export interface Env {
   env: "production" | "development";
-  mongo: {
-    username: string;
-    password: string;
-    database: string;
-    uri: string;
-  };
+  mongoUri: string;
+  mongoUsername: string;
+  mongoPassword: string;
+  database: string;
   jwt_secret_key: string;
   jwt_refresh_secret_key: string;
 }
