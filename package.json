@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node lib/server/server.js",
+    "start": "node lib/server/index.js",
     "deprecated_start_dev": "ENV_PATH=./env/env.json nodemon index.ts",
-    "start_dev": "yarn run swagger-autogen-ts && ENV_PATH=./env/env.dev.json ts-node src/server/server.ts",
+    "start_dev": "yarn run swagger-autogen-ts && ENV_PATH=./env/env.dev.json ts-node src/server/index.ts",
     "swagger-autogen-ts": "ts-node src/server/swagger/index.ts",
     "swagger-autogen-ts-watch": "nodemon src/server/swagger/index.ts",
     "build": "rm -rf lib && tsc",
