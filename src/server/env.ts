@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as path from "path";
 
 export interface Env {
   env: "production" | "development";
@@ -17,7 +18,7 @@ export const getEnv = () => {
     return env;
   }
 
-  const envFilePath = process.env.ENV_PATH || "../../env/env.json";
+  const envFilePath = process.env.ENV_PATH || path.resolve(__dirname, "../../env/env.json");
   const contents = fs.readFileSync(envFilePath);
   env = JSON.parse(contents.toString());
 
