@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import * as path from "path";
+// import * as fs from "fs";
+// import * as path from "path";
 
 export interface Env {
   env: "production" | "development";
@@ -18,8 +18,19 @@ export const getEnv = () => {
     return env;
   }
 
-  const envFilePath = process.env.ENV_PATH || path.resolve(__dirname, "../../env/env.json");
-  const contents = fs.readFileSync(envFilePath);
+  // const envFilePath = process.env.ENV_PATH || path.resolve(__dirname, "../../env/env.json");
+  // const contents = fs.readFileSync(envFilePath);
+  const contents = `
+  {
+    "env": "production",
+    "mongoUri": "mongodb+srv://waelnaamah:fHw1yjOY0VPor8XI@cluster0.euqyhdi.mongodb.net/bgas?retryWrites=true&w=majority",
+    "mongoUsername": "waelnaamah",
+    "mongoPassword": "fHw1yjOY0VPor8XI",
+    "database": "bgas",
+    "jwt_secret_key": "ASLDlpkcdd9e8dks@kskJSJNDCJNS",
+    "jwt_refresh_secret_key": "KSJDKJD$43FKjdjjdSKXMKSMWWFJSHXBSH"
+  }
+  `
   env = JSON.parse(contents.toString());
 
   return env;
