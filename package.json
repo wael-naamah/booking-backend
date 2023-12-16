@@ -10,6 +10,10 @@
     "swagger-autogen-ts": "ts-node src/server/swagger/index.ts",
     "swagger-autogen-ts-watch": "nodemon src/server/swagger/index.ts",
     "build": "rm -rf lib && tsc",
+    "postinstall": "tsc",
+    "watch-node": "nodemon lib/server/index.js",
+    "watch-ts": "tsc -w",
+    "deploy": "git add . && git commit -m Heroku && git push heroku master",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -40,5 +44,6 @@
     "@types/cors": "^2.8.14",
     "@types/jest": "^29.5.5",
     "@types/swagger-ui-express": "^4.1.4"
-  }
+  },
+  "engines": { "node": "16.20.0" }
 }
