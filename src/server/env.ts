@@ -22,13 +22,13 @@ export const getEnv = () => {
   // const contents = fs.readFileSync(envFilePath);
   const contents = `
   {
-    "env": ${process.env.NODE_ENV}, 
-    "mongoUri": ${process.env.DATABASE_URI},
-    "mongoUsername": ${process.env.DATABASE_USERNAME}, 
-    "mongoPassword": ${process.env.DATABASE_PASSWORD}, 
-    "database": ${process.env.DATABASE}, 
-    "jwt_secret_key": ${process.env.JWT_SECRET_KEY}, 
-    "jwt_refresh_secret_key": ${process.env.JWT_REFRESH_SECRET_KEY} 
+    "env": "${process.env.NODE_ENV}", 
+    "mongoUri": "${process.env.DATABASE_URI}",
+    "mongoUsername": "${process.env.DATABASE_USERNAME}", 
+    "mongoPassword": "${process.env.DATABASE_PASSWORD}", 
+    "database": "${process.env.DATABASE}", 
+    "jwt_secret_key": "${process.env.JWT_SECRET_KEY}", 
+    "jwt_refresh_secret_key": "${process.env.JWT_REFRESH_SECRET_KEY}"
   }
   `
   env = JSON.parse(contents.toString());
