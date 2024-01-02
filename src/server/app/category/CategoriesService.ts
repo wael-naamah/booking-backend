@@ -12,7 +12,7 @@ export class CategoryService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while add the category",
+          err,
           500
         );
       });
@@ -35,7 +35,7 @@ export class CategoryService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while update the category",
+          err,
           500
         );
       });
@@ -62,7 +62,7 @@ export class CategoryService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while delete the category",
+          err,
           500
         );
       });

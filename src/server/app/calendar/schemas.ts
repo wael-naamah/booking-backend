@@ -61,10 +61,10 @@ const addCalendarSchema = Joi.object().keys({
   assignments_services: Joi.array().items(Joi.string()).optional(),
   link_calendar: Joi.boolean().optional(),
   priority_link: Joi.number().optional(),
-  skills: Joi.object({
+  skills: Joi.array().items(Joi.object({
     service: Joi.string().required(),
     level: Joi.number().required(),
-  }).optional(),
+  })).optional(),
   paired_calendars: Joi.array().items(Joi.string()).optional(),
   insert_appointments: Joi.string()
     .valid(...Object.values(InsertAppointmentOption))

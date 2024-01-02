@@ -30,4 +30,11 @@ export const configure = (app: express.Router) => {
     injectService,
     SchedulesControllers.deleteSchedule
   );
+  app.get(
+    "/schedules/calendar/:calendarId",
+    injectService,
+    // validateToken,
+    // checkAuth,
+    SchedulesControllers.getSchedulesByCalendarId
+  );
 };

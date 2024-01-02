@@ -23,7 +23,7 @@ export class AppointmentsService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while add the appointment",
+          err,
           500
         );
       });
@@ -46,7 +46,7 @@ export class AppointmentsService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while update the appointment",
+          err,
           500
         );
       });
@@ -60,7 +60,7 @@ export class AppointmentsService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while fetching appointments",
+          err,
           500
         );
       });
@@ -74,7 +74,7 @@ export class AppointmentsService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while delete the appointment",
+          err,
           500
         );
       });

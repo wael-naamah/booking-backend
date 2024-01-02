@@ -247,6 +247,44 @@ class SchedulesControllers {
   
     return false;
   }
+
+
+  @tryCatchErrorDecorator
+  static async getSchedulesByCalendarId(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    // #swagger.tags = ['Schedule'];
+
+    /*
+        #swagger.description = 'Endpoint to get all schedules by calendar ID';
+         #swagger.parameters['obj'] = {
+                     in: 'body',
+                     schema: {
+                        $email: '',
+                        $password: '',
+                    },
+        }
+        #swagger.responses[200] = {
+            schema: {
+                user: {
+                    iss: "",
+                    aud: "",
+                },
+                refreshToken: '',
+                token: '',
+             }
+        }
+        */
+   
+    const { calendarId } = request.params;
+    const service = (request as any).service as ServiceContainer;
+    const data = await service.scheduleService.getSchedulesByCalendarId(calendarId);
+
+    res.status(200).json(data);
+  }
 }
+
 
 export default SchedulesControllers;

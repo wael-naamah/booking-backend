@@ -1,6 +1,11 @@
 import { schema } from "./ScheduleSchema";
 import { Model, Document, Connection } from "mongoose";
-import { ExtendedSchedule, Schedule, ScheduleType, WeekDay } from "../Schema";
+import {
+  ExtendedSchedule,
+  Schedule,
+  ScheduleType,
+  WeekDay,
+} from "../Schema";
 import { ScheduleDao } from "./ScheduleDao";
 
 export class ScheduleDaoMongo implements ScheduleDao {
@@ -56,7 +61,12 @@ export class ScheduleDaoMongo implements ScheduleDao {
           $or: [
             {
               working_hours_type: ScheduleType.Weekly,
-              weekday: WeekDay[date.toLocaleDateString('en-US', { weekday: 'long' }) as WeekDay],
+              weekday:
+                WeekDay[
+                  date.toLocaleDateString("en-US", {
+                    weekday: "long",
+                  }) as WeekDay
+                ],
             },
             {
               working_hours_type: ScheduleType.Certain,
@@ -68,14 +78,14 @@ export class ScheduleDaoMongo implements ScheduleDao {
       },
       {
         $lookup: {
-          from: 'calendars',
-          localField: 'calendar_id',
-          foreignField: '_id',
-          as: 'calendar',
+          from: "calendars",
+          localField: "calendar_id",
+          foreignField: "_id",
+          as: "calendar",
         },
       },
       {
-        $unwind: '$calendar',
+        $unwind: "$calendar",
       },
       {
         $project: {
@@ -86,20 +96,23 @@ export class ScheduleDaoMongo implements ScheduleDao {
           working_hours_type: "$working_hours_type",
           restricted_to_services: "$restricted_to_services",
           weekday: "$weekday",
-          employee_name: '$calendar.employee_name',
-          active: '$calendar.active',
+          employee_name: "$calendar.employee_name",
+          active: "$calendar.active",
         },
       },
       {
         $match: {
-          $or: [
-            { 'calendar.active': true },
-            { 'active': true },
-          ]
-        }
-      }
+          $or: [{ "calendar.active": true }, { active: true }],
+        },
+      },
     ]);
-    
+
     return schedules as unknown as ExtendedSchedule[];
+  }
+
+  async getSchedulesByCalendarId(calendarId: string): Promise<Schedule[]> {
+    return this.model
+      .find({ calendar_id: calendarId })
+      .then((data) => data as unknown as Schedule[]);
   }
 }

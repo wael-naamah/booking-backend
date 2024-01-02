@@ -16,7 +16,7 @@ export class ContactsService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while add the contact",
+          err,
           500
         );
       });
@@ -39,7 +39,7 @@ export class ContactsService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while update the contact",
+          err,
           500
         );
       });
@@ -66,7 +66,7 @@ export class ContactsService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while delete the contact",
+          err,
           500
         );
       });

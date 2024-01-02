@@ -1,3 +1,5 @@
+import { Calendar } from "./Calendar";
+
 export enum WeekDay {
   Monday = "Monday",
   Tuesday = "Tuesday",

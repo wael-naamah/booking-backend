@@ -5,7 +5,7 @@ const settingsSchema = new Schema(
     sorting_order: {
       type: String,
       required: false,
-      enum: ['asc', 'desc'],
+      enum: ['none', 'asc', 'desc'],
     },
     show_performance_in_summary: Boolean,
     show_service_in_email: Boolean,
@@ -35,8 +35,7 @@ const serviceSchema = new Schema(
     },
     abbreviation_id: {
       type: Number,
-      required: true,
-      unique: true,
+      required: true
     }
   }
 );

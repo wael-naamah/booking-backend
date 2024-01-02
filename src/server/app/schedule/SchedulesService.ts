@@ -16,7 +16,7 @@ export class SchedulesService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while add the schedule",
+          err,
           500
         );
       });
@@ -39,7 +39,7 @@ export class SchedulesService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while update the schedule",
+          err,
           500
         );
       });
@@ -66,9 +66,18 @@ export class SchedulesService {
       })
       .catch((err) => {
         throw new ClientError(
-          "Something went wrong while delete the schedule",
+          err,
           500
         );
       });
+  }
+
+  async getSchedulesByCalendarId(id: string) {
+    return this.scheduleDao
+    .getSchedulesByCalendarId(id)
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => [] as unknown as Schedule[]);
   }
 }
