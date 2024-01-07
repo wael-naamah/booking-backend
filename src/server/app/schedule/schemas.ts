@@ -20,7 +20,7 @@ const addScheduleSchema = Joi.object().keys({
   }),
   date_from: Joi.when("working_hours_type", {
     is: ScheduleType.Certain,
-    then: Joi.date().iso().required().min(new Date().toISOString()).messages({
+    then: Joi.date().iso().required().min(new Date().toISOString().split('T')[0]).messages({
       "date.min": "date_from must be equal to or greater than the current date",
     }),
     otherwise: Joi.forbidden(),
@@ -44,7 +44,7 @@ const addScheduleSchema = Joi.object().keys({
     .messages({
       "string.pattern.base": 'time_to must be in the format "hh:mm AM/PM"',
     }),
-  reason: Joi.string().optional(),
+  reason: Joi.string().optional().allow(''),
   deactivate_working_hours: Joi.boolean().optional(),
   one_time_appointment_link: Joi.string().optional(),
   only_internally: Joi.boolean().optional(),
