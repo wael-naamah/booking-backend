@@ -1,0 +1,38 @@
+import express from "express";
+import EmailControllers from "./controller";
+import { injectService } from "../middlewares/serviceMiddleware";
+import ValidateSchema from "../middlewares/validateSchema";
+import schemas from "./schemas";
+
+export const configure = (app: express.Router) => {
+  app.post(
+    "/mailer/send",
+    injectService,
+    ValidateSchema.prepare(schemas.sendEmailSchema),
+    EmailControllers.mailerSend
+  );
+  app.post(
+    "/mailer/config",
+    injectService,
+    ValidateSchema.prepare(schemas.addEmailConfigSchema),
+    EmailControllers.addEmailConfig
+  );
+  app.get(
+    "/mailer/config",
+    injectService,
+    // validateToken,
+    // checkAuth,
+    EmailControllers.getEmailConfig
+  );
+  app.put(
+    "/mailer/config/:id",
+    injectService,
+    ValidateSchema.prepare(schemas.updateEmailConfigSchema),
+    EmailControllers.updateEmailConfig
+  );
+  app.delete(
+    "/mailer/config/:id",
+    injectService,
+    EmailControllers.deleteEmailConfig
+  );
+};
