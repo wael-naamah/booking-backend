@@ -5,6 +5,7 @@ import {
   AddAppointmentRequest,
   ScheduleDaoMongo,
   ExtendedSchedule,
+  ContactAppointment,
 } from "../../../database-client";
 import { ClientError } from "../../utils/exceptions";
 
@@ -22,10 +23,7 @@ export class AppointmentsService {
         return data;
       })
       .catch((err) => {
-        throw new ClientError(
-          err,
-          500
-        );
+        throw new ClientError(err, 500);
       });
   }
 
@@ -45,10 +43,7 @@ export class AppointmentsService {
         return data;
       })
       .catch((err) => {
-        throw new ClientError(
-          err,
-          500
-        );
+        throw new ClientError(err, 500);
       });
   }
 
@@ -59,10 +54,49 @@ export class AppointmentsService {
         return data;
       })
       .catch((err) => {
-        throw new ClientError(
-          err,
-          500
-        );
+        throw new ClientError(err, 500);
+      });
+  }
+  
+
+  async getAppointmentsWithService(appointments: Appointment[]) {
+    const dataWithService: ContactAppointment[] = [];
+
+    for (const appointment of appointments) {
+      let service = null;
+      const res = await this.categoryDao.getServiceByCategoryIdAndServiceId(
+        appointment.category_id,
+        appointment.service_id
+      );
+
+      if (res) {
+        // @ts-ignore
+        service = res.services[0];
+      }
+
+      // @ts-ignore
+      dataWithService.push({ ...appointment.toObject(), service });
+    }
+    
+    return dataWithService;
+  }
+
+  async getAppointmentsByContactId(contactId: string) {
+    const appointments = await this.appointmentDao
+      .getAppointmentsByContactId(contactId)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        throw new ClientError(err, 500);
+      });
+
+    return this.getAppointmentsWithService(appointments)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        throw new ClientError(err, 500);
       });
   }
 
@@ -73,10 +107,7 @@ export class AppointmentsService {
         return data;
       })
       .catch((err) => {
-        throw new ClientError(
-          err,
-          500
-        );
+        throw new ClientError(err, 500);
       });
   }
 
@@ -246,7 +277,12 @@ export class AppointmentsService {
   }
 
   async filterBookedAppointments(
-    timeSlots: { start: string; end: string; calendar_id: string, employee_name: string }[],
+    timeSlots: {
+      start: string;
+      end: string;
+      calendar_id: string;
+      employee_name: string;
+    }[],
     bookedAppointments: Appointment[]
   ) {
     const availableTimeSlots = [];

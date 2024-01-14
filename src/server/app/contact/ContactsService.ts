@@ -31,6 +31,15 @@ export class ContactsService {
       .catch((err) => null);
   }
 
+  async getContactByEmail(email: string) {
+    return this.contactDao
+      .getContactByEmail(email)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => null);
+  }
+
   async updateContact(id: string, newContact: Contact) {
     return this.contactDao
       .updateContact(id, newContact)

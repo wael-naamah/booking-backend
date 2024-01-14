@@ -1,4 +1,12 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+
+export const attachmentSchema = new Schema(
+  {
+    title: String,
+    url: String,
+  },
+  { _id: false }
+);
 
 export const schema = new mongoose.Schema(
   {
@@ -31,6 +39,15 @@ export const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    brand_of_device: String,
+    model: String,
+    exhaust_gas_measurement: Boolean,
+    has_maintenance_agreement: Boolean,
+    has_bgas_before: Boolean,
+    year: String,
+    invoice_number: Number,
+    attachments: [attachmentSchema],
+    remarks: String,
   },
   {
     timestamps: true,

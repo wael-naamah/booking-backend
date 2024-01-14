@@ -7,6 +7,11 @@ const getAppointmentsSchema = Joi.object().keys({
   search: Joi.string().trim().optional().allow(""),
 });
 
+const attachmentSchema = {
+  title: Joi.string().allow(""),
+  url: Joi.string().allow(""),
+};
+
 const addAppointmentSchema = Joi.object().keys({
   category_id: Joi.string().required(),
   service_id: Joi.string().required(),
@@ -22,6 +27,15 @@ const addAppointmentSchema = Joi.object().keys({
   end_date: Joi.date().iso().required().min(Joi.ref("start_date")).messages({
     "date.min": "end_date must be after start_date",
   }),
+  brand_of_device: Joi.string().optional(),
+  model: Joi.string().optional(),
+  exhaust_gas_measurement: Joi.boolean().optional(),
+  has_maintenance_agreement: Joi.boolean().optional(),
+  has_bgas_before: Joi.boolean().optional(),
+  year: Joi.string().optional(),
+  invoice_number: Joi.number().optional(),
+  remarks: Joi.string().optional(),
+  attachments: Joi.array().items(attachmentSchema),
   contact: contactSchema.addContactSchema,
 });
 
@@ -40,6 +54,15 @@ const updateAppointmentSchema = Joi.object().keys({
   end_date: Joi.date().iso().required().min(Joi.ref("start_date")).messages({
     "date.min": "end_date must be after start_date",
   }),
+  brand_of_device: Joi.string().optional(),
+  model: Joi.string().optional(),
+  exhaust_gas_measurement: Joi.boolean().optional(),
+  has_maintenance_agreement: Joi.boolean().optional(),
+  has_bgas_before: Joi.boolean().optional(),
+  year: Joi.string().optional(),
+  invoice_number: Joi.number().optional(),
+  remarks: Joi.string().optional(),
+  attachments: Joi.array().items(attachmentSchema),
   contact_id: Joi.string().required(),
 });;
 

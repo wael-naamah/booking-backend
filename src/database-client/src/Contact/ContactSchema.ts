@@ -1,12 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-export const attachmentSchema = new Schema(
-  {
-    title: String,
-    url: String,
-  },
-  { _id: false }
-);
 
 export const schema = new mongoose.Schema(
   {
@@ -48,20 +41,12 @@ export const schema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-    }, // unique: true, TODO: need to discuss the requirements
+    }, 
+    // unique: true, TODO: need to discuss the requirements
     note_on_address: String,
-    brand_of_device: String,
-    model: String,
-    exhaust_gas_measurement: Boolean,
-    has_maintenance_agreement: Boolean,
-    has_bgas_before: Boolean,
-    year: String,
-    invoice_number: Number,
     newsletter: Boolean,
-  
+    categories_permission: [{type: String, required: false}],
     remarks: String,
-    attachments: [attachmentSchema],
-    categories_permission: [{type: String, required: false}]
   },
   {
     timestamps: true,

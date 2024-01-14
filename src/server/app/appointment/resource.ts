@@ -19,6 +19,13 @@ export const configure = (app: express.Router) => {
     ValidateSchema.prepare(schemas.getAppointmentsSchema, "query"),
     AppointmentsControllers.getAppointments
   );
+  app.get(
+    "/appointments/contact/:contactId",
+    injectService,
+    // validateToken,
+    // checkAuth,
+    AppointmentsControllers.getAppointmentsByContactId
+  );
   app.put(
     "/appointments/:categoryId",
     injectService,

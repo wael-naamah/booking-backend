@@ -39,18 +39,45 @@ class AppointmentsControllers {
         */
     const form = request.body as unknown as Appointment;
     const service = (request as any).service as ServiceContainer;
-
     const contact = form.contact;
-    const newContact = await service.contactService.addContact(contact);
+    let conatctId = "";
+    let contactObg = null
 
-    if (newContact && newContact._id) {
+    const existingContact = await service.contactService.getContactByEmail(
+      contact.email
+    );
+    
+    if (existingContact) {
+      // @ts-ignore
+      conatctId = existingContact._doc._id;
+      // @ts-ignore
+      contactObg = existingContact._doc
+    } else {
+      const newContact = await service.contactService.addContact(contact);
+      if (newContact && newContact._id) {
+        conatctId = newContact._id;
+        // @ts-ignore
+        contactObg = newContact._doc
+      }
+    }
+
+    if (conatctId) {
       const newAppointment: AddAppointmentRequest = {
         category_id: form.category_id,
         service_id: form.service_id,
         calendar_id: form.calendar_id,
         start_date: form.start_date,
         end_date: form.end_date,
-        contact_id: newContact._id,
+        contact_id: conatctId,
+        brand_of_device: form.brand_of_device,
+        model: form.model,
+        exhaust_gas_measurement: Boolean(form.exhaust_gas_measurement),
+        has_maintenance_agreement: Boolean(form.has_maintenance_agreement),
+        has_bgas_before: Boolean(form.has_bgas_before),
+        year: form.year || undefined,
+        invoice_number: form.invoice_number || undefined,
+        attachments: form.attachments || undefined,
+        remarks: form.remarks || undefined
       };
       const data = await service.appointmentService.addAppointment(
         newAppointment
@@ -58,8 +85,7 @@ class AppointmentsControllers {
 
       // @ts-ignore
       const dataObject = { ...data._doc };
-      // @ts-ignore
-      const contactObject = { ...newContact._doc };
+      const contactObject = { ...contactObg };
 
       const dataWithContact = {
         ...dataObject,
@@ -104,10 +130,42 @@ class AppointmentsControllers {
         */
     const { start, end } = request.query as unknown as AppointmentForm;
     const service = (request as any).service as ServiceContainer;
-    const data = await service.appointmentService.getAppointments(
-      start,
-      end
-    );
+    const data = await service.appointmentService.getAppointments(start, end);
+
+    res.status(200).json(data);
+  }
+
+  @tryCatchErrorDecorator
+  static async getAppointmentsByContactId(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    // #swagger.tags = ['Appointment'];
+
+    /*
+        #swagger.description = 'Endpoint to get all appointments by contactId';
+         #swagger.parameters['obj'] = {
+                     in: 'body',
+                     schema: {
+                        $email: '',
+                        $password: '',
+                    },
+        }
+        #swagger.responses[200] = {
+            schema: {
+                user: {
+                    iss: "",
+                    aud: "",
+                },
+                refreshToken: '',
+                token: '',
+             }
+        }
+        */
+  
+    const service = (request as any).service as ServiceContainer;
+    const data = await service.appointmentService.getAppointmentsByContactId(request.params.contactId);
 
     res.status(200).json(data);
   }
@@ -143,7 +201,9 @@ class AppointmentsControllers {
     const form = request.body as unknown as AddAppointmentRequest;
     const service = (request as any).service as ServiceContainer;
     const { categoryId } = request.params;
-    const contact = await service.contactService.getContactById(form.contact_id);
+    const contact = await service.contactService.getContactById(
+      form.contact_id
+    );
     const data = await service.appointmentService.updateAppointment(
       categoryId,
       form

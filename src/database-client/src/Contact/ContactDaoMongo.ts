@@ -22,6 +22,10 @@ export class ContactDaoMongo implements ContactDao {
     return this.model.findById(id);
   }
 
+  async getContactByEmail(email: string): Promise<Contact | null> {
+    return this.model.findOne({email});
+  }
+
   async getContacts(
     page: number,
     limit: number,

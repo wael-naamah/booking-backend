@@ -36,6 +36,14 @@ export class AppointmentDaoMongo implements AppointmentDao {
       .then((data) => data as unknown as Appointment[]);
   }
 
+  async getAppointmentsByContactId(
+    conatctId: string,
+  ): Promise<Appointment[]> {
+    return this.model
+      .find({contact_id: conatctId})
+      .then((data) => data as unknown as Appointment[]);
+  }
+
   async updateAppointment(id: string, newAppointment: AddAppointmentRequest) {
     return this.model
       .findByIdAndUpdate(id, newAppointment, { new: true })
