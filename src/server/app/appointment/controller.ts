@@ -171,6 +171,41 @@ class AppointmentsControllers {
   }
 
   @tryCatchErrorDecorator
+  static async getAppointmentsByCalendarId(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    // #swagger.tags = ['Appointment'];
+
+    /*
+        #swagger.description = 'Endpoint to get all appointments by contactId';
+         #swagger.parameters['obj'] = {
+                     in: 'body',
+                     schema: {
+                        $email: '',
+                        $password: '',
+                    },
+        }
+        #swagger.responses[200] = {
+            schema: {
+                user: {
+                    iss: "",
+                    aud: "",
+                },
+                refreshToken: '',
+                token: '',
+             }
+        }
+        */
+  
+    const service = (request as any).service as ServiceContainer;
+    const data = await service.appointmentService.getAppointmentsByCalendarId(request.params.calendarId);
+
+    res.status(200).json(data);
+  }
+
+  @tryCatchErrorDecorator
   static async updateAppointment(
     request: Request,
     res: Response,

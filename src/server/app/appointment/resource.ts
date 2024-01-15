@@ -26,6 +26,13 @@ export const configure = (app: express.Router) => {
     // checkAuth,
     AppointmentsControllers.getAppointmentsByContactId
   );
+  app.get(
+    "/appointments/calendar/:calendarId",
+    injectService,
+    // validateToken,
+    // checkAuth,
+    AppointmentsControllers.getAppointmentsByCalendarId
+  );
   app.put(
     "/appointments/:categoryId",
     injectService,

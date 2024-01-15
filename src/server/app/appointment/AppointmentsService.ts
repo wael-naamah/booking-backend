@@ -100,6 +100,25 @@ export class AppointmentsService {
       });
   }
 
+  async getAppointmentsByCalendarId(calendarId: string) {
+    const appointments = await this.appointmentDao
+      .getAppointmentsByCalendarIdId(calendarId)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        throw new ClientError(err, 500);
+      });
+
+    return this.getAppointmentsWithService(appointments)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        throw new ClientError(err, 500);
+      });
+  }
+
   async deleteAppointment(id: string) {
     return this.appointmentDao
       .deleteAppointment(id)
