@@ -36,6 +36,8 @@ const addAppointmentSchema = Joi.object().keys({
   invoice_number: Joi.number().optional(),
   remarks: Joi.string().optional(),
   attachments: Joi.array().items(attachmentSchema),
+  employee_remarks: Joi.string().optional(),
+  employee_attachments: Joi.array().items(attachmentSchema),
   contact: contactSchema.addContactSchema,
 });
 
@@ -45,12 +47,7 @@ const updateAppointmentSchema = Joi.object().keys({
   calendar_id: Joi.string().required(),
   start_date: Joi.date()
     .iso()
-    .required()
-    .min(new Date().toISOString())
-    .messages({
-      "date.min":
-        "start_date must be equal to or greater than the current date",
-    }),
+    .required(),
   end_date: Joi.date().iso().required().min(Joi.ref("start_date")).messages({
     "date.min": "end_date must be after start_date",
   }),
@@ -63,6 +60,9 @@ const updateAppointmentSchema = Joi.object().keys({
   invoice_number: Joi.number().optional(),
   remarks: Joi.string().optional(),
   attachments: Joi.array().items(attachmentSchema),
+  employee_remarks: Joi.string().optional(),
+  employee_attachments: Joi.array().items(attachmentSchema),
+  ended_at: Joi.date().iso().optional(),
   contact_id: Joi.string().required(),
 });;
 

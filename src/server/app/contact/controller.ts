@@ -70,7 +70,11 @@ class ContactsControllers {
         */
     const { page = 1, limit = 10, search } = request.query as PaginatedForm;
     const service = (request as any).service as ServiceContainer;
-    const { data, count } = await service.contactService.getContacts(page, limit, search);
+    const { data, count } = await service.contactService.getContacts(
+      page,
+      limit,
+      search
+    );
 
     const paginatedResult = new PaginatedResponse<Contact>(
       data,
@@ -79,6 +83,41 @@ class ContactsControllers {
       count
     );
     res.status(200).json(paginatedResult);
+  }
+
+  @tryCatchErrorDecorator
+  static async getContactById(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    // #swagger.tags = ['Contact'];
+
+    /*
+        #swagger.description = 'Endpoint to get all contacts';
+         #swagger.parameters['obj'] = {
+                     in: 'body',
+                     schema: {
+                        $email: '',
+                        $password: '',
+                    },
+        }
+        #swagger.responses[200] = {
+            schema: {
+                user: {
+                    iss: "",
+                    aud: "",
+                },
+                refreshToken: '',
+                token: '',
+             }
+        }
+        */
+    const { contactId } = request.params;
+    const service = (request as any).service as ServiceContainer;
+    const data = await service.contactService.getContactById(contactId);
+
+    res.status(200).json(data);
   }
 
   @tryCatchErrorDecorator

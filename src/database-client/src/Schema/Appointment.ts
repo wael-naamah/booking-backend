@@ -1,4 +1,5 @@
 import { Service } from "./Category";
+import { Attachment } from "./Common";
 import { Contact } from "./Contact";
 
 export interface Appointment {
@@ -16,11 +17,11 @@ export interface Appointment {
   has_bgas_before?: boolean;
   year?: string;
   invoice_number?: number;
-  attachments?: {
-    title: string;
-    url: string;
-  }[];
+  attachments?: Attachment[];
   remarks?: string;
+  employee_attachments?: Attachment[];
+  employee_remarks?: string;
+  ended_at?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

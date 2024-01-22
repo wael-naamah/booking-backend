@@ -77,7 +77,10 @@ class AppointmentsControllers {
         year: form.year || undefined,
         invoice_number: form.invoice_number || undefined,
         attachments: form.attachments || undefined,
-        remarks: form.remarks || undefined
+        remarks: form.remarks || undefined,
+        employee_attachments: form.employee_attachments || undefined,
+        employee_remarks: form.employee_remarks || undefined,
+        ended_at: form.ended_at || undefined
       };
       const data = await service.appointmentService.addAppointment(
         newAppointment

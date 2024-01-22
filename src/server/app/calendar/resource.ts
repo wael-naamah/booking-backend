@@ -20,6 +20,13 @@ export const configure = (app: express.Router) => {
     ValidateSchema.prepare(schemas.getCalendarsSchema, 'query'),
     CalendarsControllers.getCalendars
   );
+  app.get(
+    "/calendars/:calendarId",
+    injectService,
+    // validateToken,
+    // checkAuth,
+    CalendarsControllers.getCalendarById
+  );
   app.put(
     "/calendars/:calendarId",
     injectService,

@@ -62,6 +62,37 @@ class CalendarsControllers {
   }
 
   @tryCatchErrorDecorator
+  static async getCalendarById(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    // #swagger.tags = ['Calendar'];
+
+    /*
+        #swagger.description = 'Endpoint to get calendar by id';
+         #swagger.parameters['obj'] = {
+                     in: 'body',
+                     schema: {
+                        $email: '',
+                        $password: '',
+                    },
+        }
+        #swagger.responses[200] = {
+            schema: {
+                refreshToken: '',
+                token: '',
+             }
+        }
+        */
+    const { calendarId } = request.params;
+    const service = (request as any).service as ServiceContainer;
+    const data = await service.calendarService.getCalendarById(calendarId);
+
+    res.status(200).json(data);
+  }
+
+  @tryCatchErrorDecorator
   static async addCalendar(
     request: Request,
     res: Response,

@@ -19,6 +19,13 @@ export const configure = (app: express.Router) => {
     ValidateSchema.prepare(schemas.getContactsSchema, "query"),
     ContactsControllers.getContacts
   );
+  app.get(
+    "/contacts/:contactId",
+    injectService,
+    // validateToken,
+    // checkAuth,
+    ContactsControllers.getContactById
+  );
   app.put(
     "/contacts/:contactId",
     injectService,

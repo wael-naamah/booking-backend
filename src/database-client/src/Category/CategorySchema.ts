@@ -15,6 +15,14 @@ const settingsSchema = new Schema(
   { _id: false }
 );
 
+export const attachmentSchema = new Schema(
+  {
+    title: String,
+    url: String,
+  },
+  { _id: false }
+);
+
 const serviceSchema = new Schema(
   {
     name: {
@@ -36,7 +44,8 @@ const serviceSchema = new Schema(
     abbreviation_id: {
       type: Number,
       required: true
-    }
+    },
+    attachment: attachmentSchema,
   }
 );
 

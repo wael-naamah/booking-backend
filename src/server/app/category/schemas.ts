@@ -7,12 +7,18 @@ const getCategoriesSchema = Joi.object().keys({
   limit: Joi.number().min(1).default(10),
 });
 
+const attachmentSchema = {
+  title: Joi.string().allow(""),
+  url: Joi.string().allow(""),
+};
+
 const servicesListSchema = Joi.object({
   name: Joi.string().required(),
   description: Joi.string().required(),
   duration: Joi.number().required(),
   price: Joi.number().required(),
   abbreviation_id: Joi.number().required(),
+  attachment: Joi.object(attachmentSchema).optional(),
 });
 
 const updatedServicesListSchema = Joi.object({
@@ -22,6 +28,7 @@ const updatedServicesListSchema = Joi.object({
   duration: Joi.number().required(),
   price: Joi.number().required(),
   abbreviation_id: Joi.number().required(),
+  attachment: Joi.object(attachmentSchema).optional(),
 });
 
 const settingsSchema = Joi.object({

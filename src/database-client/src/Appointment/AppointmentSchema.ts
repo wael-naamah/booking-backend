@@ -48,6 +48,9 @@ export const schema = new mongoose.Schema(
     invoice_number: Number,
     attachments: [attachmentSchema],
     remarks: String,
+    employee_attachments: [attachmentSchema],
+    employee_remarks: String,
+    ended_at: Date,
   },
   {
     timestamps: true,
