@@ -10,8 +10,13 @@ import { configure as contactApi } from "./contact/resource";
 import { configure as calendarApi } from "./calendar/resource";
 import { configure as scheduleApi } from "./schedule/resource";
 import { configure as emailApi } from "./email/resource";
+import { configure as fileApi } from "./file/resource";
 
 import helmet from "helmet";
+import fileUpload from 'express-fileupload';
+
+import admin from 'firebase-admin';
+import serviceAccount from './file/serviceAccountKey.json';
 
 import errorHandler from "./middlewares/errorHandler";
 import { getEnv } from "../env";
@@ -32,6 +37,18 @@ app.use(
 app.use(cors);
 app.use(cookieParser);
 app.disable("x-powered-by");
+app.use(
+  fileUpload({
+      limits: { fileSize: 50 * 1024 * 1024 * 100000 },
+  })
+);
+
+// TODO: check if needed
+admin.initializeApp({
+  // @ts-ignore
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: 'your-storage-bucket-url',
+});
 
 app.use(json());
 app.use(urlencoded({ extended: true }));
@@ -54,7 +71,8 @@ appointmentApi(appScoped);
 contactApi(appScoped);
 calendarApi(appScoped);
 scheduleApi(appScoped);
-emailApi(appScoped)
+emailApi(appScoped);
+fileApi(appScoped);
 
 app.use(`/`, appScoped);
 
