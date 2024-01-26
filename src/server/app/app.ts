@@ -16,12 +16,18 @@ import helmet from "helmet";
 import fileUpload from 'express-fileupload';
 
 import admin from 'firebase-admin';
-import serviceAccount from './file/serviceAccountKey.json';
 
 import errorHandler from "./middlewares/errorHandler";
 import { getEnv } from "../env";
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "../swagger/swagger_output.json";
+
+
+const serviceAccount = {
+  projectId: getEnv().firebase_project_Id,
+  clientEmail: getEnv().firebase_client_email,
+  privateKey: getEnv().firebase_private_key,
+}
 
 const cookieParser = require("cookie-parser")();
 const cors = require("cors")({ origin: true });
