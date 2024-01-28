@@ -35,4 +35,29 @@ export const configure = (app: express.Router) => {
     injectService,
     EmailControllers.deleteEmailConfig
   );
+  app.post(
+    "/mailer/template",
+    injectService,
+    ValidateSchema.prepare(schemas.addEmailTemplateSchema),
+    EmailControllers.addEmailTemplate
+  );
+  app.get(
+    "/mailer/template",
+    injectService,
+    // validateToken,
+    // checkAuth,
+    ValidateSchema.prepare(schemas.getEmailTemplatesSchema, 'query'),
+    EmailControllers.getEmailTemplates
+  );
+  app.put(
+    "/mailer/template/:id",
+    injectService,
+    ValidateSchema.prepare(schemas.updateEmailTemplateSchema),
+    EmailControllers.updateEmailTemplate
+  );
+  app.delete(
+    "/mailer/template/:id",
+    injectService,
+    EmailControllers.deleteEmailTemplate
+  );
 };

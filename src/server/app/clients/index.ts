@@ -5,7 +5,8 @@ import {
   ContactDaoMongo,
   CalendarDaoMongo,
   ScheduleDaoMongo,
-  EmailConfigDaoMongo
+  EmailConfigDaoMongo,
+  EmailTemplateDaoMongo
 } from "../../../database-client";
 
 import { getMongo } from "./mongodb/mongo";
@@ -35,6 +36,7 @@ const createContainer = () => {
   const calendarDao = new CalendarDaoMongo(getMongo());
   const scheduleDao = new ScheduleDaoMongo(getMongo());
   const emailConfigDao = new EmailConfigDaoMongo(getMongo());
+  const emailTemplateDao = new EmailTemplateDaoMongo(getMongo());
 
 
   const authService = new AuthService(userDao);
@@ -42,7 +44,7 @@ const createContainer = () => {
   const categoryService = new CategoryService(categoryDao);
   const calendarService = new CalendarsService(calendarDao);
   const scheduleService = new SchedulesService(scheduleDao);
-  const emailService = new EmailService(emailConfigDao);
+  const emailService = new EmailService(emailConfigDao, emailTemplateDao);
 
   
 
