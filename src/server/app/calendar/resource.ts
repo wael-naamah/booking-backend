@@ -4,6 +4,7 @@ import { injectService } from "../middlewares/serviceMiddleware";
 // import { checkAuth, validateToken } from "../middlewares/authMiddleware";
 import ValidateSchema from "../middlewares/validateSchema";
 import schemas from "./schemas";
+import { passwordHashHandler } from "../middlewares/authMiddleware";
 
 export const configure = (app: express.Router) => {
   app.post(
@@ -31,6 +32,7 @@ export const configure = (app: express.Router) => {
     "/calendars/:calendarId",
     injectService,
     ValidateSchema.prepare(schemas.updateCalendarSchema),
+    passwordHashHandler,
     CalendarsControllers.updateCalendar
   );
   app.delete(

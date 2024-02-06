@@ -39,7 +39,7 @@ const createContainer = () => {
   const emailTemplateDao = new EmailTemplateDaoMongo(getMongo());
 
 
-  const authService = new AuthService(userDao);
+  const authService = new AuthService(userDao, contactDao, calendarDao);
 
   const categoryService = new CategoryService(categoryDao);
   const calendarService = new CalendarsService(calendarDao);

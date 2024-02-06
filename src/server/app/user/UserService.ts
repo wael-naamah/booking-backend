@@ -1,4 +1,10 @@
-import { UserDaoMongo, User } from "../../../database-client";
+import {
+  UserDaoMongo,
+  User,
+  ContactDaoMongo,
+  CalendarDaoMongo,
+  ResetPasswordForm,
+} from "../../../database-client";
 import { getEnv } from "../../env";
 import { ClientError } from "../../utils/exceptions";
 const bcrypt = require("bcrypt");
@@ -7,7 +13,11 @@ const jwt_secret_key = getEnv().jwt_secret_key;
 const jwt_refresh_secret_key = getEnv().jwt_refresh_secret_key;
 
 export class AuthService {
-  constructor(private userDao: UserDaoMongo) {}
+  constructor(
+    private userDao: UserDaoMongo,
+    private contactDao: ContactDaoMongo,
+    private calendarDao: CalendarDaoMongo
+  ) {}
 
   async signupUser(user: User) {
     const userByEmail = await this.userDao
@@ -53,6 +63,7 @@ export class AuthService {
           ...userByEmail._doc,
           token,
           refreshToken,
+          role: "user",
         };
 
         return user;
@@ -60,7 +71,85 @@ export class AuthService {
         throw new ClientError("Invalid password", 400);
       }
     } else {
-      throw new ClientError("Email not found", 400);
+      const userByEmail = await this.calendarDao
+        .getCalendarByEmail(email)
+        .then((data) => {
+          return data;
+        })
+        .catch((err) => null);
+
+      if (userByEmail && userByEmail._id) {
+        const passwordMatch = await bcrypt.compare(
+          password,
+          userByEmail.password
+        );
+
+        if (passwordMatch) {
+          const token = jwt.sign({ userId: userByEmail._id }, jwt_secret_key, {
+            expiresIn: "8h",
+          });
+          const refreshToken = jwt.sign(
+            { userId: userByEmail._id },
+            jwt_refresh_secret_key,
+            { expiresIn: "7d" }
+          );
+
+          const user = {
+            // @ts-ignore
+            ...userByEmail._doc,
+            token,
+            refreshToken,
+            role: "calendar",
+          };
+
+          return user;
+        } else {
+          throw new ClientError("Invalid password", 400);
+        }
+      } else {
+        const userByEmail = await this.contactDao
+          .getContactByEmail(email)
+          .then((data) => {
+            return data;
+          })
+          .catch((err) => null);
+
+        if (userByEmail && userByEmail._id) {
+          const passwordMatch = await bcrypt.compare(
+            password,
+            userByEmail.password
+          );
+
+          if (passwordMatch) {
+            const token = jwt.sign(
+              { userId: userByEmail._id },
+              jwt_secret_key,
+              {
+                expiresIn: "8h",
+              }
+            );
+            const refreshToken = jwt.sign(
+              { userId: userByEmail._id },
+              jwt_refresh_secret_key,
+              { expiresIn: "7d" }
+            );
+
+            const user = {
+              // @ts-ignore
+              ...userByEmail._doc,
+              token,
+              refreshToken,
+              role: "contact",
+            };
+
+            return user;
+          } else {
+            throw new ClientError("Invalid password", 400);
+          }
+        } else {
+          throw new ClientError("Email not found", 400);
+        }
+      }
     }
   }
 
@@ -74,14 +163,18 @@ export class AuthService {
     }
   }
 
-  async refreshToken(refreshToken: string){ 
+  async refreshToken(refreshToken: string) {
     try {
       const decodedToken = jwt.verify(refreshToken, jwt_refresh_secret_key);
 
-      if(decodedToken){
-        const token = jwt.sign({ userId: decodedToken.userId }, jwt_secret_key, {
-          expiresIn: "8h",
-        });
+      if (decodedToken) {
+        const token = jwt.sign(
+          { userId: decodedToken.userId },
+          jwt_secret_key,
+          {
+            expiresIn: "8h",
+          }
+        );
         const refreshToken = jwt.sign(
           { userId: decodedToken.userId },
           jwt_refresh_secret_key,
@@ -99,6 +192,44 @@ export class AuthService {
       return decodedToken;
     } catch (error) {
       throw new ClientError("Unauthorized", 401);
+    }
+  }
+
+  async resetPassword(form: ResetPasswordForm) {
+    const userByEmail = await this.contactDao
+      .getContactByEmail(form.email)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => null);
+
+    if (userByEmail && userByEmail._id) {
+      const passwordMatch = await bcrypt.compare(
+        form.oldPassword,
+        userByEmail.password
+      );
+
+      if (passwordMatch) {
+        const contact = {
+          // @ts-ignore
+          ...userByEmail._doc,
+          password: form.password,
+        };
+
+        const data = await this.contactDao.updateContact(
+          userByEmail._id,
+          contact
+        );
+        
+        // @ts-ignore
+        if(data) data.password = undefined;
+
+        return data;
+      } else {
+        throw new ClientError("Invalid password", 400);
+      }
+    } else {
+      throw new ClientError("Email not found", 400);
     }
   }
 }

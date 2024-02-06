@@ -5,7 +5,7 @@ import {
   AddAppointmentRequest,
   ScheduleDaoMongo,
   ExtendedSchedule,
-  ContactAppointment,
+  ExtendedAppointment,
 } from "../../../database-client";
 import { ClientError } from "../../utils/exceptions";
 
@@ -48,7 +48,7 @@ export class AppointmentsService {
   }
 
   async getAppointments(start: string, end: string) {
-    return this.appointmentDao
+    const appointments = await this.appointmentDao
       .getAppointments(start, end)
       .then((data) => {
         return data;
@@ -56,11 +56,18 @@ export class AppointmentsService {
       .catch((err) => {
         throw new ClientError(err, 500);
       });
+
+    return this.getAppointmentsWithService(appointments)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        throw new ClientError(err, 500);
+      });
   }
-  
 
   async getAppointmentsWithService(appointments: Appointment[]) {
-    const dataWithService: ContactAppointment[] = [];
+    const dataWithService: ExtendedAppointment[] = [];
 
     for (const appointment of appointments) {
       let service = null;

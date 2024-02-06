@@ -36,7 +36,7 @@ const addAppointmentSchema = Joi.object().keys({
   invoice_number: Joi.number().optional(),
   remarks: Joi.string().optional(),
   attachments: Joi.array().items(attachmentSchema),
-  employee_remarks: Joi.string().optional(),
+  employee_remarks: Joi.string().optional().allow(""),
   employee_attachments: Joi.array().items(attachmentSchema),
   contact: contactSchema.addContactSchema,
 });
@@ -60,7 +60,7 @@ const updateAppointmentSchema = Joi.object().keys({
   invoice_number: Joi.number().optional(),
   remarks: Joi.string().optional(),
   attachments: Joi.array().items(attachmentSchema),
-  employee_remarks: Joi.string().optional(),
+  employee_remarks: Joi.string().optional().allow(""),
   employee_attachments: Joi.array().items(attachmentSchema),
   ended_at: Joi.date().iso().optional(),
   contact_id: Joi.string().required(),

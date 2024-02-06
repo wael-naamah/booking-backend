@@ -2,26 +2,29 @@ import express from 'express';
 const bcrypt = require("bcrypt");
 
 import { ClientError } from '../../utils/exceptions';
-import { User } from '../../../database-client';
 import { ServiceContainer } from '../clients';
 
 // hash password before store it
 export const passwordHashHandler: express.RequestHandler = async (req, res, next) => {
-    const form = req.body as User;
+    const form = req.body as any;
     
     const saltRounds = 10;
     const plaintextPassword = form.password;
-    await bcrypt.genSalt(saltRounds, (_: any, salt: any) => {
-      bcrypt.hash(plaintextPassword, salt, (err: any, hash: string) => {
-        if (err) {
-          const error = new ClientError('error hashing password', 500);
-          next(error);
-        } else {
-          form.password = hash;
-          next();
-        }
+    if(plaintextPassword && plaintextPassword.length < 40){
+      await bcrypt.genSalt(saltRounds, (_: any, salt: any) => {
+        bcrypt.hash(plaintextPassword, salt, (err: any, hash: string) => {
+          if (err) {
+            const error = new ClientError('error hashing password', 500);
+            next(error);
+          } else {
+            form.password = hash;
+            next();
+          }
+        });
       });
-    });
+    } else {
+      next();
+    }
 };
 
 export const validateToken: express.RequestHandler = async (

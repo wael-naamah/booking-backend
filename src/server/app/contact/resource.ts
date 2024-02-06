@@ -3,12 +3,14 @@ import ContactsControllers from "./controller";
 import { injectService } from "../middlewares/serviceMiddleware";
 import ValidateSchema from "../middlewares/validateSchema";
 import schemas from "./schemas";
+import { passwordHashHandler } from "../middlewares/authMiddleware";
 
 export const configure = (app: express.Router) => {
   app.post(
     "/contacts",
     injectService,
     ValidateSchema.prepare(schemas.addContactSchema),
+    passwordHashHandler,
     ContactsControllers.addContact
   );
   app.get(
@@ -30,6 +32,7 @@ export const configure = (app: express.Router) => {
     "/contacts/:contactId",
     injectService,
     ValidateSchema.prepare(schemas.updateContactSchema),
+    passwordHashHandler,
     ContactsControllers.updateContact
   );
   app.delete(

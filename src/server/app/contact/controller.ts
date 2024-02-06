@@ -151,10 +151,22 @@ class ContactsControllers {
     const form = request.body as unknown as Contact;
     const service = (request as any).service as ServiceContainer;
     const { contactId } = request.params;
+    const existingContact = await service.contactService.getContactById(
+      contactId
+    );
 
-    const data = await service.contactService.updateContact(contactId, form);
+    if (existingContact) {
+      const data = await service.contactService.updateContact(contactId, {
+        ...form,
+        password: existingContact.password,
+      });
+      //@ts-ignore
+      data.password = undefined;
 
-    res.status(200).json(data);
+      res.status(200).json(data);
+    } else {
+      res.status(404).json({ messege: "User not found" });
+    }
   }
 
   @tryCatchErrorDecorator

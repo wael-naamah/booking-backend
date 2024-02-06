@@ -42,6 +42,10 @@ export const schema = new mongoose.Schema(
       type: String,
       required: true,
     }, 
+    password: {
+      type: String,
+      required: false,
+    },
     // unique: true, TODO: need to discuss the requirements
     note_on_address: String,
     newsletter: Boolean,

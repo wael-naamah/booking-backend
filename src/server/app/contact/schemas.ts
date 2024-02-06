@@ -19,6 +19,19 @@ const addContactSchema = Joi.object().keys({
   phone_numbber_2: Joi.string().optional().allow(""),
   phone_numbber_3: Joi.string().optional().allow(""),
   email: Joi.string().email().required(),
+  password: Joi.string()
+    .regex(/[ -~]*[a-z][ -~]*/, {}) // at least 1 lower-case
+    .regex(/[ -~]*[A-Z][ -~]*/) // at least 1 upper-case
+    .regex(/[ -~]*(?=[ -~])[^0-9a-zA-Z][ -~]*/) // basically: [ -~] && [^0-9a-zA-Z], at least 1 special character
+    .regex(/[ -~]*[0-9][ -~]*/) // at least 1 number
+    .min(10)
+    .optional().allow("")
+    .options({
+      messages: {
+        "string.pattern.base":
+          "must contain at least 1 lower-case, 1 upper-case, 1 special character and 1 number",
+      },
+  }),
   note_on_address: Joi.string().optional().allow(""),
   newsletter: Joi.boolean().optional(),
   categories_permission: Joi.array().items(Joi.string()).optional(),
@@ -36,6 +49,19 @@ const updateContactSchema = Joi.object().keys({
   phone_numbber_2: Joi.string().optional().allow(""),
   phone_numbber_3: Joi.string().optional().allow(""),
   email: Joi.string().email().required(),
+  password: Joi.string()
+    .regex(/[ -~]*[a-z][ -~]*/, {}) // at least 1 lower-case
+    .regex(/[ -~]*[A-Z][ -~]*/) // at least 1 upper-case
+    .regex(/[ -~]*(?=[ -~])[^0-9a-zA-Z][ -~]*/) // basically: [ -~] && [^0-9a-zA-Z], at least 1 special character
+    .regex(/[ -~]*[0-9][ -~]*/) // at least 1 number
+    .min(10)
+    .optional().allow("")
+    .options({
+      messages: {
+        "string.pattern.base":
+          "must contain at least 1 lower-case, 1 upper-case, 1 special character and 1 number",
+      },
+  }),
   note_on_address: Joi.string().optional().allow(""),
   newsletter: Joi.boolean().optional(),
   categories_permission: Joi.array().items(Joi.string()).optional(),

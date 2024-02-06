@@ -22,6 +22,10 @@ export class CalendarDaoMongo implements CalendarDao {
     return this.model.findById(id);
   }
 
+  async getCalendarByEmail(email: string): Promise<Calendar | null> {
+    return this.model.findOne({ email })
+  }
+
   async getCalendarsByIds(ids: string[]): Promise<Calendar[]> {
     const query = {
       _id: { $in: ids }

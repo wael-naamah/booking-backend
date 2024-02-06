@@ -58,6 +58,14 @@ export const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    email: {
+      type: String,
+      required: false,
+    },
+    password: {
+      type: String,
+      required: false,
+    },
     description: String,
     show_description: {
       type: String,

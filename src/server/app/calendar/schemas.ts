@@ -49,6 +49,20 @@ const addCalendarSchema = Joi.object().keys({
   show_description: Joi.string()
     .valid(...Object.values(DescriptionDisplayType))
     .optional(),
+  email: Joi.string().email().optional().allow(""),
+  password: Joi.string()
+    .regex(/[ -~]*[a-z][ -~]*/, {}) // at least 1 lower-case
+    .regex(/[ -~]*[A-Z][ -~]*/) // at least 1 upper-case
+    .regex(/[ -~]*(?=[ -~])[^0-9a-zA-Z][ -~]*/) // basically: [ -~] && [^0-9a-zA-Z], at least 1 special character
+    .regex(/[ -~]*[0-9][ -~]*/) // at least 1 number
+    .min(10)
+    .optional().allow("")
+    .options({
+      messages: {
+        "string.pattern.base":
+          "password must contain at least 1 lower-case, 1 upper-case, 1 special character and 1 number",
+      },
+  }),
   appointment_scheduling: Joi.string()
     .valid(...Object.values(AppointmentScheduling))
     .optional(),

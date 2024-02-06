@@ -25,4 +25,11 @@ export const configure = (app: express.Router) => {
     ValidateSchema.prepare(schemas.refreshTokenSchema),
     UserControllers.refreshToken
   );
+  app.post(
+    "/auth/reset-password",
+    injectService,
+    ValidateSchema.prepare(schemas.resetPasswordSchema),
+    passwordHashHandler,
+    UserControllers.resetPassword
+  );
 };

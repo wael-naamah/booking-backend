@@ -7,6 +7,7 @@ export interface CalendarDao {
     search?: string
   ): Promise<Calendar[]>;
   getCalendarById(id: string): Promise<Calendar | null>;
+  getCalendarByEmail(email: string): Promise<Calendar | null>;
   getCalendarsByIds(ids: string[]): Promise<Calendar[]>;
   getActiveCalendarsByIds(ids: string[]): Promise<Calendar[]>;
   addCalendar(calendar: Partial<Calendar>): Promise<Calendar>;

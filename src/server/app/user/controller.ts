@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from "express";
 
-import { LoginForm, RefreshToken, User } from "../../../database-client";
+import { LoginForm, RefreshToken, ResetPasswordForm, User } from "../../../database-client";
 import { ServiceContainer } from "../clients";
 import tryCatchErrorDecorator from "../../utils/tryCatchErrorDecorator";
 
@@ -146,6 +146,32 @@ class UserControllers {
 
       const service = (request as any).service as ServiceContainer;
       let data = await service.authService.refreshToken(form.refreshToken);
+
+      res.json(data);
+  }
+
+  @tryCatchErrorDecorator
+  static async resetPassword(request: Request, res: Response, next: NextFunction) {
+      /*
+      #swagger.description = 'Endpoint to refresh access token';
+      #swagger.tags = ['Auth'];
+       #swagger.parameters['obj'] = {
+                   in: 'body',
+                   schema: {
+                       $refreshToken: ''
+                   },
+      }
+      #swagger.responses[200] = {
+          schema: {
+              refreshToken: '',
+              token: ''
+           }
+      }
+      */
+      const form = request.body as ResetPasswordForm;
+
+      const service = (request as any).service as ServiceContainer;
+      let data = await service.authService.resetPassword(form);
 
       res.json(data);
   }
