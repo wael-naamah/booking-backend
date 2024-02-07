@@ -34,4 +34,8 @@ export class EmailTemplateDaoMongo implements EmailTemplateDao {
       return res as unknown as EmailTemplate;
     });
   }
+
+  async getEmailTemplatesByServiceId(serviceId: string): Promise<EmailTemplate | null> {
+    return this.model.findOne({service_id: serviceId}) as unknown as EmailTemplate;
+  }
 }

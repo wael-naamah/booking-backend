@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from "express";
 import tryCatchErrorDecorator from "../../utils/tryCatchErrorDecorator";
-import { ServiceContainer } from "../clients";
+import { ServiceContainer, getService } from "../clients";
 import {
   AddAppointmentRequest,
   Appointment,
@@ -95,6 +95,18 @@ class AppointmentsControllers {
         contact: contactObject,
       };
 
+      let email = "Dear Customer we have received your application and we will contact you soon!";
+      const emailTemplate = await service.emailService.getEmailTemplatesByServiceId(form.service_id)
+
+      if(emailTemplate && emailTemplate.template){
+        email = emailTemplate.template
+      }
+
+      getService().emailService.sendMail({
+        to: contactObject.email,
+        subject: "B-Gas Services",
+        text: email
+      })
       res.status(200).json(dataWithContact);
     } else {
       res.status(409).json({

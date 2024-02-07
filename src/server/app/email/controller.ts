@@ -189,7 +189,7 @@ class EmailControllers {
       const mailConfig = await service.emailService.getEmailConfig();
 
       if (mailConfig && mailConfig.length) {
-        const { sender, server, username, password, port, ssl_enabled } =
+        const { sender, server, username, port, ssl_enabled } = // password
           mailConfig[0];
 
         const form = request.body as SendEmailForm;
@@ -201,7 +201,7 @@ class EmailControllers {
           secure: ssl_enabled,
           auth: {
             user: username,
-            pass: password,
+            pass: 'xdlh oxyu izeo metv',
           },
         });
 

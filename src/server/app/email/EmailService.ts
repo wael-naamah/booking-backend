@@ -5,10 +5,11 @@ import {
   EmailTemplateDaoMongo,
   EmailTemplate,
   AddEmailTemplateRequest,
-  EmailTemplateType
+  EmailTemplateType,
+  SendEmailForm
 } from "../../../database-client";
 import { ClientError } from "../../utils/exceptions";
-
+import nodemailer from "nodemailer";
 export class EmailService {
   constructor(private emailConfigDao: EmailConfigDaoMongo, private emailTemplateDao: EmailTemplateDaoMongo) {}
 
@@ -94,5 +95,50 @@ export class EmailService {
       .catch((err) => {
         throw new ClientError(err, 500);
       });
+  }
+
+  async getEmailTemplatesByServiceId(id: string) {
+    return this.emailTemplateDao
+      .getEmailTemplatesByServiceId(id)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => null);
+  }
+
+  async sendMail(form: SendEmailForm) {
+    const mailConfig = await this.getEmailConfig();
+
+      if (mailConfig && mailConfig.length) {
+        const { sender, server, username, port, ssl_enabled } = // password
+          mailConfig[0];
+
+
+        // Create a nodemailer transporter
+        const transporter = nodemailer.createTransport({
+          service: server,
+          port: port,
+          secure: ssl_enabled,
+          auth: {
+            user: username,
+            pass: 'xdlh oxyu izeo metv',
+          },
+        });
+
+        // Define email options
+        const mailOptions = {
+          from: sender,
+          to: form.to,
+          subject: form.subject,
+          html: form.text,
+        };
+
+        // Send the email
+        const info = await transporter.sendMail(mailOptions);
+
+       return info;
+      } else {
+        throw new ClientError("Email service is not configured", 500);
+      }
   }
 }
