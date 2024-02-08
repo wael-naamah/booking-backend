@@ -10,6 +10,7 @@ import {
 } from "../../../database-client/src/Schema";
 import nodemailer from "nodemailer";
 import { ServiceContainer } from "../clients";
+import { decrypt, encrypt } from "../../utils/encryption";
 
 class EmailControllers {
   @tryCatchErrorDecorator
@@ -41,8 +42,13 @@ class EmailControllers {
         }
         */
     const form = request.body as unknown as AddEmailConfigRequest;
+    const encryptedPassword = encrypt(form.password);
+    const updatedForm = {
+      ...form,
+      password: encryptedPassword
+    }
     const service = (request as any).service as ServiceContainer;
-    const data = await service.emailService.addEmailConfig(form);
+    const data = await service.emailService.addEmailConfig(updatedForm);
 
     res.status(200).json(data);
   }
@@ -113,8 +119,14 @@ class EmailControllers {
     const form = request.body as unknown as EmailConfig;
     const service = (request as any).service as ServiceContainer;
     const { id } = request.params;
+    const encryptedPassword = encrypt(form.password);
 
-    const data = await service.emailService.updateEmailConfig(id, form);
+    const updatedForm = {
+      ...form,
+      password: encryptedPassword
+    }
+
+    const data = await service.emailService.updateEmailConfig(id, updatedForm);
 
     res.status(200).json(data);
   }
@@ -189,10 +201,11 @@ class EmailControllers {
       const mailConfig = await service.emailService.getEmailConfig();
 
       if (mailConfig && mailConfig.length) {
-        const { sender, server, username, port, ssl_enabled } = // password
+        const { sender, server, username, password, port, ssl_enabled } =
           mailConfig[0];
 
         const form = request.body as SendEmailForm;
+        const decryptedPassword = decrypt(password)
 
         // Create a nodemailer transporter
         const transporter = nodemailer.createTransport({
@@ -201,7 +214,7 @@ class EmailControllers {
           secure: ssl_enabled,
           auth: {
             user: username,
-            pass: 'xdlh oxyu izeo metv',
+            pass: decryptedPassword,
           },
         });
 

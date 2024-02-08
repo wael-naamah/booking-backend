@@ -8,6 +8,7 @@ import {
   EmailTemplateType,
   SendEmailForm
 } from "../../../database-client";
+import { decrypt } from "../../utils/encryption";
 import { ClientError } from "../../utils/exceptions";
 import nodemailer from "nodemailer";
 export class EmailService {
@@ -110,9 +111,9 @@ export class EmailService {
     const mailConfig = await this.getEmailConfig();
 
       if (mailConfig && mailConfig.length) {
-        const { sender, server, username, port, ssl_enabled } = // password
+        const { sender, server, username, password, port, ssl_enabled } =
           mailConfig[0];
-
+        const decryptedPassword = decrypt(password)
 
         // Create a nodemailer transporter
         const transporter = nodemailer.createTransport({
@@ -121,7 +122,7 @@ export class EmailService {
           secure: ssl_enabled,
           auth: {
             user: username,
-            pass: 'xdlh oxyu izeo metv',
+            pass: decryptedPassword,
           },
         });
 

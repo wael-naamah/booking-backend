@@ -12,6 +12,7 @@ export interface Env {
   firebase_project_Id: string;
   firebase_client_email: string;
   firebase_private_key: string;
+  encryption_key: string;
 }
 
 let env: Env;
@@ -39,7 +40,8 @@ export const getEnv = () => {
     "jwt_refresh_secret_key": "${process.env.JWT_REFRESH_SECRET_KEY}",
     "firebase_project_Id": "${process.env.FIREBASE_PROJECT_ID}",
     "firebase_client_email": "${process.env.FIREBASE_CLIENT_EMAIL}",
-    "firebase_private_key": "${process.env.FIREBASE_PRIVATE_KEY}"
+    "firebase_private_key": "${process.env.FIREBASE_PRIVATE_KEY}",
+    "encryption_key": "process.env.ENCRYPTION_KEY"
   }
   `;
   env = JSON.parse(contents.toString());
