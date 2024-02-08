@@ -41,7 +41,7 @@ export const getEnv = () => {
     "firebase_project_Id": "${process.env.FIREBASE_PROJECT_ID}",
     "firebase_client_email": "${process.env.FIREBASE_CLIENT_EMAIL}",
     "firebase_private_key": "${process.env.FIREBASE_PRIVATE_KEY}",
-    "encryption_key": "process.env.ENCRYPTION_KEY"
+    "encryption_key": "${process.env.ENCRYPTION_KEY}"
   }
   `;
   env = JSON.parse(contents.toString());
