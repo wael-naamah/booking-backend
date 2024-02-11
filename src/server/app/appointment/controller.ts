@@ -41,23 +41,23 @@ class AppointmentsControllers {
     const service = (request as any).service as ServiceContainer;
     const contact = form.contact;
     let conatctId = "";
-    let contactObg = null
+    let contactObg = null;
 
     const existingContact = await service.contactService.getContactByEmail(
       contact.email
     );
-    
+
     if (existingContact) {
       // @ts-ignore
       conatctId = existingContact._doc._id;
       // @ts-ignore
-      contactObg = existingContact._doc
+      contactObg = existingContact._doc;
     } else {
       const newContact = await service.contactService.addContact(contact);
       if (newContact && newContact._id) {
         conatctId = newContact._id;
         // @ts-ignore
-        contactObg = newContact._doc
+        contactObg = newContact._doc;
       }
     }
 
@@ -80,7 +80,7 @@ class AppointmentsControllers {
         remarks: form.remarks || undefined,
         employee_attachments: form.employee_attachments || undefined,
         employee_remarks: form.employee_remarks || undefined,
-        ended_at: form.ended_at || undefined
+        ended_at: form.ended_at || undefined,
       };
       const data = await service.appointmentService.addAppointment(
         newAppointment
@@ -95,18 +95,34 @@ class AppointmentsControllers {
         contact: contactObject,
       };
 
-      let email = "Dear Customer we have received your application and we will contact you soon!";
-      const emailTemplate = await service.emailService.getEmailTemplatesByServiceId(form.service_id)
+      let email =
+        "Dear Customer we have received your application and we will contact you soon!";
+      let subject = "B-Gas Services";
+      const emailTemplate =
+        await service.emailService.getEmailTemplatesByServiceId(
+          form.service_id
+        );
 
-      if(emailTemplate && emailTemplate.template){
-        email = emailTemplate.template
+      if (emailTemplate && emailTemplate.template) {
+        email = emailTemplate.template;
+        subject = emailTemplate.subject;
       }
 
       getService().emailService.sendMail({
         to: contactObject.email,
-        subject: "B-Gas Services",
-        text: email
-      })
+        subject: subject,
+        text: email,
+      });
+
+      const emailConfig = await getService().emailService.getEmailConfig();
+
+      if (emailConfig && emailConfig.length) {
+        getService().emailService.sendMail({
+          to: emailConfig[0].sender,
+          subject: subject,
+          text: email,
+        });
+      }
       res.status(200).json(dataWithContact);
     } else {
       res.status(409).json({
@@ -178,9 +194,11 @@ class AppointmentsControllers {
              }
         }
         */
-  
+
     const service = (request as any).service as ServiceContainer;
-    const data = await service.appointmentService.getAppointmentsByContactId(request.params.contactId);
+    const data = await service.appointmentService.getAppointmentsByContactId(
+      request.params.contactId
+    );
 
     res.status(200).json(data);
   }
@@ -213,9 +231,11 @@ class AppointmentsControllers {
              }
         }
         */
-  
+
     const service = (request as any).service as ServiceContainer;
-    const data = await service.appointmentService.getAppointmentsByCalendarId(request.params.calendarId);
+    const data = await service.appointmentService.getAppointmentsByCalendarId(
+      request.params.calendarId
+    );
 
     res.status(200).json(data);
   }

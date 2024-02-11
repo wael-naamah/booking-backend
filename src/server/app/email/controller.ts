@@ -80,7 +80,7 @@ class EmailControllers {
                 token: '',
              }
         }
-        */
+        */ 
 
     const service = (request as any).service as ServiceContainer;
     const data = await service.emailService.getEmailConfig();
