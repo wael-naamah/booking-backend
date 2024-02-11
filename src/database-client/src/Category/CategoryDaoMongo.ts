@@ -1,6 +1,6 @@
 import { schema } from "./CategorySchema";
 import { Model, Document, Connection, isValidObjectId } from "mongoose";
-import { Category, Service } from "../Schema";
+import { Category, ExtendedService, Service } from "../Schema";
 import { CategoryDao } from "./CategoryDao";
 import { isEmptyObject, isValidNumber } from "../utils";
 
@@ -97,28 +97,32 @@ export class CategoryDaoMongo implements CategoryDao {
     });
   }
 
-  async getServices(): Promise<Service[] | null> {
+  async getServices(): Promise<ExtendedService[] | null> {
     const query = [
       {
         $unwind: "$services",
       },
       {
-        $group: {
-          _id: null,
-          services: { $push: "$services" },
-        },
-      },
-      {
         $project: {
           _id: 0,
-          services: 1,
+          "category_id": "$_id",
+          "services._id": 1,
+          "services.name": 1,
+          "services.description": 1,
+          "services.duration": 1,
+          "services.price": 1,
+          "services.abbreviation_id": 1,
+          "services.attachment": 1,
         },
       },
     ];
-
+  
     return this.model.aggregate(query).then((res) => {
       if (res && res.length) {
-        return res[0].services as unknown as Service[];
+        return res.map((item: any) => ({
+          category_id: item.category_id,
+          ...item.services,
+        }));
       } else return [];
     });
   }
