@@ -113,7 +113,7 @@ class AppointmentsControllers {
         subject: subject,
         text: email,
       });
-
+      
       const emailConfig = await getService().emailService.getEmailConfig();
 
       if (emailConfig && emailConfig.length) {
