@@ -108,6 +108,7 @@ export class EmailService {
   }
 
   async sendMail(form: SendEmailForm) {
+    try{
     const mailConfig = await this.getEmailConfig();
 
       if (mailConfig && mailConfig.length) {
@@ -141,5 +142,9 @@ export class EmailService {
       } else {
         throw new ClientError("Email service is not configured", 500);
       }
+    } catch (err){
+      console.error('err', err)
+      throw new ClientError("Something went wrong. please try again later.", 500);
+    }
   }
 }
