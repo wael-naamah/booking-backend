@@ -119,7 +119,7 @@ class EmailControllers {
     const form = request.body as unknown as EmailConfig;
     const service = (request as any).service as ServiceContainer;
     const { id } = request.params;
-    const encryptedPassword = encrypt(form.password);
+    const encryptedPassword = form.password.length < 40 ? encrypt(form.password) : form.password;
 
     const updatedForm = {
       ...form,
