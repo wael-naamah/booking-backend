@@ -118,7 +118,7 @@ export class EmailService {
 
         // Create a nodemailer transporter
         const transporter = nodemailer.createTransport({
-          service: server,
+          host: server,
           port: port,
           secure: ssl_enabled,
           auth: {

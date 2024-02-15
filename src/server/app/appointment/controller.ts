@@ -46,6 +46,8 @@ class AppointmentsControllers {
     const existingContact = await service.contactService.getContactByEmail(
       contact.email
     );
+    let newContactEmail = `<p>Dear Customer,</p><p>Your account has been successfully created. We recommend logging in to the <a href='https://booking-frontend-waels-projects-d2811c36.vercel.app/login'>website</a> using the following credentials and change your password for security reasons:</p>email: ${contact.email}<br>password: ${contact.password}<br><p>Thank you for choosing our services.</p><p>Best Regards,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>`
+    let newContactSubject = "B-Gas Account Creation";
 
     if (existingContact) {
       // @ts-ignore
@@ -53,11 +55,18 @@ class AppointmentsControllers {
       // @ts-ignore
       contactObg = existingContact._doc;
     } else {
+      
+      // TODO: encrypt password 
       const newContact = await service.contactService.addContact(contact);
       if (newContact && newContact._id) {
         conatctId = newContact._id;
         // @ts-ignore
         contactObg = newContact._doc;
+        getService().emailService.sendMail({
+          to: contact.email,
+          subject: newContactSubject,
+          text: newContactEmail,
+        });
       }
     }
 
