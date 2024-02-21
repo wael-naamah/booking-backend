@@ -50,6 +50,8 @@ export const schema = new mongoose.Schema(
     remarks: String,
     employee_attachments: [attachmentSchema],
     employee_remarks: String,
+    company_remarks: String,
+    created_by: String,
     ended_at: Date,
   },
   {

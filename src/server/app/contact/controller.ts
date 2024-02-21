@@ -156,12 +156,7 @@ class ContactsControllers {
     );
 
     if (existingContact) {
-      const data = await service.contactService.updateContact(contactId, {
-        ...form,
-        password: existingContact.password,
-      });
-      //@ts-ignore
-      data.password = undefined;
+      const data = await service.contactService.updateContact(contactId, form);
 
       res.status(200).json(data);
     } else {

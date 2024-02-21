@@ -7,6 +7,7 @@ import {
   AppointmentForm,
   TimeSlotsForm,
 } from "../../../database-client/src/Schema";
+import { hashPassword } from "../middlewares/authMiddleware";
 
 class AppointmentsControllers {
   @tryCatchErrorDecorator
@@ -55,9 +56,14 @@ class AppointmentsControllers {
       // @ts-ignore
       contactObg = existingContact._doc;
     } else {
+      const encryptedPassword = contact.password ? await hashPassword(contact.password) : undefined;
+
+      const updatedContact = {
+        ...contact,
+        password: encryptedPassword,
+      };
       
-      // TODO: encrypt password 
-      const newContact = await service.contactService.addContact(contact);
+      const newContact = await service.contactService.addContact(updatedContact);
       if (newContact && newContact._id) {
         conatctId = newContact._id;
         // @ts-ignore
@@ -89,6 +95,8 @@ class AppointmentsControllers {
         remarks: form.remarks || undefined,
         employee_attachments: form.employee_attachments || undefined,
         employee_remarks: form.employee_remarks || undefined,
+        company_remarks: form.company_remarks || undefined,
+        created_by: form.created_by || undefined,
         ended_at: form.ended_at || undefined,
       };
       const data = await service.appointmentService.addAppointment(
