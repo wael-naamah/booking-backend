@@ -98,6 +98,7 @@ class AppointmentsControllers {
         company_remarks: form.company_remarks || undefined,
         created_by: form.created_by || undefined,
         ended_at: form.ended_at || undefined,
+        control_points: form.control_points || undefined,
       };
       const data = await service.appointmentService.addAppointment(
         newAppointment

@@ -67,6 +67,7 @@ const updateAppointmentSchema = Joi.object().keys({
   created_by: Joi.string().optional().allow(""),
   employee_attachments: Joi.array().items(attachmentSchema),
   ended_at: Joi.date().iso().optional(),
+  control_points: Joi.array().items(Joi.object().keys({ title: Joi.string(), value: Joi.number() })).optional(),
   contact_id: Joi.string().required(),
 });;
 

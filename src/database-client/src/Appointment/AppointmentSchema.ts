@@ -8,6 +8,14 @@ export const attachmentSchema = new Schema(
   { _id: false }
 );
 
+export const controlPointsSchema = new Schema(
+  {
+    title: String,
+    value: Number,
+  },
+  { _id: false }
+);
+
 export const schema = new mongoose.Schema(
   {
     _id: {
@@ -51,6 +59,7 @@ export const schema = new mongoose.Schema(
     employee_attachments: [attachmentSchema],
     employee_remarks: String,
     company_remarks: String,
+    control_points: [controlPointsSchema],
     created_by: String,
     ended_at: Date,
   },
