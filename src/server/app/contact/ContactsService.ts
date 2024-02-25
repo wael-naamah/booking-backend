@@ -80,4 +80,18 @@ export class ContactsService {
         );
       });
   }
+
+  async getContactsWithAppointments() {
+    return this.contactDao
+      .getContactsWithAppointments()
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        throw new ClientError(
+          err,
+          500
+        );
+      });
+  }
 }

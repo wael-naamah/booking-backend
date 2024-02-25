@@ -1,5 +1,4 @@
 import Joi from "joi";
-import { Salutation } from "../../../database-client";
 
 const getContactsSchema = Joi.object().keys({
   search: Joi.string().trim().optional().allow(""),
@@ -9,7 +8,7 @@ const getContactsSchema = Joi.object().keys({
 
 
 const addContactSchema = Joi.object().keys({
-  salutation: Joi.string().valid(...Object.values(Salutation)),
+  salutation: Joi.string().required(),
   first_name: Joi.string().required(),
   last_name: Joi.string().required(),
   address: Joi.string().required(),
@@ -39,7 +38,7 @@ const addContactSchema = Joi.object().keys({
 });
 
 const updateContactSchema = Joi.object().keys({
-  salutation: Joi.string().valid(...Object.values(Salutation)),
+  salutation: Joi.string().required(),
   first_name: Joi.string().required(),
   last_name: Joi.string().required(),
   address: Joi.string().required(),

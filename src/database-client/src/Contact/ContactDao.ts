@@ -10,4 +10,5 @@ export interface ContactDao {
   addContact(contact: Partial<Contact>): Promise<Contact>;
   updateContact(id: string, newContact: Partial<Contact>): Promise<Contact>;
   deleteContact(id: string): Promise<Contact | null>;
+  getContactsWithAppointments(): Promise<any>;
 }

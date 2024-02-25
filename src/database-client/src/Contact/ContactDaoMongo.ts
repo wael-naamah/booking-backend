@@ -61,6 +61,19 @@ export class ContactDaoMongo implements ContactDao {
       .then((data) => data as unknown as Contact[]);
   }
 
+  async getContactsWithAppointments(): Promise<any> {
+    return this.model.aggregate([
+      {
+        $lookup: {
+          from: "appointments",
+          localField: "_id",
+          foreignField: "contact_id",
+          as: "appointments",
+        },
+      },
+    ]);
+  }
+
   async getContactsCount(search?: string): Promise<number> {
     const isValidNo = isValidNumber(search);
 
