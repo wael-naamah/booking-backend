@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from "express";
 import tryCatchErrorDecorator from "../../utils/tryCatchErrorDecorator";
-import { ServiceContainer } from "../clients";
+import { ServiceContainer, getService } from "../clients";
 import {
   AddContactRequest,
   Contact,
@@ -201,6 +201,32 @@ class ContactsControllers {
       res.json({ status: "success" });
     } else {
       res.json({ status: "faild" });
+    }
+  }
+
+  @tryCatchErrorDecorator
+  static async sendContactCredentials(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ){
+    const service = (request as any).service as ServiceContainer;
+    const { contactId } = request.params;
+    const existingContact = await service.contactService.getContactById(
+      contactId
+    );
+
+    if (existingContact) {
+      let email = `<p>Dear Customer,</p><p>Your account has been successfully created. We recommend logging in to the <a href='https://booking-frontend-waels-projects-d2811c36.vercel.app/login'>website</a> using the following credentials and change your password for security reasons:</p>email: ${existingContact.email || ""}<br>password: Welcome1234!<br><p>Thank you for choosing our services.</p><p>Best Regards,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>`
+      getService().emailService.sendMail({
+        to: existingContact.email,
+        subject: "B-Gas Account Creation",
+        text: email,
+      });
+    
+      res.status(200).json({ messege: "Credentials sent" });
+    } else {
+      res.status(404).json({ messege: "Contact not found" });
     }
   }
 }

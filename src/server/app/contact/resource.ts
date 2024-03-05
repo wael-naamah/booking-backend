@@ -40,4 +40,11 @@ export const configure = (app: express.Router) => {
     injectService,
     ContactsControllers.deleteContact
   );
+  app.post(
+    "/contacts/credentials/:contactId",
+    injectService,
+    // validateToken,
+    // checkAuth,
+    ContactsControllers.sendContactCredentials
+  );
 };

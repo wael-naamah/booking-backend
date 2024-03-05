@@ -51,6 +51,7 @@ export const schema = new mongoose.Schema(
     newsletter: Boolean,
     categories_permission: [{type: String, required: false}],
     remarks: String,
+    imported: Boolean,
   },
   {
     timestamps: true,

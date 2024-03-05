@@ -4,6 +4,7 @@ import multer from "multer";
 import admin from "firebase-admin";
 import xlsx from "xlsx";
 import { getService } from "../clients";
+import { hashPassword } from "../middlewares/authMiddleware";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -122,6 +123,7 @@ export const configure = (app: express.Router) => {
         if (contact && contact._id) {
           contactId = contact._id;
         } else {
+          const hashedPassword = await hashPassword("Welcome1234!");
           const contact = await Contact.addContact({
             salutation: item.Anrede || "--",
             first_name: item.Vorname || "--",
@@ -131,6 +133,8 @@ export const configure = (app: express.Router) => {
             location: item.Ort || "--",
             telephone: item.Telefon || "--",
             email: item.Email || "--",
+            password: hashedPassword,
+            imported: true,
           });
           if (contact && contact._id) {
             contactId = contact._id;

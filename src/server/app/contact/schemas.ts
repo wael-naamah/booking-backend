@@ -35,6 +35,7 @@ const addContactSchema = Joi.object().keys({
   newsletter: Joi.boolean().optional(),
   categories_permission: Joi.array().items(Joi.string()).optional(),
   remarks: Joi.string().optional().allow(""),
+  imported: Joi.boolean().optional(),
 });
 
 const updateContactSchema = Joi.object().keys({
@@ -65,6 +66,7 @@ const updateContactSchema = Joi.object().keys({
   newsletter: Joi.boolean().optional(),
   categories_permission: Joi.array().items(Joi.string()).optional(),
   remarks: Joi.string().optional().allow(""),
+  imported: Joi.boolean().optional(),
 });
 
 
