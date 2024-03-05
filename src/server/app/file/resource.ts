@@ -81,7 +81,7 @@ export const configure = (app: express.Router) => {
   });
 
   app.post(
-    "/files/upload-contacts-file",
+    "/files/import-contacts-file",
     excelUploads.single("file"),
     async (req: any, res: any) => {
       try {
@@ -95,9 +95,17 @@ export const configure = (app: express.Router) => {
         const sheet = workbook.Sheets[sheetName];
         const data = xlsx.utils.sheet_to_json(sheet);
         const contactsInserted = await insertData(data);
-        res.json({ status: "success", message: "successfully imported " + contactsInserted + " contacts" });
+        res.json({
+          status: "success",
+          message: "successfully imported " + contactsInserted + " contacts",
+        });
       } catch (error) {
-        res.status(500).json({ status: "error", message: "Error inserting the data" + error });
+        res
+          .status(500)
+          .json({
+            status: "error",
+            message: "Error inserting the data" + error,
+          });
       }
     }
   );
@@ -158,65 +166,60 @@ export const configure = (app: express.Router) => {
 
   app.get("/files/export-contacts-file", async (req, res) => {
     try {
-      const dataToExport = await getService().contactService.getContactsWithAppointments();
+      const dataToExport =
+        await getService().contactService.getContactsWithAppointments();
+      const transformedData: any[] = [];
 
-      const transformedData = dataToExport.map((item: any) => {
-        const { _id, password, categories_permission, appointments, ...rest } = item;
-        const appointmentData = appointments.map((appointment: any) => {
-            const { _id, createdAt, updatedAt, ...appointmentInfo } = appointment;
-            return appointmentInfo;
-        });
-        return { ...rest, appointments: appointmentData };
-    });
+      dataToExport.map((item: any) => {
+        const {
+          _id,
+          createdAt,
+          updatedAt,
+          password,
+          categories_permission,
+          appointments,
+          ...rest
+        } = item;
+        if (appointments.length === 0) {
+          transformedData.push(rest);
+        } else {
+          appointments.map((appointment: any) => {
+            const {
+              _id,
+              createdAt,
+              updatedAt,
+              contact_id,
+              calendar_id,
+              service_id,
+              category_id,
+              control_points,
+              ...appointmentInfo
+            } = appointment;
+            return transformedData.push({ ...rest, ...appointmentInfo });
+          });
+        }
+      });
 
       const workbook = xlsx.utils.book_new();
       const sheet = xlsx.utils.json_to_sheet(transformedData);
 
-      xlsx.utils.book_append_sheet(workbook, sheet, 'Sheet1');
+      xlsx.utils.book_append_sheet(workbook, sheet, "Sheet1");
 
-      const buffer = xlsx.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+      const buffer = xlsx.write(workbook, { type: "buffer", bookType: "xlsx" });
 
-      res.setHeader('Content-Disposition', 'attachment; filename="exported_data.xlsx"');
-      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader(
+        "Content-Disposition",
+        'attachment; filename="exported_data.xlsx"'
+      );
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
 
       res.send(buffer);
-  } catch (error) {
-      console.error('Error exporting data:', error);
-      res.status(500).json({ message: 'Error exporting data' });
-  }
-    // try {
-    //   const workbook = xlsx.utils.book_new();
-    //   const sheet = xlsx.utils.aoa_to_sheet([
-    //     [
-    //       "Anrede",
-    //       "Vorname",
-    //       "Nachname",
-    //       "Adresse",
-    //       "PLZ",
-    //       "Ort",
-    //       "Telefon",
-    //       "Email",
-    //       "Datum",
-    //       "Rechnungsnummer",
-    //       "Kundennummer",
-    //       "Leistungen",
-    //       "Dauern",
-    //       "Preis",
-    //       "Brand",
-    //       "Model",
-    //       "Beschreibung",
-    //     ],
-    //   ]);
-    //   xlsx.utils.book_append_sheet(workbook, sheet, "Contacts");
-    //   const buffer = xlsx.write(workbook, { type: "buffer", bookType: "xlsx" });
-    //   res.setHeader(
-    //     "Content-Disposition",
-    //     "attachment; filename=contacts-import-template.xlsx"
-    //   );
-    //   res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    //   res.send(buffer);
-    // } catch (error) {
-    //   res.status(500).json({ message: "Error downloading the file." });
-    // }
+    } catch (error) {
+      console.error("Error exporting data:", error);
+      res.status(500).json({ message: "Error exporting data" });
+    }
   });
 };
