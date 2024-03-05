@@ -69,9 +69,14 @@ const updateContactSchema = Joi.object().keys({
   imported: Joi.boolean().optional(),
 });
 
+const resetContactPasswordSchema = Joi.object().keys({
+  password: Joi.string().required(),
+})
+
 
 export default {
   getContactsSchema,
   addContactSchema,
   updateContactSchema,
+  resetContactPasswordSchema
 };

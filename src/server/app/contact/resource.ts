@@ -41,8 +41,9 @@ export const configure = (app: express.Router) => {
     ContactsControllers.deleteContact
   );
   app.post(
-    "/contacts/credentials/:contactId",
+    "/contacts/reset-password/:contactId",
     injectService,
+    ValidateSchema.prepare(schemas.resetContactPasswordSchema),
     // validateToken,
     // checkAuth,
     ContactsControllers.sendContactCredentials

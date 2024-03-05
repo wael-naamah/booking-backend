@@ -7,6 +7,7 @@ import {
   PaginatedForm,
 } from "../../../database-client/src/Schema";
 import { PaginatedResponse } from "../category/dto";
+import { hashPassword } from "../middlewares/authMiddleware";
 
 class ContactsControllers {
   @tryCatchErrorDecorator
@@ -210,6 +211,7 @@ class ContactsControllers {
     res: Response,
     next: NextFunction
   ){
+    const {password} = request.body as unknown as {password: string};
     const service = (request as any).service as ServiceContainer;
     const { contactId } = request.params;
     const existingContact = await service.contactService.getContactById(
@@ -217,14 +219,20 @@ class ContactsControllers {
     );
 
     if (existingContact) {
-      let email = `<p>Dear Customer,</p><p>Your account has been successfully created. We recommend logging in to the <a href='https://booking-frontend-waels-projects-d2811c36.vercel.app/login'>website</a> using the following credentials and change your password for security reasons:</p>email: ${existingContact.email || ""}<br>password: Welcome1234!<br><p>Thank you for choosing our services.</p><p>Best Regards,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>`
+      const hashedPassword = await hashPassword(password);
+      await service.contactService.updateContact(contactId, {
+        ...existingContact,
+        password: hashedPassword,
+      });
+      
+      let email = `<p>Dear Customer,</p><p>Your account has been successfully updated. We recommend logging in to the <a href='https://booking-frontend-waels-projects-d2811c36.vercel.app/login'>website</a> using the following credentials and change your password for security reasons:</p>email: ${existingContact.email || ""}<br>password: ${password}<br><p>Thank you for choosing our services.</p><p>Best Regards,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>`
       getService().emailService.sendMail({
         to: existingContact.email,
-        subject: "B-Gas Account Creation",
+        subject: "B-Gas Account Update",
         text: email,
       });
     
-      res.status(200).json({ messege: "Credentials sent" });
+      res.status(200).json({ messege: "Contact has been updated and email has been sent" });
     } else {
       res.status(404).json({ messege: "Contact not found" });
     }
