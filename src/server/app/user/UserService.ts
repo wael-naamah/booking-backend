@@ -247,7 +247,7 @@ export class AuthService {
         expiresIn: "1h",
       });
 
-      const resetLink = `https://booking-frontend-waels-projects-d2811c36.vercel.app/reset-password?token=${token}`;
+      const resetLink = `https://booking-frontend-waels-projects-d2811c36.vercel.app/reset-password/${token}`;
 
       await this.userDao.addToken(token, email);
 
