@@ -258,6 +258,7 @@ export class AuthService {
       });
 
       return {
+        code: 200,
         message: "Reset link sent to your email",
       };
     } else {
