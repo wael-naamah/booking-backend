@@ -48,3 +48,25 @@ export const schema = new Schema(
     versionKey: false,
   }
 );
+
+export const resetPasswordSchema = new Schema(
+  {
+    _id: {
+      type: String,
+      required: true,
+      default: () => new mongoose.Types.ObjectId(),
+    },
+    token: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  }
+);

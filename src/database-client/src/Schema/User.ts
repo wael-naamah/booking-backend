@@ -35,6 +35,14 @@ export interface User {
   updatedAt?: Date;
 }
 
+export interface ResetToken {
+  _id?: string;
+  token: string;
+  email: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export interface LoginForm {
   email: string;
   password: string;

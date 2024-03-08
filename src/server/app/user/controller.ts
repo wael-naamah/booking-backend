@@ -1,6 +1,11 @@
 import { Response, Request, NextFunction } from "express";
 
-import { LoginForm, RefreshToken, ResetPasswordForm, User } from "../../../database-client";
+import {
+  LoginForm,
+  RefreshToken,
+  ResetPasswordForm,
+  User,
+} from "../../../database-client";
 import { ServiceContainer } from "../clients";
 import tryCatchErrorDecorator from "../../utils/tryCatchErrorDecorator";
 
@@ -75,13 +80,13 @@ class UserControllers {
     const form = request.body as User;
     const service = (request as any).service as ServiceContainer;
     let v = await service.authService.signupUser(form);
-    v.password = '';
+    v.password = "";
     res.json(v);
   }
 
   @tryCatchErrorDecorator
   static async login(request: Request, res: Response, next: NextFunction) {
-      /*
+    /*
       #swagger.description = 'Endpoint to login';
       #swagger.tags = ['Auth'];
        #swagger.parameters['obj'] = {
@@ -116,17 +121,21 @@ class UserControllers {
            }
       }
       */
-      const form = request.body as LoginForm;
+    const form = request.body as LoginForm;
 
-      const service = (request as any).service as ServiceContainer;
-      let data = await service.authService.login(form.email, form.password);
-      data.password = undefined;
-      res.json(data);
+    const service = (request as any).service as ServiceContainer;
+    let data = await service.authService.login(form.email, form.password);
+    data.password = undefined;
+    res.json(data);
   }
 
   @tryCatchErrorDecorator
-  static async refreshToken(request: Request, res: Response, next: NextFunction) {
-      /*
+  static async refreshToken(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    /*
       #swagger.description = 'Endpoint to refresh access token';
       #swagger.tags = ['Auth'];
        #swagger.parameters['obj'] = {
@@ -142,17 +151,21 @@ class UserControllers {
            }
       }
       */
-      const form = request.body as RefreshToken;
+    const form = request.body as RefreshToken;
 
-      const service = (request as any).service as ServiceContainer;
-      let data = await service.authService.refreshToken(form.refreshToken);
+    const service = (request as any).service as ServiceContainer;
+    let data = await service.authService.refreshToken(form.refreshToken);
 
-      res.json(data);
+    res.json(data);
   }
 
   @tryCatchErrorDecorator
-  static async resetPassword(request: Request, res: Response, next: NextFunction) {
-      /*
+  static async resetPassword(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    /*
       #swagger.description = 'Endpoint to refresh access token';
       #swagger.tags = ['Auth'];
        #swagger.parameters['obj'] = {
@@ -168,17 +181,46 @@ class UserControllers {
            }
       }
       */
-      const form = request.body as ResetPasswordForm;
+    const form = request.body as ResetPasswordForm;
 
-      const service = (request as any).service as ServiceContainer;
-      let data = await service.authService.resetPassword(form);
+    const service = (request as any).service as ServiceContainer;
+    let data = await service.authService.resetPassword(form);
 
-      res.json(data);
+    res.json(data);
+  }
+
+  @tryCatchErrorDecorator
+  static async forgotPassword(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const form = request.body as { email: string };
+
+    const service = (request as any).service as ServiceContainer;
+
+    let data = await service.authService.forgotPassword(form.email);
+
+    res.json(data);
+  }
+
+  @tryCatchErrorDecorator
+  static async resetContactPassword(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const form = request.body as { token: string; password: string };
+
+    const service = (request as any).service as ServiceContainer;
+
+    let data = await service.authService.resetContactPassword(
+      form.token,
+      form.password
+    );
+
+    res.json(data);
   }
 }
-
-
-
-
 
 export default UserControllers;

@@ -32,4 +32,17 @@ export const configure = (app: express.Router) => {
     passwordHashHandler,
     UserControllers.resetPassword
   );
+  app.post(
+    "/auth/forgot-password",
+    injectService,
+    ValidateSchema.prepare(schemas.forgotPasswordSchema),
+    UserControllers.forgotPassword
+  );
+  app.post(
+    "/auth/reset-contact-password",
+    injectService,
+    ValidateSchema.prepare(schemas.resetContactPasswordSchema),
+    passwordHashHandler,
+    UserControllers.resetContactPassword
+  );
 };

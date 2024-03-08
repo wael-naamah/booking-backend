@@ -67,9 +67,32 @@ const resetPasswordSchema = Joi.object().keys({
     }),
 })
 
+const forgotPasswordSchema = Joi.object().keys({
+  email: Joi.string().email().required(),
+})
+
+const resetContactPasswordSchema = Joi.object().keys({
+  token: Joi.string().required(),
+  password: Joi.string()
+    .regex(/[ -~]*[a-z][ -~]*/, {}) // at least 1 lower-case
+    .regex(/[ -~]*[A-Z][ -~]*/) // at least 1 upper-case
+    .regex(/[ -~]*(?=[ -~])[^0-9a-zA-Z][ -~]*/) // basically: [ -~] && [^0-9a-zA-Z], at least 1 special character
+    .regex(/[ -~]*[0-9][ -~]*/) // at least 1 number
+    .min(10)
+    .required()
+    .options({
+      messages: {
+        "string.pattern.base":
+          "must contain at least 1 lower-case, 1 upper-case, 1 special character and 1 number",
+      },
+    }),
+});
+
 export default {
   signupSchema,
   signinSchema,
   refreshTokenSchema,
-  resetPasswordSchema
+  resetPasswordSchema,
+  forgotPasswordSchema,
+  resetContactPasswordSchema
 };

@@ -7,6 +7,7 @@ import {
 } from "../../../database-client";
 import { getEnv } from "../../env";
 import { ClientError } from "../../utils/exceptions";
+import { getService } from "../clients";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jwt_secret_key = getEnv().jwt_secret_key;
@@ -220,16 +221,97 @@ export class AuthService {
           userByEmail._id,
           contact
         );
-        
+
         // @ts-ignore
-        if(data) data.password = undefined;
+        if (data) data.password = undefined;
 
         return data;
       } else {
         throw new ClientError("Invalid password", 400);
       }
     } else {
-      throw new ClientError("Email not found", 400);
+      throw new ClientError("User not found", 400);
+    }
+  }
+
+  async forgotPassword(email: string) {
+    const userByEmail = await this.contactDao
+      .getContactByEmail(email)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => null);
+
+    if (userByEmail && userByEmail._id) {
+      const token = jwt.sign({ userId: userByEmail._id }, jwt_secret_key, {
+        expiresIn: "1h",
+      });
+
+      const resetLink = `https://booking-frontend-waels-projects-d2811c36.vercel.app/reset-password?token=${token}`;
+
+      await this.userDao.addToken(token, email);
+
+      getService().emailService.sendMail({
+        to: email,
+        subject: "Reset your password",
+        text: `To reset your password, please click the following link: ${resetLink}`,
+      });
+
+      return {
+        message: "Reset link sent to your email",
+      };
+    } else {
+      throw new ClientError("User not found", 400);
+    }
+  }
+
+  async resetContactPassword(token: string, password: string) {
+    const tokenData = await this.userDao
+      .getToken(token)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => null);
+
+    if (tokenData) {
+      // check if token is expired
+      const currentTime = new Date().getTime();
+      const tokenTime = tokenData.createdAt!.getTime();
+      const timeDiff = currentTime - tokenTime;
+      const tokenExpired = timeDiff > 3600000;
+      if (tokenExpired) {
+        throw new ClientError("Token expired", 400);
+      }
+      const userByEmail = await this.contactDao
+        .getContactByEmail(tokenData.email)
+        .then((data) => {
+          return data;
+        })
+        .catch((err) => null);
+
+      if (userByEmail && userByEmail._id) {
+        const contact = {
+          // @ts-ignore
+          ...userByEmail._doc,
+          password,
+        };
+
+        const data = await this.contactDao.updateContact(
+          userByEmail._id,
+          contact
+        );
+
+        // @ts-ignore
+        if (data) data.password = undefined;
+
+        await this.userDao.deleteToken(token);
+
+        return data;
+      } else {
+        throw new ClientError("User not found", 400);
+      }
+    } else {
+      throw new ClientError("Token not found", 400);
     }
   }
 }
