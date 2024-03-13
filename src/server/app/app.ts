@@ -21,6 +21,7 @@ import errorHandler from "./middlewares/errorHandler";
 import { getEnv } from "../env";
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "../swagger/swagger_output.json";
+import reminderJob, { testCronJob } from "./reminderJob";
 
 
 const serviceAccount = {
@@ -33,6 +34,9 @@ const cookieParser = require("cookie-parser")();
 const cors = require("cors")({ origin: true });
 
 export const app = express();
+
+reminderJob();
+testCronJob();
 
 app.use(
   helmet({

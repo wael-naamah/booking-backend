@@ -82,9 +82,9 @@ export class AppointmentsService {
       }
 
       // @ts-ignore
-      dataWithService.push({ ...appointment.toObject(), service });
+      dataWithService.push({ ...(typeof appointment === 'object' ? appointment : appointment?.toObject()), service });
     }
-    
+
     return dataWithService;
   }
 
@@ -334,5 +334,24 @@ export class AppointmentsService {
     }
 
     return availableTimeSlots;
+  }
+
+  async getDueReminderAppointments() {
+    const appointments = await this.appointmentDao
+      .getDueReminderAppointments()
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        throw new ClientError(err, 500);
+      });
+
+    return this.getAppointmentsWithService(appointments)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        throw new ClientError(err, 500);
+      });
   }
 }

@@ -10,4 +10,5 @@ export interface AppointmentDao {
   addAppointment(appointment: AddAppointmentRequest): Promise<Appointment>;
   updateAppointment(id: string, newAppointment: AddAppointmentRequest): Promise<Appointment>;
   deleteAppointment(id: string): Promise<Appointment | null>;
+  getDueReminderAppointments(): Promise<Appointment[]>;
 }
