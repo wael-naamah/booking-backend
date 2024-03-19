@@ -98,6 +98,7 @@ export class ScheduleDaoMongo implements ScheduleDao {
           weekday: "$weekday",
           employee_name: "$calendar.employee_name",
           active: "$calendar.active",
+          assignments_services: "$calendar.assignments_services",
         },
       },
       {

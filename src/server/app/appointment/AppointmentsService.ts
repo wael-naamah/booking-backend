@@ -154,7 +154,11 @@ export class AppointmentsService {
     const schedules = await this.scheduleDao.getScheduleByDate(new Date(date));
     if (schedules && schedules.length) {
       const timeSlots = await this.calculateTimeSlots(
-        schedules,
+        schedules.filter(
+          (schedule) =>
+            !schedule.assignments_services?.length ||
+            schedule.assignments_services?.includes(service_id!)
+        ),
         new Date(date),
         serviseDuration
       );

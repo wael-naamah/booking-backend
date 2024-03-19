@@ -2,11 +2,9 @@ import cron from "node-cron";
 import { getService } from "./clients";
 
 export default function reminderJob() {
-  cron.schedule("* * * * *", async () => {
-    console.log("Cron job is running every minute.");
+  cron.schedule("0 0 * * *", async () => {
     const appointments =
       await getService().appointmentService.getDueReminderAppointments();
-    console.log("appointments", appointments);
     appointments.forEach((appointment) => {
       sendReminderEmail(appointment);
     });
@@ -14,7 +12,6 @@ export default function reminderJob() {
 }
 
 function sendReminderEmail(appointment: any) {
-  console.log("appointment", appointment);
   const formattedStartDate = (
     appointment.start_date || new Date(appointment.imported_service_duration)
   ).toLocaleDateString("en-US", {
@@ -48,12 +45,5 @@ function sendReminderEmail(appointment: any) {
     to: appointment?.contact?.[0]?.email,
     subject: "Appointment Reminder",
     text: emailSubject,
-  });
-}
-
-export function testCronJob() {
-  cron.schedule("0 0 * * *", () => {
-    // Log a message
-    console.log("Cron job is running every day.");
   });
 }
