@@ -26,6 +26,7 @@ let connection: mongoose.Connection;
 export const getMongo = (): mongoose.Connection => {
     if (!connection) {
         const uri = getEnv().env === 'development'? getEnv().mongoUri : `mongodb://${getEnv().mongoUsername}:${getEnv().mongoPassword}@${getEnv().mongoHost}:${getEnv().mongoPort}/${getEnv().database}`;
+        console.log('uri', uri);
         connection = createConnection(uri)
     }
     if (connection) {
