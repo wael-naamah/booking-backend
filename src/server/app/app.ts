@@ -64,7 +64,7 @@ app.use(urlencoded({ extended: true }));
 
 app.set("port", process.env.PORT || 11700);
 
-app.set('trust proxy', true);
+app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
 
 app.use(rateLimiterUsingThirdParty);
 if (getEnv().env === "development") {
