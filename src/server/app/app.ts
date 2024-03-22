@@ -64,6 +64,8 @@ app.use(urlencoded({ extended: true }));
 
 app.set("port", process.env.PORT || 11700);
 
+app.set('trust proxy', true);
+
 app.use(rateLimiterUsingThirdParty);
 if (getEnv().env === "development") {
   app.use("/app/docs-yuop!", swaggerUi.serve, swaggerUi.setup(swaggerFile));
