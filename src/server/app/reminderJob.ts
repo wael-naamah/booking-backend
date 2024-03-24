@@ -3,11 +3,13 @@ import { getService } from "./clients";
 
 export default function reminderJob() {
   cron.schedule("0 0 * * *", async () => {
-    const appointments =
-      await getService().appointmentService.getDueReminderAppointments();
-    appointments.forEach((appointment) => {
-      sendReminderEmail(appointment);
-    });
+    try {
+      const appointments =
+        await getService().appointmentService.getDueReminderAppointments();
+      appointments.forEach((appointment) => {
+        sendReminderEmail(appointment);
+      });
+    } catch (error) {}
   });
 }
 
