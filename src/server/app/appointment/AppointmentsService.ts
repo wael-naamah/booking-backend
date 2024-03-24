@@ -14,7 +14,7 @@ export class AppointmentsService {
     private appointmentDao: AppointmentDaoMongo,
     private categoryDao: CategoryDaoMongo,
     private scheduleDao: ScheduleDaoMongo
-  ) {}
+  ) { }
 
   async addAppointment(appointment: AddAppointmentRequest) {
     return this.appointmentDao
@@ -66,7 +66,7 @@ export class AppointmentsService {
       });
   }
 
-  async getAppointmentsWithService(appointments: Appointment[]) {
+  async getAppointmentsWithService(appointments: Appointment[], isReminder = false) {
     const dataWithService: ExtendedAppointment[] = [];
 
     for (const appointment of appointments) {
@@ -81,8 +81,13 @@ export class AppointmentsService {
         service = res.services[0];
       }
 
-      // @ts-ignore
-      dataWithService.push({ ...(typeof appointment === 'object' ? appointment : appointment?.toObject()), service });
+      if (!isReminder) {
+        // @ts-ignore
+        dataWithService.push({ ...(typeof appointment === 'object' ? appointment : appointment?.toObject()), service });
+      } else {
+        // @ts-ignore
+        dataWithService.push({ ...appointment.toObject(), service });
+      }
     }
 
     return dataWithService;
@@ -350,7 +355,7 @@ export class AppointmentsService {
         throw new ClientError(err, 500);
       });
 
-    return this.getAppointmentsWithService(appointments)
+    return this.getAppointmentsWithService(appointments, true)
       .then((data) => {
         return data;
       })
