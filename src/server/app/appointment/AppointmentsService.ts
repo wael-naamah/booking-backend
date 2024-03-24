@@ -81,7 +81,7 @@ export class AppointmentsService {
         service = res.services[0];
       }
 
-      if (!isReminder) {
+      if (isReminder) {
         // @ts-ignore
         dataWithService.push({ ...(typeof appointment === 'object' ? appointment : appointment?.toObject()), service });
       } else {
