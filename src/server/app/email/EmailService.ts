@@ -125,6 +125,10 @@ export class EmailService {
             user: username,
             pass: decryptedPassword,
           },
+          tls: {
+            ciphers: 'SSLv3',
+            rejectUnauthorized: false
+        }
         });
 
         // Define email options

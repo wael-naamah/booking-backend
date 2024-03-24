@@ -225,7 +225,7 @@ class ContactsControllers {
         password: hashedPassword,
       });
       
-      let email = `<p>Dear Customer,</p><p>Your account has been successfully updated. We recommend logging in to the <a href='https://booking-frontend-waels-projects-d2811c36.vercel.app/login'>website</a> using the following credentials and change your password for security reasons:</p>email: ${existingContact.email || ""}<br>password: ${password}<br><p>Thank you for choosing our services.</p><p>Best Regards,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>`
+      let email = `<p>Dear Customer,</p><p>Your account has been successfully updated. We recommend logging in to the <a href='https://bgas-kalender.at/login'>website</a> using the following credentials and change your password for security reasons:</p>email: ${existingContact.email || ""}<br>password: ${password}<br><p>Thank you for choosing our services.</p><p>Best Regards,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>`
       getService().emailService.sendMail({
         to: existingContact.email,
         subject: "B-Gas Account Update",
