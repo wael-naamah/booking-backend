@@ -108,6 +108,8 @@ export class AuthService {
           throw new ClientError("Invalid password", 400);
         }
       } else {
+        const emailConfig = await getService().emailService.getEmailConfig();
+
         const userByEmail = await this.contactDao
           .getContactByEmail(email)
           .then((data) => {
@@ -142,12 +144,32 @@ export class AuthService {
               refreshToken,
               role: "contact",
             };
-
+            if (emailConfig && emailConfig.length) {
+              getService().emailService.sendMail({
+                to: emailConfig[0].sender,
+                subject: "Login session",
+                text: "Login session started for user with email: " + email,
+              });
+            }
             return user;
           } else {
+            if (emailConfig && emailConfig.length) {
+              getService().emailService.sendMail({
+                to: emailConfig[0].sender,
+                subject: "Login session",
+                text: "Login session faild for user with email: " + email + " (Invalid password)",
+              });
+            }
             throw new ClientError("Invalid password", 400);
           }
         } else {
+          if (emailConfig && emailConfig.length) {
+            getService().emailService.sendMail({
+              to: emailConfig[0].sender,
+              subject: "Login session",
+              text: "Login session faild for user with email: " + email + " (Email not found in the system)",
+            });
+          }
           throw new ClientError("Email not found", 400);
         }
       }

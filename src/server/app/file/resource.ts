@@ -3,6 +3,8 @@ import multer from "multer";
 import admin from "firebase-admin";
 import xlsx from "xlsx";
 import { getService } from "../clients";
+import { AppointmentStatus } from "../../../database-client";
+const ObjectId = require('mongodb').ObjectId;
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -92,11 +94,14 @@ export const configure = (app: express.Router) => {
         const workbook = xlsx.read(file.data, { type: "buffer" });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
-        const data = xlsx.utils.sheet_to_json(sheet);
-        const contactsInserted = await insertData(data);
+        const data = xlsx.utils.sheet_to_json(sheet, {
+          raw: true,
+          dateNF: 'MM/DD/YYYY h:mm:ss A',
+        });
+        const result = await insertData(data);
         res.json({
           status: "success",
-          message: "successfully imported " + contactsInserted + " contacts",
+          message: "successfully imported " + result?.contactsInserted + " contacts and " + result?.appointmentInserted + " appointments.",
         });
       } catch (error) {
         res
@@ -109,27 +114,35 @@ export const configure = (app: express.Router) => {
     }
   );
 
+  const EXCEL_START_DATE = new Date(Date.UTC(1899, 11, 30));
+  function excelSerialNumberToDate(serial: number) {
+    const milliseconds = (serial - 1) * 24 * 60 * 60 * 1000;
+    const leapYearAdjustment = milliseconds < 0 ? 0 : 1;
+    return new Date(EXCEL_START_DATE.getTime() + milliseconds + leapYearAdjustment * 24 * 60 * 60 * 1000);
+  }
+
   async function insertData(data: any) {
     let contactsInserted = 0;
+    let appointmentInserted = 0;
     const service = getService();
     const Contact = service.contactService;
     try {
       for (const item of data) {
-        let contact = await Contact.getContactByEmail(item.Email || "");
+        let contact = await Contact.getContactByEmail(item.Email || item.email || "");
         let contactId = "";
 
         if (contact && contact._id) {
           contactId = contact._id;
         } else {
           const contact = await Contact.addContact({
-            salutation: item.Anrede || "--",
-            first_name: item.Vorname || "--",
-            last_name: item.Nachname || "--",
-            address: item.Adresse || "--",
-            zip_code: item.PLZ || "--",
-            location: item.Ort || "--",
-            telephone: item.Telefon || "--",
-            email: item.Email || "--",
+            salutation: item.Anrede || item.salutation || "--",
+            first_name: item.Vorname || item.first_name || "--",
+            last_name: item.Nachname || item.last_name || "--",
+            address: item.Adresse || item.address || "--",
+            zip_code: item.PLZ || item.zip_code || "--",
+            location: item.Ort || item.location || "--",
+            telephone: item.Telefon || item.telephone || "--",
+            email: item.Email || item.email || "--",
             imported: true,
           });
           if (contact && contact._id) {
@@ -139,29 +152,52 @@ export const configure = (app: express.Router) => {
         }
 
         const Appointment = service.appointmentService;
-        await Appointment.addAppointment({
-          category_id: "--",
-          service_id: "--",
-          calendar_id: "--",
-          start_date: item.Datum || "--",
-          end_date: item.Datum || "--",
-          invoice_number: item.Rechnungsnummer || 0,
-          contract_number: item.Kundennummer || 0,
-          imported_service_name: item.Leistungen,
-          imported_service_duration: item.Dauern,
-          imported_service_price: item.Preis,
-          contact_id: contactId,
-          brand_of_device: item.Brand || "--",
-          model: item.Model,
-          remarks: item.Beschreibung,
-        });
+        let shouldInsertAppointment = true;
+        let existingAppointment = await Appointment.getAppointmentById(item.appointment_id || "");
+        if (existingAppointment && existingAppointment._id) {
+          shouldInsertAppointment = false;
+        }
+        if (!item.Datum && !item.start_date && !item.end_date) {
+          shouldInsertAppointment = false;
+        }
+
+        if (shouldInsertAppointment) {
+          const startDate = item.Datum || item.start_date;
+          const endDate = item.Datum || item.end_date;
+
+          await Appointment.addAppointment({
+            category_id: "--",
+            service_id: "--",
+            calendar_id: "--",
+            start_date: excelSerialNumberToDate(startDate).toISOString(),
+            end_date: excelSerialNumberToDate(endDate).toISOString(),
+            invoice_number: item.Rechnungsnummer || item.invoice_number || 0,
+            contract_number: item.Kundennummer || item.contract_number || 0,
+            imported_service_name: item.Leistunngen || item.service || "--",
+            imported_service_duration: item.Dauern || item.duration || 0,
+            imported_service_price: item.Preis || item.price || 0,
+            contact_id: contactId,
+            brand_of_device: item.Brand || item.brand_of_device || undefined,
+            model: item.Model || item.model || undefined,
+            remarks: item.Beschreibung || item.remarks || undefined,
+            exhaust_gas_measurement: item.Abgasuntersuchung || item.exhaust_gas_measurement || undefined,
+            has_maintenance_agreement: item.Wartungsvertrag || item.has_maintenance_agreement || undefined,
+            year: item.Jahr || item.year || undefined,
+            employee_remarks: item.Mitarbeiterbemerkungen || item.employee_remarks || undefined,
+            company_remarks: item.Firmenbemerkungen || item.company_remarks || undefined,
+            appointment_status: item.Status || item.appointment_status || AppointmentStatus.Confirmed,
+            ended_at: item.Abgelaufen || item.ended_at || undefined,
+            created_by: item.ErstelltVon || item.created_by || undefined,
+          });
+          appointmentInserted++;
+        }
       }
     } catch (error) {
       console.error("Error inserting data:", error);
-      return contactsInserted;
+      return {contactsInserted, appointmentInserted};
     }
 
-    return contactsInserted;
+    return {contactsInserted, appointmentInserted};
   }
 
   app.get("/files/export-contacts-file", async (req, res) => {
@@ -169,7 +205,7 @@ export const configure = (app: express.Router) => {
       const dataToExport =
         await getService().contactService.getContactsWithAppointments();
       const transformedData: any[] = [];
-
+      const services = await getService().categoryService.getServices();
       dataToExport.map((item: any) => {
         const {
           _id,
@@ -183,7 +219,7 @@ export const configure = (app: express.Router) => {
         if (appointments.length === 0) {
           transformedData.push(rest);
         } else {
-          appointments.map((appointment: any) => {
+          appointments.map(async (appointment: any) => {
             const {
               _id,
               createdAt,
@@ -195,7 +231,21 @@ export const configure = (app: express.Router) => {
               control_points,
               ...appointmentInfo
             } = appointment;
-            return transformedData.push({ ...rest, ...appointmentInfo });
+            let duration = 0;
+            let service = '';
+            let price = 0;
+
+            if (category_id && service_id) {
+              const serviceObjectId = new ObjectId(service_id);
+              const servise = (services || []).find((service: any) => service._id.equals(serviceObjectId));
+              if (servise) {
+                duration = servise.duration;
+                service = servise.name;
+                price = servise.price;
+              }
+            }
+
+            return transformedData.push({ ...rest, duration, service, price, appointment_id: _id, ...appointmentInfo });
           });
         }
       });

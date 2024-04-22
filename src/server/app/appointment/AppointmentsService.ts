@@ -6,6 +6,7 @@ import {
   ScheduleDaoMongo,
   ExtendedSchedule,
   ExtendedAppointment,
+  AppointmentStatus,
 } from "../../../database-client";
 import { ClientError } from "../../utils/exceptions";
 
@@ -331,7 +332,7 @@ export class AppointmentsService {
         const timeSlotStart = new Date(timeSlot.start);
         const timeSlotEnd = new Date(timeSlot.end);
 
-        if (timeSlotStart < appointmentEnd && timeSlotEnd > appointmentStart) {
+        if (appointment.appointment_status === AppointmentStatus.Confirmed && timeSlotStart < appointmentEnd && timeSlotEnd > appointmentStart) {
           isBooked = true;
           break;
         }

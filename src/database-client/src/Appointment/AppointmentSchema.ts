@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { AppointmentStatus } from "../Schema";
 
 export const attachmentSchema = new Schema(
   {
@@ -46,6 +47,11 @@ export const schema = new mongoose.Schema(
     contact_id: {
       type: String,
       required: true,
+    },
+    appointment_status: {
+      type: String,
+      required: true,
+      default: AppointmentStatus.Confirmed,
     },
     brand_of_device: String,
     model: String,

@@ -5,6 +5,8 @@ import {
   AddAppointmentRequest,
   Appointment,
   AppointmentForm,
+  AppointmentStatus,
+  EmailTemplateType,
   TimeSlotsForm,
 } from "../../../database-client/src/Schema";
 import { hashPassword } from "../middlewares/authMiddleware";
@@ -62,7 +64,7 @@ class AppointmentsControllers {
         ...contact,
         password: encryptedPassword,
       };
-      
+
       const newContact = await service.contactService.addContact(updatedContact);
       if (newContact && newContact._id) {
         conatctId = newContact._id;
@@ -98,6 +100,7 @@ class AppointmentsControllers {
         attachments: form.attachments || undefined,
         remarks: form.remarks || undefined,
         employee_attachments: form.employee_attachments || undefined,
+        appointment_status: form.appointment_status || AppointmentStatus.Confirmed,
         employee_remarks: form.employee_remarks || undefined,
         company_remarks: form.company_remarks || undefined,
         created_by: form.created_by || undefined,
@@ -135,7 +138,7 @@ class AppointmentsControllers {
         subject: subject,
         text: email,
       });
-      
+
       const emailConfig = await getService().emailService.getEmailConfig();
 
       if (emailConfig && emailConfig.length) {
@@ -296,10 +299,55 @@ class AppointmentsControllers {
     const contact = await service.contactService.getContactById(
       form.contact_id
     );
+    const { updated_by, ...rest } = form;
     const data = await service.appointmentService.updateAppointment(
       categoryId,
-      form
+      rest
     );
+    const emailConfig = await getService().emailService.getEmailConfig();
+
+    if (rest.appointment_status === AppointmentStatus.Cancelled) {
+      if (updated_by === 'contact') {
+        if (emailConfig && emailConfig.length) {
+          getService().emailService.sendMail({
+            to: emailConfig[0].sender,
+            subject: "B-Gas Appointment Cancellation",
+            // @ts-ignore
+            text: "Appointment (" + rest.start_date + " - " + rest.end_date + ") has been cancelled by customer: " + contact?._doc?.email,
+          });
+        }
+
+
+      } else {
+        let email =
+          "Dear Customer your appointment have been cancelled";
+        let subject = "B-Gas Appointment Cancellation";
+        const emailTemplate =
+          await service.emailService.getEmailTemplates(
+            EmailTemplateType.Cancellation
+          );
+
+        if (emailTemplate && emailTemplate[0] && emailTemplate[0].template) {
+          email = emailTemplate[0].template;
+          subject = emailTemplate[0].subject;
+        }
+
+        getService().emailService.sendMail({
+          // @ts-ignore
+          to: contact?._doc?.email || "",
+          subject: subject,
+          text: email,
+        });
+
+        if (emailConfig && emailConfig.length) {
+          getService().emailService.sendMail({
+            to: emailConfig[0].sender,
+            subject: subject,
+            text: email,
+          });
+        }
+      }
+    }
 
     // @ts-ignore
     const dataObject = { ...data._doc };

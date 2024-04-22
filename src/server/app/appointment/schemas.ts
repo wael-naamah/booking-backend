@@ -1,5 +1,6 @@
 import Joi from "joi";
 import contactSchema from "../contact/schemas";
+import { AppointmentStatus } from "../../../database-client";
 
 const getAppointmentsSchema = Joi.object().keys({
   start: Joi.date().iso().required(),
@@ -38,6 +39,9 @@ const addAppointmentSchema = Joi.object().keys({
   imported_service_name: Joi.string().optional().allow(""),
   imported_service_duration: Joi.string().optional().allow(""),
   imported_service_price: Joi.string().optional().allow(""),
+  appointment_status: Joi.string()
+  .valid(...Object.values(AppointmentStatus))
+  .optional(),
   remarks: Joi.string().optional(),
   attachments: Joi.array().items(attachmentSchema),
   employee_remarks: Joi.string().optional().allow(""),
@@ -68,6 +72,9 @@ const updateAppointmentSchema = Joi.object().keys({
   imported_service_name: Joi.string().optional().allow(""),
   imported_service_duration: Joi.string().optional().allow(""),
   imported_service_price: Joi.string().optional().allow(""),
+  appointment_status: Joi.string()
+  .valid(...Object.values(AppointmentStatus))
+  .optional(),
   remarks: Joi.string().optional(),
   attachments: Joi.array().items(attachmentSchema),
   employee_remarks: Joi.string().optional().allow(""),
@@ -77,6 +84,7 @@ const updateAppointmentSchema = Joi.object().keys({
   ended_at: Joi.date().iso().optional(),
   control_points: Joi.array().items(Joi.object().keys({ title: Joi.string(), value: Joi.number() })).optional(),
   contact_id: Joi.string().required(),
+  updated_by: Joi.string().optional(),
 });;
 
 const getTimeSlotsSchema = Joi.object().keys({
