@@ -364,4 +364,16 @@ export class AppointmentsService {
         throw new ClientError(err, 500);
       });
   }
+
+  async getServiceNameByCategory(categoryId: string, serviceId: string) {
+    return this.categoryDao
+      .getServiceByCategoryIdAndServiceId(categoryId, serviceId)
+      .then((data) => {
+        // @ts-ignore
+        return data?.services?.[0]?.name;
+      })
+      .catch((err) => {
+        return '';
+      });
+  }
 }

@@ -49,8 +49,9 @@ class AppointmentsControllers {
     const existingContact = await service.contactService.getContactByEmail(
       contact.email
     );
-    let newContactEmail = `<p>Dear Customer,</p><p>Your account has been successfully created. We recommend logging in to the <a href='https://bgas-kalender.at/login'>website</a> using the following credentials and change your password for security reasons:</p>email: ${contact.email}<br>password: ${contact.password}<br><p>Thank you for choosing our services.</p><p>Best Regards,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>`
-    let newContactSubject = "B-Gas Account Creation";
+
+    let newContactEmail = `<p>Liebe Kund*innen,</p><br>Ihr Konto wurde erfolgreich erstellt. Wir empfehlen Ihnen, sich auf der <a href='https://bgas-kalender.at/login'>Website</a> mit den folgenden Anmeldeinformationen anzumelden und aus Sicherheitsgründen Ihr Passwort zu ändern:<br>E-Mail: ${contact.email}<br>Passwort: ${contact.password}<br><p>Vielen Dank, dass Sie unsere Dienste gewählt haben.</p><p>Mit freundlichen Grüßen,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>` 
+    let newContactSubject = "B-Gas Kontoerstellung";
 
     if (existingContact) {
       // @ts-ignore
@@ -121,15 +122,48 @@ class AppointmentsControllers {
       };
 
       let email =
-        "Dear Customer we have received your application and we will contact you soon!";
-      let subject = "B-Gas Services";
+        "Sehr geehrter Kunde, wir haben Ihre Bewerbung erhalten und werden uns bald mit Ihnen in Verbindung setzen!<p>beste grüße,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>";
+      let subject = "B-Gas Dienstleistungen";
       const emailTemplate =
         await service.emailService.getEmailTemplatesByServiceId(
           form.service_id
         );
 
       if (emailTemplate && emailTemplate.template) {
-        email = emailTemplate.template;
+        const serviceName = await service.appointmentService.getServiceNameByCategory(form.category_id, form.service_id);
+        const formattedStartDate = dataObject.start_date.toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        const formattedStartTime = dataObject.end_date.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        });
+        const formattedEndTime = dataObject.end_date.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        });
+        email = emailTemplate.template
+          .replace('B_Performance', serviceName)
+          .replace('B_Salutation', contactObject.salutation)
+          .replace('B_First_Name', contactObject.first_name)
+          .replace('B_Last_Name', contactObject.last_name)
+          .replace('B_Date', formattedStartDate)
+          .replace('B_Start_Time', formattedStartTime)
+          .replace('B_End_Time', formattedEndTime)
+          .replace('B_Address', contactObject.address)
+          .replace('B_ZIP', contactObject.zip_code)
+          .replace('B_Location', contactObject.location)
+          .replace('B_Telephone', contactObject.telephone)
+          .replace('B_Email', contactObject.email)
+          .replace('B_Brand', dataObject.brand_of_device)
+          .replace('B_Model', dataObject.model)
+          .replace('B_Year', dataObject.year)
+          .replace('B_Notes', dataObject.remarks);
         subject = emailTemplate.subject;
       }
 
@@ -311,17 +345,17 @@ class AppointmentsControllers {
         if (emailConfig && emailConfig.length) {
           getService().emailService.sendMail({
             to: emailConfig[0].sender,
-            subject: "B-Gas Appointment Cancellation",
+            subject: "Absage eines B-Gas-Termins",
             // @ts-ignore
-            text: "Appointment (" + rest.start_date + " - " + rest.end_date + ") has been cancelled by customer: " + contact?._doc?.email,
+            text: "Termin (" + rest.start_date + " - " + rest.end_date + ") wurde vom Kunden storniert: " + contact?._doc?.email,
           });
         }
 
 
       } else {
         let email =
-          "Dear Customer your appointment have been cancelled";
-        let subject = "B-Gas Appointment Cancellation";
+        "Sehr geehrter Kunde, Ihr Termin wurde abgesagt";
+        let subject = "Absage eines B-Gas-Termins";
         const emailTemplate =
           await service.emailService.getEmailTemplates(
             EmailTemplateType.Cancellation

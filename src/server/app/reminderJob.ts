@@ -37,15 +37,11 @@ function sendReminderEmail(appointment: any) {
     hour12: true,
   });
 
-  const emailSubject = `Appointment Reminder: ${
-    appointment.service?.name || appointment?.imported_service_name || ""
-  } ${appointment?.brand_of_device || ""} ${
-    appointment.model
-  } - ${formattedStartDate}, from ${formattedStartTime} to ${formattedEndTime}`;
+  const emailSubject = `<p>Liebe Kund*innen,</p> wir möchten Sie freundlich an Ihren Termin erinnern:<br>Service: ${appointment.service?.name || appointment?.imported_service_name || ""}<br>Gerät: ${appointment?.brand_of_device || ""} ${appointment.model}<br>Datum: ${formattedStartDate}<br>Uhrzeit: Von ${formattedStartTime} bis ${formattedEndTime}<br><p>Bitte denken Sie daran, rechtzeitig zu erscheinen. Bei Fragen oder Änderungswünschen kontaktieren Sie uns bitte umgehend.</p><br><p>Mit freundlichen Grüßen,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>`;
 
   getService().emailService.sendMail({
     to: appointment?.contact?.[0]?.email,
-    subject: "Appointment Reminder",
+    subject: "Terminerinnerung",
     text: emailSubject,
   });
 }

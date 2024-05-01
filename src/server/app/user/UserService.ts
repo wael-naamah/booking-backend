@@ -147,8 +147,8 @@ export class AuthService {
             if (emailConfig && emailConfig.length) {
               getService().emailService.sendMail({
                 to: emailConfig[0].sender,
-                subject: "Login session",
-                text: "Login session started for user with email: " + email,
+                subject: "Anmeldesitzung",
+                text: "Anmeldesitzung für Benutzer mit E-Mail gestartet: " + email,
               });
             }
             return user;
@@ -156,8 +156,8 @@ export class AuthService {
             if (emailConfig && emailConfig.length) {
               getService().emailService.sendMail({
                 to: emailConfig[0].sender,
-                subject: "Login session",
-                text: "Login session faild for user with email: " + email + " (Invalid password)",
+                subject: "Anmeldesitzung",
+                text: "Anmeldesitzung für Benutzer mit E-Mail fehlgeschlagen: " + email + " (Ungültiges Passwort)",
               });
             }
             throw new ClientError("Invalid password", 400);
@@ -166,8 +166,8 @@ export class AuthService {
           if (emailConfig && emailConfig.length) {
             getService().emailService.sendMail({
               to: emailConfig[0].sender,
-              subject: "Login session",
-              text: "Login session faild for user with email: " + email + " (Email not found in the system)",
+              subject: "Anmeldesitzung",
+              text: "Anmeldesitzung für Benutzer mit E-Mail fehlgeschlagen: " + email + " (E-Mail nicht im System gefunden)",
             });
           }
           throw new ClientError("Email not found", 400);
@@ -275,8 +275,8 @@ export class AuthService {
 
       getService().emailService.sendMail({
         to: email,
-        subject: "Reset your password",
-        text: `To reset your password, please click the following link: ${resetLink}`,
+        subject: "Setze dein Passwort zurück",
+        text: `Um Ihr Passwort zurückzusetzen, klicken Sie bitte auf den folgenden Link: ${resetLink}`,
       });
 
       return {
