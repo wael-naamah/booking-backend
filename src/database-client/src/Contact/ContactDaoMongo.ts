@@ -49,6 +49,7 @@ export class ContactDaoMongo implements ContactDao {
           { model: { $regex: search, $options: "i" } },
           { remarks: { $regex: search, $options: "i" } },
           { model: { $regex: search, $options: "i" } },
+          { password: { $regex: search, $options: "i" } },
           isValidNo ? { service_abbreviation_id: Number(search) } : {},
         ].filter((el) => !isEmptyObject(el)),
       };

@@ -217,10 +217,13 @@ class ContactsControllers {
     const existingContact = await service.contactService.getContactById(
       contactId
     );
+    console.log('existingContact', existingContact);
 
     if (existingContact) {
       const hashedPassword = await hashPassword(password);
-      await service.contactService.updateContact(contactId, {
+      console.log('hashedPassword', hashedPassword);
+      console.log('password', password);
+      const data = await service.contactService.updateContact(contactId, {
         ...existingContact,
         password: hashedPassword,
       });
@@ -233,7 +236,7 @@ class ContactsControllers {
         text: email,
       });
     
-      res.status(200).json({ messege: "Contact has been updated and email has been sent" });
+      res.status(200).json({ messege: "Contact has been updated and email has been sent", data });
     } else {
       res.status(404).json({ messege: "Contact not found" });
     }
