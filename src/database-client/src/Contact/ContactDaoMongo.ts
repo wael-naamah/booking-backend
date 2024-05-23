@@ -105,6 +105,7 @@ export class ContactDaoMongo implements ContactDao {
   }
 
   async updateContact(id: string, newContact: Partial<Contact>) {
+    console.log('newContact', newContact)
     return this.model
       .findByIdAndUpdate(id, newContact, { new: true })
       .then((res) => {
