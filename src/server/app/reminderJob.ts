@@ -16,7 +16,7 @@ export default function reminderJob() {
 function sendReminderEmail(appointment: any) {
   const formattedStartDate = (
     appointment.start_date || new Date(appointment.imported_service_duration)
-  ).toLocaleDateString("en-US", {
+  ).toLocaleDateString("de-DE", {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -24,14 +24,14 @@ function sendReminderEmail(appointment: any) {
   });
   const formattedStartTime = (
     appointment.start_date || new Date(appointment.imported_service_duration)
-  ).toLocaleTimeString("en-US", {
+  ).toLocaleTimeString("de-DE", { 
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
   });
   const formattedEndTime = (
     appointment.end_date || new Date(appointment.imported_service_duration)
-  ).toLocaleTimeString("en-US", {
+  ).toLocaleTimeString("de-DE", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,

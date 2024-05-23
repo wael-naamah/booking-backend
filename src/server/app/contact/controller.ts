@@ -227,6 +227,7 @@ class ContactsControllers {
         ...existingContact,
         password: hashedPassword,
       });
+      console.log('data', data)
 
       let email = `<p>Liebe Kund*innen,</p><br>Ihr Konto wurde erfolgreich aktualisiert. Wir empfehlen Ihnen, sich auf der <a href='https://bgas-kalender.at/login'>Website</a> mit den folgenden Anmeldeinformationen anzumelden und aus Sicherheitsgründen Ihr Passwort zu ändern:<br>E-Mail: ${existingContact.email}<br>Passwort: ${password}<br><p>Vielen Dank, dass Sie unsere Dienste gewählt haben.</p><p>Mit freundlichen Grüßen,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>`
 

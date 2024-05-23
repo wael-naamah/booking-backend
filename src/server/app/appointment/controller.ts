@@ -131,18 +131,18 @@ class AppointmentsControllers {
 
       if (emailTemplate && emailTemplate.template) {
         const serviceName = await service.appointmentService.getServiceNameByCategory(form.category_id, form.service_id);
-        const formattedStartDate = dataObject.start_date.toLocaleDateString("en-US", {
+        const formattedStartDate = dataObject.start_date.toLocaleDateString("de-DE", { 
           weekday: "long",
           year: "numeric",
           month: "long",
           day: "numeric",
         });
-        const formattedStartTime = dataObject.end_date.toLocaleTimeString("en-US", {
+        const formattedStartTime = dataObject.start_date.toLocaleTimeString("de-DE", {
           hour: "2-digit",
           minute: "2-digit",
           hour12: true,
         });
-        const formattedEndTime = dataObject.end_date.toLocaleTimeString("en-US", {
+        const formattedEndTime = dataObject.end_date.toLocaleTimeString("de-DE", {
           hour: "2-digit",
           minute: "2-digit",
           hour12: true,
