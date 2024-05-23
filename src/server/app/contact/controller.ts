@@ -210,23 +210,23 @@ class ContactsControllers {
     request: Request,
     res: Response,
     next: NextFunction
-  ){
-    const {password} = request.body as unknown as {password: string};
+  ) {
+    const { password } = request.body as unknown as { password: string };
     const service = (request as any).service as ServiceContainer;
     const { contactId } = request.params;
     const existingContact = await service.contactService.getContactById(
       contactId
     );
-    console.log('existingContact', existingContact);
 
     if (existingContact) {
       const hashedPassword = await hashPassword(password);
-      console.log('hashedPassword', hashedPassword);
-      console.log('password', password);
-      const newContact = Object.assign({...existingContact}, {password: hashedPassword})
-      console.log('assigned contact', newContact)
-      const data = await service.contactService.updateContact(contactId, newContact);
-      console.log('data', data)
+      // @ts-ignore
+      const dataObject = { ...existingContact._doc, password: hashedPassword };
+
+      const data = await service.contactService.updateContact(
+        contactId,
+        dataObject
+      );
 
       let email = `<p>Liebe Kund*innen,</p><br>Ihr Konto wurde erfolgreich aktualisiert. Wir empfehlen Ihnen, sich auf der <a href='https://bgas-kalender.at/login'>Website</a> mit den folgenden Anmeldeinformationen anzumelden und aus Sicherheitsgründen Ihr Passwort zu ändern:<br>E-Mail: ${existingContact.email}<br>Passwort: ${password}<br><p>Vielen Dank, dass Sie unsere Dienste gewählt haben.</p><p>Mit freundlichen Grüßen,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>`
 
@@ -235,8 +235,13 @@ class ContactsControllers {
         subject: "B-Gas Kontoaktualisierung",
         text: email,
       });
-    
-      res.status(200).json({ messege: "Contact has been updated and email has been sent", data });
+
+      res
+        .status(200)
+        .json({
+          messege: "Contact has been updated and email has been sent",
+          data,
+        });
     } else {
       res.status(404).json({ messege: "Contact not found" });
     }
