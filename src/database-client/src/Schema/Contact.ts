@@ -1,9 +1,3 @@
-export enum Salutation {
-  WOMAN = "Mrs",
-  MISTER = "Mr",
-  COMPANY = "Company",
-}
-
 export interface Contact {
   _id?: string;
   salutation: string;

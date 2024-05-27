@@ -57,7 +57,8 @@ class AppointmentsControllers {
       // @ts-ignore
       conatctId = existingContact._doc._id;
       // @ts-ignore
-      contactObg = existingContact._doc;
+      const updatedContact = {...existingContact._doc, ...contact, password: existingContact._doc.password}
+      contactObg = await service.contactService.updateContact(conatctId, updatedContact);
     } else {
       const encryptedPassword = contact.password ? await hashPassword(contact.password) : undefined;
 
@@ -78,6 +79,12 @@ class AppointmentsControllers {
         });
       }
     }
+    const formatTime = (time: string) => {
+      const date = new Date(time);
+      const hours = date.getUTCHours().toString().padStart(2, '0');
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+  };
 
     if (conatctId) {
       const newAppointment: AddAppointmentRequest = {
@@ -137,16 +144,8 @@ class AppointmentsControllers {
           month: "long",
           day: "numeric",
         });
-        const formattedStartTime = dataObject.start_date.toLocaleTimeString("de-DE", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
-        });
-        const formattedEndTime = dataObject.end_date.toLocaleTimeString("de-DE", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
-        });
+        const formattedStartTime = formatTime(dataObject.start_date);
+        const formattedEndTime = formatTime(dataObject.end_date);
         email = emailTemplate.template
           .replace('B_Performance', serviceName)
           .replace('B_Salutation', contactObject.salutation)
