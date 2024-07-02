@@ -25,6 +25,7 @@ export interface Appointment {
   start_date: string;
   end_date: string;
   contact: Contact;
+  contact_id?: string;
   brand_of_device?: string;
   model?: string;
   exhaust_gas_measurement?: boolean;

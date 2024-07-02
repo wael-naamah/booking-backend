@@ -67,6 +67,53 @@ export class AppointmentsService {
       });
   }
 
+  async getAppointmentsByDateAndCalendarIdId(
+    calendarId: string,
+    start: string,
+    end: string
+  ) {
+    try {
+      const appointments: Appointment[] =
+        await this.appointmentDao.getAppointmentsByDateCalendarIdId(
+          calendarId,
+          start,
+          end
+        );
+
+      const appointmentDetails = await Promise.all(
+        appointments.map(async (appointment) => {
+          const service =
+            await this.categoryDao.getServiceByCategoryIdAndServiceId(
+              appointment.category_id,
+              appointment.service_id
+            );
+
+          if (service) {
+            const category = await this.categoryDao.getCategoryById(
+              appointment.category_id
+            );
+            return {
+              appointment,
+              service,
+              category,
+            };
+          } else {
+            return {
+              appointment,
+              service: null,
+              category: null,
+            };
+          }
+        })
+      );
+
+      return appointmentDetails;
+    } catch (error) {
+      console.error("Error fetching appointment details:", error);
+      throw error;
+    }
+  }
+
   async getAppointmentsWithService(appointments: Appointment[], isReminder = false) {
     const dataWithService: ExtendedAppointment[] = [];
 

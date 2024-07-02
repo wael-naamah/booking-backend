@@ -272,4 +272,38 @@ export const configure = (app: express.Router) => {
       res.status(500).json({ message: "Error exporting data" });
     }
   });
+
+  app.post(
+    "/files/upload-contract-file",
+    upload.single("file"),
+    async (req: any, res: any) => {
+      try {
+        const file = req.files?.file;
+        const bucket = admin.storage().bucket("gs://b-gas-13308.appspot.com");
+        const fileBuffer = file.data;
+        const fileName = file.name;
+        const fileRef = bucket.file(`contracts/${fileName}`);
+        await fileRef.save(fileBuffer, { contentType: file.mimetype });
+        const fileLink = await fileRef.getSignedUrl({
+          version: "v2",
+          action: "read",
+          expires: new Date(3000, 0, 1),
+        });
+
+        if (fileLink && fileLink.length) {
+          res.json({
+            message: "File uploaded successfully",
+            link: fileLink[0].replace(
+              "https://storage.googleapis.com/b-gas-13308.appspot.com/",
+              ""
+            ),
+          });
+        } else {
+          res.status(500).json({ message: "Error uploading the file." });
+        }
+      } catch (error) {
+        res.status(500).json({ message: "Error uploading the file." });
+      }
+    }
+  );
 };

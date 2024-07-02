@@ -6,6 +6,12 @@ import schemas from "./schemas";
 
 export const configure = (app: express.Router) => {
   app.post(
+    "/appointments/get_by_date_and_id",
+    injectService,
+    ValidateSchema.prepare(schemas.getAppointmentsByDateAndCalendarIdSchema),
+    AppointmentsControllers.getAppointmentsByDateAndCalenderId
+  );
+  app.post(
     "/appointments",
     injectService,
     ValidateSchema.prepare(schemas.addAppointmentSchema),

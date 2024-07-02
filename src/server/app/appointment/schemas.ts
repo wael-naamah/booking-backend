@@ -13,6 +13,12 @@ const attachmentSchema = {
   url: Joi.string().allow(""),
 };
 
+const getAppointmentsByDateAndCalendarIdSchema = Joi.object().keys({
+  calendar_id: Joi.string().required(),
+  start_date: Joi.date().iso().required(),
+  end_date: Joi.date().iso().required()
+});
+
 const addAppointmentSchema = Joi.object().keys({
   category_id: Joi.string().required(),
   service_id: Joi.string().required(),
@@ -98,4 +104,5 @@ export default {
   addAppointmentSchema,
   updateAppointmentSchema,
   getTimeSlotsSchema,
+  getAppointmentsByDateAndCalendarIdSchema
 };

@@ -47,10 +47,10 @@ class AppointmentsControllers {
     let contactObg = null;
 
     const existingContact = await service.contactService.getContactByEmail(
-      contact.email
+      contact?.email
     );
 
-    let newContactEmail = `<p>Liebe Kund*innen,</p><br>Ihr Konto wurde erfolgreich erstellt. Wir empfehlen Ihnen, sich auf der <a href='https://bgas-kalender.at/login'>Website</a> mit den folgenden Anmeldeinformationen anzumelden und aus Sicherheitsgründen Ihr Passwort zu ändern:<br>E-Mail: ${contact.email}<br>Passwort: ${contact.password}<br><p>Vielen Dank, dass Sie unsere Dienste gewählt haben.</p><p>Mit freundlichen Grüßen,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>` 
+    let newContactEmail = existingContact ? `<p>Liebe Kund*innen,</p><br>Ihr Konto wurde erfolgreich erstellt. Wir empfehlen Ihnen, sich auf der <a href='https://bgas-kalender.at/login'>Website</a> mit den folgenden Anmeldeinformationen anzumelden und aus Sicherheitsgründen Ihr Passwort zu ändern:<br>E-Mail: ${contact.email}<br>Passwort: ${contact.password}<br><p>Vielen Dank, dass Sie unsere Dienste gewählt haben.</p><p>Mit freundlichen Grüßen,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>` : ''
     let newContactSubject = "B-Gas Kontoerstellung";
 
     if (existingContact) {
@@ -222,6 +222,69 @@ class AppointmentsControllers {
     const data = await service.appointmentService.getAppointments(start, end);
 
     res.status(200).json(data);
+  }
+
+  @tryCatchErrorDecorator
+  static async getAppointmentsByDateAndCalenderId(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const XLSX = require("xlsx");
+    const serviceContainer = (request as any).service as ServiceContainer;
+    const body = request.body;
+    const { calendar_id, start_date, end_date } = body;
+
+    const data =
+      await serviceContainer.appointmentService.getAppointmentsByDateAndCalendarIdId(
+        calendar_id,
+        start_date,
+        end_date
+      );
+
+      const transformedData: any[] = [];
+
+      await Promise.all(
+        data.map(async (item: any) => {
+          const { service, appointment } = item;
+
+          const contact = await serviceContainer.contactService.getContactById(
+            appointment.contact_id
+          );
+
+          const serviceInfo = service.services[0];
+
+          transformedData.push({
+            "Service ID": serviceInfo?._id,
+            "Service Name": serviceInfo?.name,
+            "Service Description": serviceInfo?.description,
+            "Service Duration (minutes)": serviceInfo?.duration,
+            "Service Price": serviceInfo?.price,
+            "Service Abbreviation ID": serviceInfo?.abbreviation_id,
+            "Contact First Name": contact?.first_name,
+            "Contact Last Name": contact?.last_name,
+            "Contact Address": contact?.address,
+            "Contact Zip Code": contact?.zip_code,
+            "Contact Location": contact?.location,
+            "Contact Telephone": contact?.telephone,
+            "Contact Email": contact?.email,
+          });
+        })
+      );
+
+    const workbook = XLSX.utils.book_new();
+    const sheet = XLSX.utils.json_to_sheet(transformedData);
+    XLSX.utils.book_append_sheet(workbook, sheet, "Sheet1");
+    const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+    res.setHeader(
+      "Content-Disposition",
+      'attachment; filename="exported_data.xlsx"'
+    );
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.send(buffer);
   }
 
   @tryCatchErrorDecorator
