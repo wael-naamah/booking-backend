@@ -9,6 +9,7 @@ export interface Contact {
   telephone: string;
   phone_numbber_2?: string;
   phone_numbber_3?: string;
+  contra?: string;
   email: string;
   password?: string;
   note_on_address?: string;

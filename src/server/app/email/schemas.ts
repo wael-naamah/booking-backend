@@ -27,8 +27,8 @@ const updateEmailConfigSchema = Joi.object().keys({
 
 const addEmailTemplateSchema = Joi.object().keys({
   type: Joi.string()
-  .valid(...Object.values(EmailTemplateType))
-  .required(),
+    .valid(...Object.values(EmailTemplateType))
+    .required(),
   subject: Joi.string().required(),
   template: Joi.string().required(),
   service_id: Joi.string().optional(),
@@ -36,8 +36,8 @@ const addEmailTemplateSchema = Joi.object().keys({
 
 const updateEmailTemplateSchema = Joi.object().keys({
   type: Joi.string()
-  .valid(...Object.values(EmailTemplateType))
-  .required(),
+    .valid(...Object.values(EmailTemplateType))
+    .required(),
   subject: Joi.string().required(),
   template: Joi.string().required(),
   service_id: Joi.string().optional(),
@@ -45,8 +45,46 @@ const updateEmailTemplateSchema = Joi.object().keys({
 
 const getEmailTemplatesSchema = Joi.object().keys({
   type: Joi.string()
-  .valid(...Object.values(EmailTemplateType))
-  .required(),
+    .valid(...Object.values(EmailTemplateType))
+    .required(),
+});
+
+const emailContraSchema = Joi.object().keys({
+  content1: Joi.string().required(),
+  content2: Joi.string().required(),
+  content3: Joi.string().required(),
+  title: Joi.string(),
+  name: Joi.string().required(),
+  street_number: Joi.string().required(),
+  year: Joi.string(),
+  postal_code: Joi.string().required(),
+  device_type: Joi.string().required(),
+  address: Joi.string().required(),
+  mobile_number: Joi.string().required(),
+  device_type2: Joi.string().optional().allow(""),
+  email: Joi.string().required(),
+  tester: Joi.string(),
+  gander: Joi.string().required(),
+});
+
+const emailContraAndSignSchema = Joi.object().keys({
+  content1: Joi.string().required(),
+  content2: Joi.string().required(),
+  content3: Joi.string().required(),
+  title: Joi.string(),
+  name: Joi.string().required(),
+  street_number: Joi.string().required(),
+  year: Joi.string(),
+  password: Joi.string(),
+  postal_code: Joi.string().required(),
+  device_type: Joi.string().required(),
+  address: Joi.string().required(),
+  mobile_number: Joi.string().required(),
+  device_type2: Joi.string().optional().allow(""),
+  email: Joi.string().required(),
+  tester: Joi.string(),
+  gander: Joi.string().required(),
+  sign_url: Joi.string().required(),
 });
 
 export default {
@@ -55,5 +93,7 @@ export default {
   updateEmailConfigSchema,
   addEmailTemplateSchema,
   updateEmailTemplateSchema,
-  getEmailTemplatesSchema
+  getEmailTemplatesSchema,
+  emailContraSchema,
+  emailContraAndSignSchema,
 };

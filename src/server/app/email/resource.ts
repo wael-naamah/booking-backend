@@ -12,6 +12,18 @@ export const configure = (app: express.Router) => {
     EmailControllers.mailerSend
   );
   app.post(
+    "/mailer/send_with_contra",
+    injectService,
+    ValidateSchema.prepare(schemas.emailContraSchema),
+    EmailControllers.sendEmailWithConrta
+  );
+  app.post(
+    "/mailer/send_with_contra_and_sign",
+    injectService,
+    ValidateSchema.prepare(schemas.emailContraAndSignSchema),
+    EmailControllers.sendEmailWithConrtaAndSign
+  );
+  app.post(
     "/mailer/config",
     injectService,
     ValidateSchema.prepare(schemas.addEmailConfigSchema),

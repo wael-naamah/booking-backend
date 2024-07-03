@@ -38,6 +38,7 @@ export const schema = new mongoose.Schema(
     },
     phone_numbber_2: String,
     phone_numbber_3: String,
+    contra: String,
     email: {
       type: String,
       required: true,
