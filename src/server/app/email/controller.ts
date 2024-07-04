@@ -502,11 +502,29 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
         size: 8,
       });
     }
-    const fileName = "./contras/" + req.body.email + ".pdf";
     const modifiedPdfBytes = await pdfDoc.save();
-    fs.writeFileSync(fileName, modifiedPdfBytes);
-    const createHtmlTemplate = () => {
-      return `
+    const buffer = Buffer.from(modifiedPdfBytes);
+    const blob = new Blob([buffer], { type: "application/pdf" });
+    const uploadEndpoint = "http://localhost:11700/files/upload-contract-file";
+
+    const formData = new FormData();
+    formData.append("file", blob, `${req.body.email}.pdf`);
+
+    try {
+      const response = await fetch(uploadEndpoint, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed: ${response.statusText}`);
+      }
+
+      const responseData = await response.json();
+      const fileLink = responseData.link;
+
+      const createHtmlTemplate = () => {
+        return `
                <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -540,15 +558,15 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
                            <table cellspacing="0" cellpadding="0" style="margin: auto;">
                                <tr>
                                    <td align="center" style="background-color: #345C72; padding: 10px 20px; border-radius: 5px;">
-                                       <a  href="http://localhost:3000/sign_contra/?first_name=${
+                                       <a  href="https://bgas-kalender.at/sign_contra/?first_name=${
                                          data.name.split(" ")[0]
                                        }&last_name=${
-        data.name.split(" ")[1] ?? ""
-      }&email=${data.email}&phone_number=${data.mobile_number}&location=${
-        data.address
-      }&gander=${data.gander}&zip_code=${
-        data.postal_code ?? ""
-      }" target="_blank" style="color: #ffffff; text-decoration: none; font-weight: bold;">Make a Signiture</a>
+          data.name.split(" ")[1] ?? ""
+        }&email=${data.email}&phone_number=${data.mobile_number}&location=${
+          data.address
+        }&gander=${data.gander}&zip_code=${
+          data.postal_code ?? ""
+        }" target="_blank" style="color: #ffffff; text-decoration: none; font-weight: bold;">Make a Signiture</a>
                                    </td>
                                </tr>
                            </table>
@@ -568,48 +586,54 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
 </html>
 
                `;
-    };
-
-    if (mailConfig && mailConfig.length) {
-      const { sender, server, username, password, port, ssl_enabled } =
-        mailConfig[0];
-      const decryptedPassword = decrypt(password);
-      const mailOptions = {
-        from: sender,
-        to: data.email,
-        subject: "B-Gas Vertrag",
-
-        html: createHtmlTemplate(),
-        attachments: [
-          {
-            filename: "conta.pdf", // Specify the filename for the attachment
-            path: "./contras/" + req.body.email + ".pdf", // Provide the actual path to your attachment file
-          },
-        ],
       };
 
-      const transporter = nodemailer.createTransport({
-        host: server,
-        port: port,
-        secure: ssl_enabled,
-        auth: {
-          user: username,
-          pass: decryptedPassword,
-        },
-      });
+      if (mailConfig && mailConfig.length) {
+        const { sender, server, username, password, port, ssl_enabled } =
+          mailConfig[0];
+        const decryptedPassword = decrypt(password);
+        const mailOptions = {
+          from: sender,
+          to: data.email,
+          subject: "B-Gas Vertrag",
 
-      const info = await transporter.sendMail(mailOptions);
+          html: createHtmlTemplate(),
+          attachments: [
+            {
+              filename: "contract.pdf",
+              path:
+                "https://storage.googleapis.com/b-gas-13308.appspot.com/" +
+                fileLink,
+            },
+          ],
+        };
 
-      res.status(200).json({
-        status: "success",
-        message: "Email sent successfully",
-        info,
-      });
-    } else {
-      res.status(200).json({
-        status: "faild",
-        message: "Email service is not configured",
-      });
+        const transporter = nodemailer.createTransport({
+          host: server,
+          port: port,
+          secure: ssl_enabled,
+          auth: {
+            user: username,
+            pass: decryptedPassword,
+          },
+        });
+
+        const info = await transporter.sendMail(mailOptions);
+
+        res.status(200).json({
+          status: "success",
+          message: "Email sent successfully",
+          info,
+        });
+      } else {
+        res.status(200).json({
+          status: "faild",
+          message: "Email service is not configured",
+        });
+      }
+    } catch (error) {
+      console.error("Error uploading the file:", error);
+      res.status(500).json({ message: "Error uploading the file." });
     }
   }
 
@@ -874,18 +898,32 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
         size: 8,
       });
     }
-    const fileName = "./contras/" + req.body.email + ".pdf";
+
     const modifiedPdfBytes = await pdfDoc.save();
-    fs.writeFileSync(fileName, modifiedPdfBytes);
+    const buffer = Buffer.from(modifiedPdfBytes);
+    const blob = new Blob([buffer], { type: "application/pdf" });
+    const uploadEndpoint = "http://localhost:11700/files/upload-contract-file";
+    const formData = new FormData();
+    formData.append("file", blob, `${req.body.email}.pdf`);
+
     if (mailConfig && mailConfig.length) {
       const { sender, server, username, password, port, ssl_enabled } =
         mailConfig[0];
       const decryptedPassword = decrypt(password);
 
       try {
-        const fileName = "./contras/" + req.body.email + ".pdf";
-        const modifiedPdfBytes = await pdfDoc.save();
-        fs.writeFileSync(fileName, modifiedPdfBytes);
+        const response = await fetch(uploadEndpoint, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Upload failed: ${response.statusText}`);
+        }
+
+        const responseData = await response.json();
+        const fileLink = responseData.link;
+
         const createHtmlTemplate = () => {
           return `
                            <!DOCTYPE html>
@@ -948,8 +986,10 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
           html: createHtmlTemplate(),
           attachments: [
             {
-              filename: "contra.pdf", // Specify the filename for the attachment
-              path: "./contras/" + req.body.email + ".pdf", // Provide the actual path to your attachment file
+              filename: "contract.pdf",
+              path:
+                "https://storage.googleapis.com/b-gas-13308.appspot.com/" +
+                fileLink,
             },
           ],
         };
@@ -961,8 +1001,10 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
           html: createHtmlTemplate(),
           attachments: [
             {
-              filename: "contra.pdf", // Specify the filename for the attachment
-              path: "./contras/" + req.body.email + ".pdf", // Provide the actual path to your attachment file
+              filename: "contract.pdf",
+              path:
+                "https://storage.googleapis.com/b-gas-13308.appspot.com/" +
+                fileLink,
             },
           ],
         };
@@ -976,13 +1018,6 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
           },
         });
 
-        fs.writeFileSync(fileName, modifiedPdfBytes);
-        const pdfToBase64 = await fs.readFileSync(
-          `./contras/${data.email}.pdf`,
-          {
-            encoding: "base64",
-          }
-        );
         const contact = {
           first_name: data.first_name,
           last_name: data.last_name,
@@ -993,7 +1028,7 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
               : data.gander == "female"
               ? "Mrs"
               : "Company",
-          contra: pdfToBase64,
+          contra: fileLink,
           email: data.email,
           location: data.location,
           zip_code: data.zip_code,
@@ -1016,11 +1051,6 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
         } catch (error) {
           throw error;
         }
-        fs.unlink("./contras/" + data.name + ".pdf", (err) => {
-          if (err) {
-            console.error(err);
-          }
-        });
 
         res.send("done");
       } catch (error) {
