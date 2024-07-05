@@ -644,6 +644,7 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
     next: NextFunction
   ) {
     const data = req.body;
+    console.log('data', data);
     const service = (req as any).service as ServiceContainer;
     const mailConfig = await service.emailService.getEmailConfig();
 
@@ -923,6 +924,7 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
 
         const responseData = await response.json();
         const fileLink = responseData.link;
+        console.log('fileLink', fileLink);
 
         const createHtmlTemplate = () => {
           return `
@@ -1054,6 +1056,7 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
 
         res.send("done");
       } catch (error) {
+        console.log('error', error);
         res.json({
           error: error,
         });

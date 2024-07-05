@@ -50,7 +50,7 @@ class AppointmentsControllers {
       contact?.email
     );
 
-    let newContactEmail = existingContact ? `<p>Liebe Kund*innen,</p><br>Ihr Konto wurde erfolgreich erstellt. Wir empfehlen Ihnen, sich auf der <a href='https://bgas-kalender.at/login'>Website</a> mit den folgenden Anmeldeinformationen anzumelden und aus Sicherheitsgründen Ihr Passwort zu ändern:<br>E-Mail: ${contact.email}<br>Passwort: ${contact.password}<br><p>Vielen Dank, dass Sie unsere Dienste gewählt haben.</p><p>Mit freundlichen Grüßen,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>` : ''
+    let newContactEmail = `<p>Liebe Kund*innen,</p><br>Ihr Konto wurde erfolgreich erstellt. Wir empfehlen Ihnen, sich auf der <a href='https://bgas-kalender.at/login'>Website</a> mit den folgenden Anmeldeinformationen anzumelden und aus Sicherheitsgründen Ihr Passwort zu ändern:<br>E-Mail: ${contact?.email}<br>Passwort: ${contact?.password}<br><p>Vielen Dank, dass Sie unsere Dienste gewählt haben.</p><p>Mit freundlichen Grüßen,</p><img src='https://firebasestorage.googleapis.com/v0/b/b-gas-13308.appspot.com/o/bgas-logo.png?alt=media&token=7ebf87ca-c995-4266-b660-a4c354460ace' alt='Company Signature Logo' width='150'>`
     let newContactSubject = "B-Gas Kontoerstellung";
 
     if (existingContact) {
