@@ -644,7 +644,6 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
     next: NextFunction
   ) {
     const data = req.body;
-    console.log('data', data);
     const service = (req as any).service as ServiceContainer;
     const mailConfig = await service.emailService.getEmailConfig();
 
@@ -924,7 +923,6 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
 
         const responseData = await response.json();
         const fileLink = responseData.link;
-        console.log('fileLink', fileLink);
 
         const createHtmlTemplate = () => {
           return `
@@ -1021,9 +1019,8 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
         });
 
         const contact = {
-          first_name: data.first_name,
-          last_name: data.last_name,
-          lcoation: data.location,
+          first_name: data.name.split(" ")[0],
+          last_name: data.name.split(" ")[1] ?? "",
           salutation:
             data.gander == "male"
               ? "Mr"
@@ -1032,10 +1029,10 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
               : "Company",
           contra: fileLink,
           email: data.email,
-          location: data.location,
-          zip_code: data.zip_code,
-          address: data.location,
-          telephone: data.phone_number,
+          location: data.street_number,
+          zip_code: data.postal_code,
+          address: data.address,
+          telephone: data.mobile_number,
         };
 
         try {
@@ -1043,11 +1040,8 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
             contact.email
           );
           if (cbe) {
-            console.log('cbe', cbe);
-            console.log('updated contact', contact);
             await service.contactService.updateContact(cbe._id!, contact);
           } else {
-            console.log('contact', contact);
             await service.contactService.addContact(contact);
           }
 
@@ -1059,7 +1053,6 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
 
         res.send("done");
       } catch (error) {
-        console.log('error', error);
         res.json({
           error: error,
         });
