@@ -1043,8 +1043,11 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
             contact.email
           );
           if (cbe) {
+            console.log('cbe', cbe);
+            console.log('updated contact', contact);
             await service.contactService.updateContact(cbe._id!, contact);
           } else {
+            console.log('contact', contact);
             await service.contactService.addContact(contact);
           }
 
