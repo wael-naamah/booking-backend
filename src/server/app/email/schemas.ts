@@ -67,25 +67,6 @@ const emailContraSchema = Joi.object().keys({
   gander: Joi.string().required(),
 });
 
-const emailContraAndSignSchema = Joi.object().keys({
-  content1: Joi.string().required(),
-  content2: Joi.string().required(),
-  content3: Joi.string().required(),
-  title: Joi.string(),
-  name: Joi.string().required(),
-  street_number: Joi.string().required(),
-  year: Joi.string(),
-  password: Joi.string(),
-  postal_code: Joi.string().required(),
-  device_type: Joi.string().required(),
-  address: Joi.string().required(),
-  mobile_number: Joi.string().required(),
-  device_type2: Joi.string().optional().allow(""),
-  email: Joi.string().required(),
-  tester: Joi.string(),
-  gander: Joi.string().required(),
-  sign_url: Joi.string().required(),
-});
 
 export default {
   sendEmailSchema,
@@ -95,5 +76,4 @@ export default {
   updateEmailTemplateSchema,
   getEmailTemplatesSchema,
   emailContraSchema,
-  emailContraAndSignSchema,
 };
