@@ -40,8 +40,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page2.drawText(
-    `
-    •   Die Wartungsvereinbarung ist am PC, Tablet oder Smartphone ausfüllbar, mit der Original Adobe Acrobat
+   `•   Die Wartungsvereinbarung ist am PC, Tablet oder Smartphone ausfüllbar, mit der Original Adobe Acrobat
         Reader App lässt sich auch eine Unterschrift mit dem Finger, Stift oder Maus oder eine 
         digitale Signatur hinzufügen.
         Acrobat Reader Download:
@@ -49,12 +48,10 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
         Google Playstore: https://play.google.com/store/apps/details?id=com.adobe.reader&hl=de Apple
         Iphone/Ipad: https://apps.apple.com/de/app/adobe-fill-sign/id950099951
     •   Die Typen-Bezeichnung Ihrer Geräte finden Sie am oder im Gerät meist auf einem silbernen Aufkleber.
-        Beispiele: VCW AT 194/4-5, HG15 WK19, Luna 3 Blue 180i, CGB-2-24, Logamax plus GB192i
-   
-   `,
+        Beispiele: VCW AT 194/4-5, HG15 WK19, Luna 3 Blue 180i, CGB-2-24, Logamax plus GB192i`,
     {
       x: 40,
-      y: 630,
+      y: 640,
       size: 10,
     }
   );
@@ -65,8 +62,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page2.drawText(
-    `
-    •	Auf einem Touch-Monitor, Tablet oder Smartphone kann mit zugehörigem Stift oder Finger direkt unterschrieben
+   `•	Auf einem Touch-Monitor, Tablet oder Smartphone kann mit zugehörigem Stift oder Finger direkt unterschrieben
         werden, scrollen Sie zu und vergrößern Sie das Unterschriftenfeld, Stift oder Finger 2 Sekun-
         den gedrückt halten und „Unterschift hinzufügen“ auswählen. Am PC auf „Ausfüllen und Unterschrei- 
         ben“ klicken und dann auf „Selbst signieren“, wenn Sie keine digitale Signatur haben.
@@ -100,16 +96,13 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page2.drawText(
-    `
-    •	Einen unterschriebenen Ausdruck einem B-GAS Mitarbeiter mitgeben, den anderen Ausdruck behalten
+   `•	Einen unterschriebenen Ausdruck einem B-GAS Mitarbeiter mitgeben, den anderen Ausdruck behalten
     •	Oder Wartungsvereinbarung im 90° Winkel von oben mit dem Smartphone fotografieren, Foto und ge-
         speichertes PDF (zwecks Lesbarkeit) per E-Mail an office@b-gas.at senden oder per Whatsapp an
         +43 660 947 28 60
     •	Oder unterschriebene Wartungsvereinbarung einscannen und per E-Mail an office@b-gas.at senden
     •	Oder einen unterschriebenen Ausdruck per Post an B-GAS GmbH, Wagramer Straße 133, 1220 Wien
-        schicken.
-    
- `,
+        schicken.`,
     {
       x: 40,
       y: 150.5,
@@ -128,7 +121,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     y: 650,
     size: 8,
   });
-  page.drawText(contact.location, {
+  page.drawText(contact.address, {
     x: 40,
     y: 620,
     size: 8,
@@ -139,7 +132,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     size: 8,
   });
   page.drawText(form.year || "", {
-    x: 400,
+    x: 520,
     y: 620,
     size: 8,
   });
@@ -148,7 +141,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     y: 593,
     size: 8,
   });
-  page.drawText(contact.address, {
+  page.drawText(contact.location, {
     x: 165,
     y: 593,
     size: 8,
@@ -167,10 +160,16 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     x: 195,
     y: 535,
     size: 12,
+    font: timesRomanBoldFont,
   });
   page.drawText(form.selected_devices || "", {
     x: 30,
-    y: 450,
+    y: 520,
+    size: 9,
+  });
+  page.drawText("*Brennerdichtung (€ 60 - € 90) im Preis bereits enthalten, andere Geräte benötigen diese nicht.", {
+    x: 100,
+    y: 500,
     size: 9,
   });
 
@@ -178,15 +177,14 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     x: 195,
     y: 470,
     size: 12,
+    font: timesRomanBoldFont,
   });
 
   page.drawText(
-    `*Brennerdichtung (€ 60 - € 90) im Preis bereits enthalten, andere Geräte benötigen diese nicht.
-    Bis ca. 30 min Fahrt € 20,-                                                                                                               Bis ca. 60 min Fahrt	€ 55,-
-  `,
+    `Bis ca. 30 min Fahrt € 20,-                                                                                                               Bis ca. 60 min Fahrt	€ 55,-`,
     {
       x: 30,
-      y: 520,
+      y: 450,
       size: 9,
     }
   );
@@ -196,6 +194,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
       x: 70,
       y: 415,
       size: 10,
+      font: timesRomanBoldFont,
     }
   );
 
@@ -212,15 +211,15 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     }
   );
   page.drawText(
-    "                                Alle Preise verstehen sich inkl. 20% USt. Preisänderungen vorbehalten.   ",
+    "Alle Preise verstehen sich inkl. 20% USt. Preisänderungen vorbehalten.",
     {
-      x: 70,
+      x: 170,
       y: 312,
       size: 9,
     }
   );
-  page.drawText("                             Bonus    ", {
-    x: 180,
+  page.drawText("Bonus", {
+    x: 265,
     y: 295,
     size: 12,
   });
