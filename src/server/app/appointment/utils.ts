@@ -1,4 +1,4 @@
-import { PDFDocument } from "pdf-lib";
+import { PDFDocument, StandardFonts } from "pdf-lib";
 import fs from "fs";
 import { Appointment, Contact } from "../../../database-client";
 import { getService } from "../clients";
@@ -13,6 +13,10 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
 
   const image = await pdfDoc.embedPng(Buffer.from(base64Image!, "base64"));
   const page2 = pdfDoc.getPages()[1];
+  const timesRomanBoldFont = await pdfDoc.embedFont(
+    StandardFonts.TimesRomanBold
+  );
+
   page2.drawText(
     `Wartungsvereinbarung
    `,
@@ -20,28 +24,32 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
       x: 190,
       y: 690,
       size: 22,
+      font: timesRomanBoldFont,
     }
   );
   page2.drawText(`Anleitung`, {
     x: 265,
     y: 715,
     size: 16,
+    font: timesRomanBoldFont,
   });
   page2.drawText(`Ausfüllen`, {
     x: 40,
     y: 650,
     size: 14,
+    font: timesRomanBoldFont,
   });
   page2.drawText(
-    `•	Die Wartungsvereinbarung ist am PC, Tablet oder Smartphone ausfüllbar, 
-   mit der Original Adobe Acrobat Reader App lässt sich auch eine Unterschrift mit dem Finger,
-    Stift oder Maus oder eine digitale Signatur hinzufügen.
-   Acrobat Reader Download:
-   PC: https://get.adobe.com/de/reader/otherversions/
-   Google Playstore: https://play.google.com/store/apps/details?id=com.adobe.reader&hl=de Apple
-    Iphone/Ipad: https://apps.apple.com/de/app/adobe-fill-sign/id950099951
-   •	Die Typen-Bezeichnung Ihrer Geräte finden Sie am oder im Gerät meist auf einem silbernen Aufkleber.
-    Beispiele: VCW AT 194/4-5, HG15 WK19, Luna 3 Blue 180i, CGB-2-24, Logamax plus GB192i
+    `
+    •   Die Wartungsvereinbarung ist am PC, Tablet oder Smartphone ausfüllbar, mit der Original Adobe Acrobat
+        Reader App lässt sich auch eine Unterschrift mit dem Finger, Stift oder Maus oder eine 
+        digitale Signatur hinzufügen.
+        Acrobat Reader Download:
+        PC: https://get.adobe.com/de/reader/otherversions/
+        Google Playstore: https://play.google.com/store/apps/details?id=com.adobe.reader&hl=de Apple
+        Iphone/Ipad: https://apps.apple.com/de/app/adobe-fill-sign/id950099951
+    •   Die Typen-Bezeichnung Ihrer Geräte finden Sie am oder im Gerät meist auf einem silbernen Aufkleber.
+        Beispiele: VCW AT 194/4-5, HG15 WK19, Luna 3 Blue 180i, CGB-2-24, Logamax plus GB192i
    
    `,
     {
@@ -54,15 +62,16 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     x: 40,
     y: 410.5,
     size: 14,
+    font: timesRomanBoldFont,
   });
   page2.drawText(
-    `•	Auf einem Touch-Monitor, Tablet oder Smartphone kann mit zugehörigem Stift oder Finger
- direkt unterschrieben werden, scrollen Sie zu und vergrößern Sie das Unterschriftenfeld, 
- Stift oder Finger 2 Sekun-
- den gedrückt halten und „Unterschift hinzufügen“ auswählen. Am PC auf „Ausfüllen und Unterschrei- 
- ben“ klicken und dann auf „Selbst signieren“, wenn Sie keine digitale Signatur haben.
-•	Oder dem PDF eine elektronische Signatur extern hinzufügen, z.B. Handysignatur
-•	Oder ausgefüllte Wartungsvereinbarung speichern, 2 mal Seite 1 ausdrucken und auf Papier unter- schreiben
+    `
+    •	Auf einem Touch-Monitor, Tablet oder Smartphone kann mit zugehörigem Stift oder Finger direkt unterschrieben
+        werden, scrollen Sie zu und vergrößern Sie das Unterschriftenfeld, Stift oder Finger 2 Sekun-
+        den gedrückt halten und „Unterschift hinzufügen“ auswählen. Am PC auf „Ausfüllen und Unterschrei- 
+        ben“ klicken und dann auf „Selbst signieren“, wenn Sie keine digitale Signatur haben.
+    •	Oder dem PDF eine elektronische Signatur extern hinzufügen, z.B. Handysignatur
+    •	Oder ausgefüllte Wartungsvereinbarung speichern, 2 mal Seite 1 ausdrucken und auf Papier unter- schreiben
    `,
     {
       x: 40,
@@ -74,6 +83,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     x: 40,
     y: 220.5,
     size: 14,
+    font: timesRomanBoldFont,
   });
   page2.drawText(
     `•	Gespeichertes und elektronisch signiertes PDF an office@b-gas.at senden`,
@@ -87,15 +97,18 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     x: 40,
     y: 168.5,
     size: 14,
+    font: timesRomanBoldFont,
   });
   page2.drawText(
-    `•	Einen unterschriebenen Ausdruck einem B-GAS Mitarbeiter mitgeben, 
-den anderen Ausdruck behalten
-•	Oder Wartungsvereinbarung im 90° Winkel von oben mit dem Smartphone fotografieren,
- Foto und ge- speichertes PDF (zwecks Lesbarkeit) per E-Mail an office@b-gas.at
- senden oder per Whatsapp an +43 660 947 28 60
-•	Oder unterschriebene Wartungsvereinbarung einscannen und per E-Mail an office@b-gas.at senden
-•	Oder einen unterschriebenen Ausdruck per Post an B-GAS GmbH, Wagramer Straße 133, 1220 Wien schicken
+    `
+    •	Einen unterschriebenen Ausdruck einem B-GAS Mitarbeiter mitgeben, den anderen Ausdruck behalten
+    •	Oder Wartungsvereinbarung im 90° Winkel von oben mit dem Smartphone fotografieren, Foto und ge-
+        speichertes PDF (zwecks Lesbarkeit) per E-Mail an office@b-gas.at senden oder per Whatsapp an
+        +43 660 947 28 60
+    •	Oder unterschriebene Wartungsvereinbarung einscannen und per E-Mail an office@b-gas.at senden
+    •	Oder einen unterschriebenen Ausdruck per Post an B-GAS GmbH, Wagramer Straße 133, 1220 Wien
+        schicken.
+    
  `,
     {
       x: 40,
@@ -103,12 +116,6 @@ den anderen Ausdruck behalten
       size: 10,
     }
   );
-//   delete this line
-//   page.drawText("", {
-//     x: 165,
-//     y: 677.5,
-//     size: 8,
-//   });
   page.drawImage(image, {
     x: 430,
     y: 10,
@@ -126,18 +133,18 @@ den anderen Ausdruck behalten
     y: 620,
     size: 8,
   });
-  page.drawText(form.year || "", {
+  page.drawText(form.brand_of_device || "", {
     x: 320,
+    y: 620,
+    size: 8,
+  });
+  page.drawText(form.year || "", {
+    x: 400,
     y: 620,
     size: 8,
   });
   page.drawText(contact.zip_code, {
     x: 40,
-    y: 593,
-    size: 8,
-  });
-  page.drawText(form.brand_of_device || "", {
-    x: 320,
     y: 593,
     size: 8,
   });
