@@ -40,7 +40,8 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page2.drawText(
-   `•   Die Wartungsvereinbarung ist am PC, Tablet oder Smartphone ausfüllbar, mit der Original Adobe Acrobat
+   `
+    •   Die Wartungsvereinbarung ist am PC, Tablet oder Smartphone ausfüllbar, mit der Original Adobe Acrobat
         Reader App lässt sich auch eine Unterschrift mit dem Finger, Stift oder Maus oder eine 
         digitale Signatur hinzufügen.
         Acrobat Reader Download:
@@ -62,7 +63,8 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page2.drawText(
-   `•	Auf einem Touch-Monitor, Tablet oder Smartphone kann mit zugehörigem Stift oder Finger direkt unterschrieben
+   `
+    •	Auf einem Touch-Monitor, Tablet oder Smartphone kann mit zugehörigem Stift oder Finger direkt unterschrieben
         werden, scrollen Sie zu und vergrößern Sie das Unterschriftenfeld, Stift oder Finger 2 Sekun-
         den gedrückt halten und „Unterschift hinzufügen“ auswählen. Am PC auf „Ausfüllen und Unterschrei- 
         ben“ klicken und dann auf „Selbst signieren“, wenn Sie keine digitale Signatur haben.
@@ -96,7 +98,8 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page2.drawText(
-   `•	Einen unterschriebenen Ausdruck einem B-GAS Mitarbeiter mitgeben, den anderen Ausdruck behalten
+   `
+    •	Einen unterschriebenen Ausdruck einem B-GAS Mitarbeiter mitgeben, den anderen Ausdruck behalten
     •	Oder Wartungsvereinbarung im 90° Winkel von oben mit dem Smartphone fotografieren, Foto und ge-
         speichertes PDF (zwecks Lesbarkeit) per E-Mail an office@b-gas.at senden oder per Whatsapp an
         +43 660 947 28 60
@@ -105,17 +108,28 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
         schicken.`,
     {
       x: 40,
-      y: 150.5,
+      y: 155,
       size: 10,
     }
   );
   page.drawImage(image, {
-    x: 430,
+    x: 415,
     y: 10,
     width: image.width * 0.3,
     height: image.height * 0.3,
     opacity: 1,
   });
+    const currentDate = new Date();
+    const date = currentDate.getDate();
+    const month = currentDate.getMonth();
+    const year = currentDate.getFullYear();
+    const dateString = `${date}/${month}/${year}`;
+    page.drawText(dateString, {
+      x: 50,
+      y: 10,
+      size: 10,
+      font: timesRomanBoldFont,
+    });
   page.drawText(contact.first_name + " " + contact.last_name, {
     x: 40,
     y: 650,
@@ -126,13 +140,13 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     y: 620,
     size: 8,
   });
-  page.drawText(form.brand_of_device || "", {
+  page.drawText(form.model || "", {
     x: 320,
     y: 620,
     size: 8,
   });
   page.drawText(form.year || "", {
-    x: 520,
+    x: 523,
     y: 620,
     size: 8,
   });
@@ -181,7 +195,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
   });
 
   page.drawText(
-    `Bis ca. 30 min Fahrt € 20,-                                                                                                               Bis ca. 60 min Fahrt	€ 55,-`,
+    `Bis ca. 30 min Fahrt € 20`,
     {
       x: 30,
       y: 450,
@@ -189,7 +203,15 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     }
   );
   page.drawText(
-    "   Im Preis enthalten                                                                                   Nicht im Preis enthalten    ",
+    `Bis ca. 60 min Fahrt	€ 55`,
+    {
+      x: 400,
+      y: 450,
+      size: 9,
+    }
+  );
+  page.drawText(
+    "   Im Preis enthalten                                                                                     Nicht im Preis enthalten",
     {
       x: 70,
       y: 415,
@@ -201,7 +223,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
   page.drawText(
     `                   
     •	Komplette Wartung während Öffnungszeiten                                                                              • Etwaige Materialkosten   
-    •	Arbeitszeit pauschal, egal wie lange es dauert                                                                         • Reparaturen
+    •	Arbeitszeit pauschal, egal wie lange es dauert                                                                        • Reparaturen
     •	Anfahrt Wien               
   `,
     {
@@ -222,12 +244,13 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     x: 265,
     y: 295,
     size: 12,
+    font: timesRomanBoldFont,
   });
   page.drawText(
-    `    • 12 Monate Garantie auf Abgaswerte                                           sätze abends, Sa/So/Feiertags, Heizungstörung, Ab-       
-  •	Reparaturen innerhalb 24h                                                     flussverstopfung, Rohrbruch, Sanitär...
-  •	Reparaturen innerhalb 24h                                                     Jedoch werden unsere Weg- und Arbeitszeit zu Prei-
-  •	Keinen Überstundenaufschlag für Notdienstein-                     sen von normalen Öffnungszeiten verrechnet.                                                                       
+ `• 12 Monate Garantie auf Abgaswerte                                           sätze abends, Sa/So/Feiertags, Heizungstörung, Ab-       
+  •	Reparaturen innerhalb 24h                                                   flussverstopfung, Rohrbruch, Sanitär...
+  •	Reparaturen innerhalb 24h                                                   Jedoch werden unsere Weg- und Arbeitszeit zu Prei-
+  •	Keinen Überstundenaufschlag für Notdienstein-                               sen von normalen Öffnungszeiten verrechnet.                                                                       
 `,
     {
       x: 35,
