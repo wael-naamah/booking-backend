@@ -214,7 +214,7 @@ export const configure = (app: express.Router) => {
           password,
           categories_permission,
           appointments,
-          contra,
+          contract_link,
           ...rest
         } = item;
         if (appointments.length === 0) {
@@ -246,8 +246,8 @@ export const configure = (app: express.Router) => {
               }
             }
             let contractLink = '';
-            if (contra) {
-            contractLink = `https://storage.googleapis.com/b-gas-13308.appspot.com/${contra}`;
+            if (contract_link) {
+            contractLink = `https://storage.googleapis.com/b-gas-13308.appspot.com/${contract_link}`;
             }
 
             return transformedData.push({ ...rest, duration, service, price, appointment_id: _id, contract_link: contractLink ? contractLink : '', ...appointmentInfo });

@@ -14,6 +14,7 @@ export interface SendEmailForm {
   to: string;
   subject: string;
   text: string;
+  attachments?: {filename: string; path: string}[];
 }
 
 export interface AddEmailConfigRequest

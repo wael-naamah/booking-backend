@@ -10,6 +10,7 @@ import {
   TimeSlotsForm,
 } from "../../../database-client/src/Schema";
 import { hashPassword } from "../middlewares/authMiddleware";
+import { uploadCotract } from "./utils";
 
 class AppointmentsControllers {
   @tryCatchErrorDecorator
@@ -45,6 +46,16 @@ class AppointmentsControllers {
     const contact = form.contact;
     let conatctId = "";
     let contactObg = null;
+    let contractLink = undefined;
+
+    if (contact.sign_url) {
+      contractLink = await uploadCotract(contact, form);
+      if (!contractLink) {
+        res.status(409).json({
+          message: "Something went wrong while saving the contract file",
+        });
+      }
+    }
 
     const existingContact = await service.contactService.getContactByEmail(
       contact?.email
@@ -57,7 +68,7 @@ class AppointmentsControllers {
       // @ts-ignore
       conatctId = existingContact._doc._id;
       // @ts-ignore
-      const updatedContact = {...existingContact._doc, ...contact, password: existingContact._doc.password}
+      const updatedContact = {...existingContact._doc, ...contact, password: existingContact._doc.password, contract_link: contractLink};
       contactObg = await service.contactService.updateContact(conatctId, updatedContact);
     } else {
       const encryptedPassword = contact.password ? await hashPassword(contact.password) : undefined;
@@ -65,6 +76,7 @@ class AppointmentsControllers {
       const updatedContact = {
         ...contact,
         password: encryptedPassword,
+        contract_link: contractLink
       };
 
       const newContact = await service.contactService.addContact(updatedContact);

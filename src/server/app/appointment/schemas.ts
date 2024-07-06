@@ -54,6 +54,7 @@ const addAppointmentSchema = Joi.object().keys({
   company_remarks: Joi.string().optional().allow(""),
   created_by: Joi.string().optional().allow(""),
   employee_attachments: Joi.array().items(attachmentSchema),
+  selected_devices: Joi.string().optional().allow(""),
   contact: contactSchema.addContactSchema,
 });
 

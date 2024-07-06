@@ -17,7 +17,7 @@ const addContactSchema = Joi.object().keys({
   telephone: Joi.string().required(),
   phone_numbber_2: Joi.string().optional().allow(""),
   phone_numbber_3: Joi.string().optional().allow(""),
-  contra: Joi.string().optional().allow(""),
+  contract_link: Joi.string().optional().allow(""),
   email: Joi.string().email().required(),
   password: Joi.string()
     .regex(/[ -~]*[a-z][ -~]*/, {}) // at least 1 lower-case
@@ -37,6 +37,7 @@ const addContactSchema = Joi.object().keys({
   categories_permission: Joi.array().items(Joi.string()).optional(),
   remarks: Joi.string().optional().allow(""),
   imported: Joi.boolean().optional(),
+  sign_url: Joi.string().optional().allow(""),
 });
 
 const updateContactSchema = Joi.object().keys({
@@ -49,7 +50,7 @@ const updateContactSchema = Joi.object().keys({
   telephone: Joi.string().required(),
   phone_numbber_2: Joi.string().optional().allow(""),
   phone_numbber_3: Joi.string().optional().allow(""),
-  contra: Joi.string().optional().allow(""),
+  contract_link: Joi.string().optional().allow(""),
   email: Joi.string().email().required(),
   password: Joi.string()
     .regex(/[ -~]*[a-z][ -~]*/, {}) // at least 1 lower-case

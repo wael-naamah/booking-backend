@@ -137,6 +137,7 @@ export class EmailService {
           to: form.to,
           subject: form.subject,
           html: form.text,
+          ...{ ...(form.attachments ? { attachments: form.attachments } : {}) },
         };
 
         // Send the email

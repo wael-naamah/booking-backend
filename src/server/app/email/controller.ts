@@ -1027,7 +1027,7 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
               : data.gander == "female"
               ? "Mrs"
               : "Company",
-          contra: fileLink,
+          contract_link: fileLink,
           email: data.email,
           location: data.street_number,
           zip_code: data.postal_code,
