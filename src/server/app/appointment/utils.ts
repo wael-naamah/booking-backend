@@ -84,8 +84,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page2.drawText(
-    `
-    •	Gespeichertes und elektronisch signiertes PDF an office@b-gas.at senden`,
+    `•	Gespeichertes und elektronisch signiertes PDF an office@b-gas.at senden`,
     {
       x: 40,
       y: 195.5,
@@ -255,23 +254,50 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
   );
   page.drawText("Bonus", {
     x: 265,
-    y: 310,
+    y: 315,
     size: 12,
     font: timesRomanBoldFont,
   });
-  page.drawText(
-    `
-  • 12 Monate Garantie auf Abgaswerte                                          sätze abends, Sa/So/Feiertags, Heizungstörung, Ab-       
-  •	Reparaturen innerhalb 24h                                                   flussverstopfung, Rohrbruch, Sanitär...
-  •	Reparaturen innerhalb 24h                                                   Jedoch werden unsere Weg- und Arbeitszeit zu Prei-
-  •	Keinen Überstundenaufschlag für Notdienstein-                           sen von normalen Öffnungszeiten verrechnet.                                                                       
-`,
-    {
-      x: 35,
-      y: 290,
-      size: 10,
-    }
-  );
+  page.drawText(`•	12 Monate Garantie auf Abgaswerte`, {
+    x: 35,
+    y: 295,
+    size: 10,
+  });
+  page.drawText(`sätze abends, Sa/So/Feiertags, Heizungstörung, Ab-`, {
+    x: 400,
+    y: 295,
+    size: 10,
+  });
+  page.drawText(`•	Protokollführung Ihrer Geräte`, {
+    x: 35,
+    y: 275,
+    size: 10,
+  });
+  page.drawText(`flussverstopfung, Rohrbruch, Sanitär...`, {
+    x: 400,
+    y: 275,
+    size: 10,
+  });
+  page.drawText(`•	Reparaturen innerhalb 24h`, {
+    x: 35,
+    y: 255,
+    size: 10,
+  });
+  page.drawText(`Jedoch werden unsere Weg- und Arbeitszeit zu Prei`, {
+    x: 400,
+    y: 255,
+    size: 10,
+  });
+  page.drawText(`•	Keinen Überstundenaufschlag für Notdienstein-`, {
+    x: 35,
+    y: 235,
+    size: 10,
+  });
+  page.drawText(`sen von normalen Öffnungszeiten verrechnet.`, {
+    x: 400,
+    y: 235,
+    size: 10,
+  });
   page.drawText(
     `Die Vereinbarung ist jederzeit kündbar und verliert bei Umzug die Gültigkeit. Eine Meldung an uns ist trotz-
 dem notwendig, da wir Sie sonst jährlich kontaktieren. Sie sind nicht verpflichtet die jährliche Wartung durch uns in Anspruch zu nehmen,
