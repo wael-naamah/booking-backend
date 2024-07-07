@@ -58,7 +58,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
   );
   page2.drawText(`Möglichkeiten zur Unterschrift`, {
     x: 40,
-    y: 410.5,
+    y: 405,
     size: 14,
     font: timesRomanBoldFont,
   });
@@ -84,7 +84,8 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page2.drawText(
-    `•	Gespeichertes und elektronisch signiertes PDF an office@b-gas.at senden`,
+    `
+    •	Gespeichertes und elektronisch signiertes PDF an office@b-gas.at senden`,
     {
       x: 40,
       y: 195.5,
@@ -113,7 +114,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     }
   );
   page.drawImage(image, {
-    x: 415,
+    x: 400,
     y: 10,
     width: image.width * 0.3,
     height: image.height * 0.3,
@@ -125,9 +126,9 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     const year = currentDate.getFullYear();
     const dateString = `${date}/${month}/${year}`;
     page.drawText(dateString, {
-      x: 50,
-      y: 10,
-      size: 10,
+      x: 40,
+      y: 30,
+      size: 12,
       font: timesRomanBoldFont,
     });
   page.drawText(contact.first_name + " " + contact.last_name, {
@@ -177,7 +178,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page.drawText(form.selected_devices || "", {
-    x: 30,
+    x: 35,
     y: 520,
     size: 9,
   });
@@ -197,7 +198,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
   page.drawText(
     `Bis ca. 30 min Fahrt € 20`,
     {
-      x: 30,
+      x: 35,
       y: 450,
       size: 9,
     }
@@ -205,37 +206,63 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
   page.drawText(
     `Bis ca. 60 min Fahrt	€ 55`,
     {
-      x: 400,
+      x: 440,
       y: 450,
       size: 9,
     }
   );
   page.drawText(
-    "   Im Preis enthalten                                                                                     Nicht im Preis enthalten",
+    "Im Preis enthalten",
     {
       x: 70,
-      y: 415,
+      y: 430,
       size: 10,
       font: timesRomanBoldFont,
     }
   );
-
   page.drawText(
-    `                   
-    •	Komplette Wartung während Öffnungszeiten                                                                              • Etwaige Materialkosten   
-    •	Arbeitszeit pauschal, egal wie lange es dauert                                                                        • Reparaturen
-    •	Anfahrt Wien               
-  `,
+    "Nicht im Preis enthalten",
     {
+      x: 420,
+      y: 430,
+      size: 10,
+      font: timesRomanBoldFont,
+    }
+  );
+  page.drawText(`•	Komplette Wartung während Öffnungszeiten`, {
       x: 30,
-      y: 405,
+      y: 410,
+      size: 9,
+    }
+  );
+  page.drawText(`•	Etwaige Materialkosten`, {
+      x: 420,
+      y: 410,
+      size: 9,
+    }
+  );
+  page.drawText(`•	Arbeitszeit pauschal, egal wie lange es dauert`, {
+      x: 30,
+      y: 400,
+      size: 9,
+    }
+  );
+  page.drawText(`•	Reparaturen`, {
+    x: 420,
+    y: 400,
+    size: 9,
+  }
+);
+  page.drawText(`•	Anfahrt Wien`, {
+      x: 30,
+      y: 390,
       size: 9,
     }
   );
   page.drawText(
     "Alle Preise verstehen sich inkl. 20% USt. Preisänderungen vorbehalten.",
     {
-      x: 170,
+      x: 150,
       y: 312,
       size: 9,
     }
@@ -247,7 +274,8 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page.drawText(
- `• 12 Monate Garantie auf Abgaswerte                                           sätze abends, Sa/So/Feiertags, Heizungstörung, Ab-       
+ `
+  • 12 Monate Garantie auf Abgaswerte                                           sätze abends, Sa/So/Feiertags, Heizungstörung, Ab-       
   •	Reparaturen innerhalb 24h                                                   flussverstopfung, Rohrbruch, Sanitär...
   •	Reparaturen innerhalb 24h                                                   Jedoch werden unsere Weg- und Arbeitszeit zu Prei-
   •	Keinen Überstundenaufschlag für Notdienstein-                               sen von normalen Öffnungszeiten verrechnet.                                                                       
