@@ -40,7 +40,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page2.drawText(
-   `
+    `
     •   Die Wartungsvereinbarung ist am PC, Tablet oder Smartphone ausfüllbar, mit der Original Adobe Acrobat
         Reader App lässt sich auch eine Unterschrift mit dem Finger, Stift oder Maus oder eine 
         digitale Signatur hinzufügen.
@@ -63,7 +63,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page2.drawText(
-   `
+    `
     •	Auf einem Touch-Monitor, Tablet oder Smartphone kann mit zugehörigem Stift oder Finger direkt unterschrieben
         werden, scrollen Sie zu und vergrößern Sie das Unterschriftenfeld, Stift oder Finger 2 Sekun-
         den gedrückt halten und „Unterschift hinzufügen“ auswählen. Am PC auf „Ausfüllen und Unterschrei- 
@@ -99,7 +99,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
   page2.drawText(
-   `
+    `
     •	Einen unterschriebenen Ausdruck einem B-GAS Mitarbeiter mitgeben, den anderen Ausdruck behalten
     •	Oder Wartungsvereinbarung im 90° Winkel von oben mit dem Smartphone fotografieren, Foto und ge-
         speichertes PDF (zwecks Lesbarkeit) per E-Mail an office@b-gas.at senden oder per Whatsapp an
@@ -120,17 +120,17 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     height: image.height * 0.3,
     opacity: 1,
   });
-    const currentDate = new Date();
-    const date = currentDate.getDate();
-    const month = currentDate.getMonth();
-    const year = currentDate.getFullYear();
-    const dateString = `${date}/${month}/${year}`;
-    page.drawText(dateString, {
-      x: 40,
-      y: 30,
-      size: 12,
-      font: timesRomanBoldFont,
-    });
+  const currentDate = new Date();
+  const date = currentDate.getDate();
+  const month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+  const dateString = `${date}/${month}/${year}`;
+  page.drawText(dateString, {
+    x: 35,
+    y: 40,
+    size: 12,
+    font: timesRomanBoldFont,
+  });
   page.drawText(contact.first_name + " " + contact.last_name, {
     x: 40,
     y: 650,
@@ -182,11 +182,14 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     y: 520,
     size: 9,
   });
-  page.drawText("*Brennerdichtung (€ 60 - € 90) im Preis bereits enthalten, andere Geräte benötigen diese nicht.", {
-    x: 100,
-    y: 500,
-    size: 9,
-  });
+  page.drawText(
+    "*Brennerdichtung (€ 60 - € 90) im Preis bereits enthalten, andere Geräte benötigen diese nicht.",
+    {
+      x: 100,
+      y: 500,
+      size: 9,
+    }
+  );
 
   page.drawText("Aufpreis für Wegzeit Niederösterreich", {
     x: 195,
@@ -195,94 +198,77 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     font: timesRomanBoldFont,
   });
 
-  page.drawText(
-    `Bis ca. 30 min Fahrt € 20`,
-    {
-      x: 35,
-      y: 450,
-      size: 9,
-    }
-  );
-  page.drawText(
-    `Bis ca. 60 min Fahrt	€ 55`,
-    {
-      x: 440,
-      y: 450,
-      size: 9,
-    }
-  );
-  page.drawText(
-    "Im Preis enthalten",
-    {
-      x: 70,
-      y: 430,
-      size: 10,
-      font: timesRomanBoldFont,
-    }
-  );
-  page.drawText(
-    "Nicht im Preis enthalten",
-    {
-      x: 420,
-      y: 430,
-      size: 10,
-      font: timesRomanBoldFont,
-    }
-  );
+  page.drawText(`Bis ca. 30 min Fahrt € 20`, {
+    x: 35,
+    y: 450,
+    size: 9,
+  });
+  page.drawText(`Bis ca. 60 min Fahrt	€ 55`, {
+    x: 440,
+    y: 450,
+    size: 9,
+  });
+  page.drawText("Im Preis enthalten", {
+    x: 70,
+    y: 430,
+    size: 10,
+    font: timesRomanBoldFont,
+  });
+  page.drawText("Nicht im Preis enthalten", {
+    x: 420,
+    y: 430,
+    size: 10,
+    font: timesRomanBoldFont,
+  });
   page.drawText(`•	Komplette Wartung während Öffnungszeiten`, {
-      x: 30,
-      y: 410,
-      size: 9,
-    }
-  );
+    x: 30,
+    y: 410,
+    size: 9,
+  });
   page.drawText(`•	Etwaige Materialkosten`, {
-      x: 420,
-      y: 410,
-      size: 9,
-    }
-  );
+    x: 420,
+    y: 410,
+    size: 9,
+  });
   page.drawText(`•	Arbeitszeit pauschal, egal wie lange es dauert`, {
-      x: 30,
-      y: 400,
-      size: 9,
-    }
-  );
+    x: 30,
+    y: 390,
+    size: 9,
+  });
   page.drawText(`•	Reparaturen`, {
     x: 420,
-    y: 400,
+    y: 390,
     size: 9,
-  }
-);
+  });
   page.drawText(`•	Anfahrt Wien`, {
-      x: 30,
-      y: 390,
-      size: 9,
-    }
-  );
+    x: 30,
+    y: 370,
+    size: 9,
+  });
   page.drawText(
     "Alle Preise verstehen sich inkl. 20% USt. Preisänderungen vorbehalten.",
     {
       x: 150,
-      y: 312,
+      y: 340,
       size: 9,
     }
   );
   page.drawText("Bonus", {
     x: 265,
-    y: 295,
+    y: 310,
     size: 12,
     font: timesRomanBoldFont,
   });
   page.drawText(
- `
-  • 12 Monate Garantie auf Abgaswerte                                           sätze abends, Sa/So/Feiertags, Heizungstörung, Ab-       
+    `
+  • 12 Monate Garantie auf Abgaswerte                                          sätze abends, Sa/So/Feiertags, Heizungstörung, Ab-       
   •	Reparaturen innerhalb 24h                                                   flussverstopfung, Rohrbruch, Sanitär...
   •	Reparaturen innerhalb 24h                                                   Jedoch werden unsere Weg- und Arbeitszeit zu Prei-
-  •	Keinen Überstundenaufschlag für Notdienstein-                               sen von normalen Öffnungszeiten verrechnet.                                                                       
+  •	Keinen Überstundenaufschlag für Notdienstein-                           sen von normalen Öffnungszeiten verrechnet.                                                                       
 `,
     {
       x: 35,
-      y: 280,
+      y: 290,
       size: 10,
     }
   );
