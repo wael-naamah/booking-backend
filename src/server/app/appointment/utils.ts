@@ -264,7 +264,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     size: 10,
   });
   page.drawText(`sätze abends, Sa/So/Feiertags, Heizungstörung, Ab-`, {
-    x: 400,
+    x: 370,
     y: 295,
     size: 10,
   });
@@ -274,7 +274,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     size: 10,
   });
   page.drawText(`flussverstopfung, Rohrbruch, Sanitär...`, {
-    x: 400,
+    x: 370,
     y: 275,
     size: 10,
   });
@@ -284,7 +284,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     size: 10,
   });
   page.drawText(`Jedoch werden unsere Weg- und Arbeitszeit zu Prei`, {
-    x: 400,
+    x: 370,
     y: 255,
     size: 10,
   });
@@ -294,7 +294,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     size: 10,
   });
   page.drawText(`sen von normalen Öffnungszeiten verrechnet.`, {
-    x: 400,
+    x: 370,
     y: 235,
     size: 10,
   });
