@@ -64,7 +64,8 @@ export class AuthService {
           ...userByEmail._doc,
           token,
           refreshToken,
-          role: "user",
+          // @ts-ignore
+          role: userByEmail?._doc?.role || "user"
         };
 
         return user;
