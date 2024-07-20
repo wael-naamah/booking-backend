@@ -7,11 +7,15 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
   const pdfBytes = fs.readFileSync("./template/Wartungsvereinbarung.pdf");
   const pdfDoc = await PDFDocument.load(pdfBytes);
   const page = pdfDoc.getPages()[0];
-  const base64Image = contact.sign_url!.split(";base64,").pop();
+  let base64Image = undefined;
+  let image = undefined;
   let contractLink = undefined;
-  const emailConfig = await getService().emailService.getEmailConfig();
+  if (contact.sign_url) {
+    base64Image = contact.sign_url!.split(";base64,").pop();
+    image = await pdfDoc.embedPng(Buffer.from(base64Image!, "base64"));
+  }
 
-  const image = await pdfDoc.embedPng(Buffer.from(base64Image!, "base64"));
+  const emailConfig = await getService().emailService.getEmailConfig();
   const page2 = pdfDoc.getPages()[1];
   const timesRomanBoldFont = await pdfDoc.embedFont(
     StandardFonts.TimesRomanBold
@@ -112,24 +116,35 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
       size: 10,
     }
   );
-  page.drawImage(image, {
-    x: 400,
-    y: 10,
-    width: image.width * 0.3,
-    height: image.height * 0.3,
-    opacity: 1,
-  });
+  if (image) {
+    page.drawImage(image, {
+      x: 400,
+      y: 10,
+      width: image.width * 0.3,
+      height: image.height * 0.3,
+      opacity: 1,
+    });
+  }
   const currentDate = new Date();
   const date = currentDate.getDate();
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
   const dateString = `${date}/${month}/${year}`;
-  page.drawText(dateString, {
-    x: 35,
-    y: 40,
-    size: 12,
-    font: timesRomanBoldFont,
-  });
+  if (image) {
+    page.drawText(dateString, {
+      x: 35,
+      y: 40,
+      size: 12,
+      font: timesRomanBoldFont,
+    });
+  }
+  if (contact.title) {
+    page.drawText(contact.title, {
+      x: 165,
+      y: 677.5,
+      size: 8,
+    });
+  }
   page.drawText(contact.first_name + " " + contact.last_name, {
     x: 40,
     y: 650,
@@ -203,12 +218,12 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     size: 9,
   });
   page.drawText(`Bis ca. 60 min Fahrt	€ 55`, {
-    x: 440,
+    x: 420,
     y: 450,
     size: 9,
   });
   page.drawText("Im Preis enthalten", {
-    x: 70,
+    x: 35,
     y: 430,
     size: 10,
     font: timesRomanBoldFont,
@@ -264,7 +279,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     size: 10,
   });
   page.drawText(`sätze abends, Sa/So/Feiertags, Heizungstörung, Ab-`, {
-    x: 370,
+    x: 350,
     y: 295,
     size: 10,
   });
@@ -274,7 +289,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     size: 10,
   });
   page.drawText(`flussverstopfung, Rohrbruch, Sanitär...`, {
-    x: 370,
+    x: 350,
     y: 275,
     size: 10,
   });
@@ -284,7 +299,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     size: 10,
   });
   page.drawText(`Jedoch werden unsere Weg- und Arbeitszeit zu Prei`, {
-    x: 370,
+    x: 350,
     y: 255,
     size: 10,
   });
@@ -294,7 +309,7 @@ export async function uploadCotract(contact: Contact, form: Appointment) {
     size: 10,
   });
   page.drawText(`sen von normalen Öffnungszeiten verrechnet.`, {
-    x: 370,
+    x: 350,
     y: 235,
     size: 10,
   });
@@ -335,6 +350,71 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
 
     const responseData = await response.json();
     contractLink = responseData.link;
+
+    const createHtmlTemplateForSign = () => {
+      return `
+             <!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Responsive Email Template</title>
+</head>
+<body style="font-family: 'Poppins', Arial, sans-serif">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+         <td align="center" style="padding: 20px;">
+             <table class="content" width="600" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse; border: 1px solid #cccccc;">
+                 <!-- Header -->
+                 <tr>
+                     <td class="header" style="background-color: #345C72; padding: 40px; text-align: center; color: white; font-size: 24px;">
+                      B-gaz Email Template
+                     </td>
+                 </tr>
+                 <!-- Body -->
+                 <tr>
+                     <td class="body" style="padding: 40px; text-align: left; font-size: 16px; line-height: 1.6;">
+                         Hello, All! <br>
+                         Lorem odio soluta quae dolores sapiente voluptatibus recusandae aliquam fugit ipsam. <br><br>
+                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam corporis sint eum nemo animi velit exercitationem impedit.
+                     </td>
+                 </tr>
+                 <!-- Call to Action Button -->
+                 <tr>
+                     <td style="padding: 0px 40px 0px 40px; text-align: center;">
+                         <!-- CTA Button -->
+                         <table cellspacing="0" cellpadding="0" style="margin: auto;">
+                             <tr>
+                                 <td align="center" style="background-color: #345C72; padding: 10px 20px; border-radius: 5px;">
+                                     <a  href="https://bgas-kalender.at/sign_contra/?first_name=${
+                                       contact.first_name
+                                     }&last_name=${contact.last_name}&email=${
+        contact.email
+      }&phone_number=${contact.telephone}&location=${contact.address}&gender=${
+        contact.salutation
+      }&zip_code=${
+        contact.zip_code ?? ""
+      }" target="_blank" style="color: #ffffff; text-decoration: none; font-weight: bold;">Make a Signiture</a>
+                                 </td>
+                             </tr>
+                         </table>
+                     </td>
+                 </tr>
+                 <!-- Additional Content -->
+                 <tr>
+                     <td class="body" style="padding: 40px; text-align: left; font-size: 16px; line-height: 1.6;">
+                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam corporis sint eum nemo animi velit exercitationem impedit.
+                     </td>
+                 </tr>
+             </table>
+         </td>
+     </tr>
+ </table>
+</body>
+</html>
+
+             `;
+    };
 
     const createHtmlTemplate = () => {
       return `
@@ -394,7 +474,9 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
     getService().emailService.sendMail({
       to: contact.email,
       subject: "B-Gas Vertrag",
-      text: createHtmlTemplate(),
+      text: contact.sign_url
+        ? createHtmlTemplate()
+        : createHtmlTemplateForSign(),
       attachments: [
         {
           filename: "contract.pdf",

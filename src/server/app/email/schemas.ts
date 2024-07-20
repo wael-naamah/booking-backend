@@ -50,9 +50,7 @@ const getEmailTemplatesSchema = Joi.object().keys({
 });
 
 const emailContraSchema = Joi.object().keys({
-  content1: Joi.string().required(),
-  content2: Joi.string().required(),
-  content3: Joi.string().required(),
+  selected_devices: Joi.string().required(),
   title: Joi.string(),
   name: Joi.string().required(),
   street_number: Joi.string().required(),
@@ -61,10 +59,8 @@ const emailContraSchema = Joi.object().keys({
   device_type: Joi.string().required(),
   address: Joi.string().required(),
   mobile_number: Joi.string().required(),
-  device_type2: Joi.string().optional().allow(""),
   email: Joi.string().required(),
-  tester: Joi.string(),
-  gander: Joi.string().required(),
+  gender: Joi.string().required(),
 });
 
 

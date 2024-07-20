@@ -12,6 +12,7 @@ export interface Contact {
   email: string;
   password?: string;
   contract_link?: string;
+  title?: string;
   sign_url?: string;
   note_on_address?: string;
   newsletter?: boolean;
