@@ -94,6 +94,7 @@ const signValidationSchema = Joi.object().keys({
   last_name: Joi.string().required(),
   first_name: Joi.string().required(),
   location: Joi.string(),
+  password: Joi.string().required(),
   address: Joi.string(),
   zip_code: Joi.string(),
   gender: Joi.string().required(),
