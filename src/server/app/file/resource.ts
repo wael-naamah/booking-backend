@@ -66,15 +66,16 @@ export const configure = (app: express.Router) => {
     }
   );
 
-  app.get("/files/download/:filename", async (req, res) => {
+  app.get("/files/download/:path/:filename", async (req, res) => {
     try {
       const downloadFileName = req.params.filename;
+      const downloadFilePath = req.params.path;
       const options = {
         destination: downloadFileName,
       };
       const bucket = admin.storage().bucket("gs://b-gas-13308.appspot.com");
 
-      await bucket.file("services/" + downloadFileName).download(options);
+      await bucket.file(downloadFilePath + '/' + downloadFileName).download(options);
       return res.download(downloadFileName);
     } catch (err) {
       res.status(500).json({ message: "Error downloading the file." });

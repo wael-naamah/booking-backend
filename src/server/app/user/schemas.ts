@@ -4,7 +4,7 @@ import { UserRole } from "../../../database-client";
 const signinSchema = Joi.object().keys({
   email: Joi.string().email().required(),
   password: Joi.string().required().allow(""),
-})
+});
 
 const signupSchema = Joi.object().keys({
   password: Joi.string()
@@ -44,10 +44,9 @@ const signupSchema = Joi.object().keys({
   }).optional(),
 });
 
-
 const refreshTokenSchema = Joi.object().keys({
   refreshToken: Joi.string().required().allow(""),
-})
+});
 
 const resetPasswordSchema = Joi.object().keys({
   email: Joi.string().email().required(),
@@ -65,11 +64,11 @@ const resetPasswordSchema = Joi.object().keys({
           "must contain at least 1 lower-case, 1 upper-case, 1 special character and 1 number",
       },
     }),
-})
+});
 
 const forgotPasswordSchema = Joi.object().keys({
   email: Joi.string().email().required(),
-})
+});
 
 const resetContactPasswordSchema = Joi.object().keys({
   token: Joi.string().required(),
@@ -88,11 +87,24 @@ const resetContactPasswordSchema = Joi.object().keys({
     }),
 });
 
+const signValidationSchema = Joi.object().keys({
+  sign_url: Joi.string().required(),
+  email: Joi.string().required(),
+  phone_number: Joi.string().required(),
+  last_name: Joi.string().required(),
+  first_name: Joi.string().required(),
+  location: Joi.string(),
+  address: Joi.string(),
+  zip_code: Joi.string(),
+  gender: Joi.string().required(),
+});
+
 export default {
   signupSchema,
   signinSchema,
   refreshTokenSchema,
   resetPasswordSchema,
   forgotPasswordSchema,
-  resetContactPasswordSchema
+  resetContactPasswordSchema,
+  signValidationSchema,
 };

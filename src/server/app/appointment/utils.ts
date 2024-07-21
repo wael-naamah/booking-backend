@@ -390,7 +390,7 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
                                        contact.first_name
                                      }&last_name=${contact.last_name}&email=${
         contact.email
-      }&phone_number=${contact.telephone}&location=${contact.address}&gender=${
+      }&phone_number=${contact.telephone}&location=${contact.location}&address=${contact.address}&gender=${
         contact.salutation
       }&zip_code=${
         contact.zip_code ?? ""
@@ -508,4 +508,13 @@ Daten gemäß DSGVO. Informationen zum Datenschutz finden Sie auf www.installate
   }
 
   return contractLink;
+}
+
+export async function downloadFile(url: string) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to download file: ${response.statusText}`);
+  }
+  const arrayBuffer = await response.arrayBuffer();
+  return Buffer.from(arrayBuffer);
 }

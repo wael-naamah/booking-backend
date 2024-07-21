@@ -45,4 +45,11 @@ export const configure = (app: express.Router) => {
     passwordHashHandler,
     UserControllers.resetContactPassword
   );
+  app.post(
+    "/user/sign",
+    injectService,
+    ValidateSchema.prepare(schemas.signValidationSchema),
+    passwordHashHandler,
+    UserControllers.signUser
+  );
 };
