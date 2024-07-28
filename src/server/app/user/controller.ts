@@ -244,7 +244,7 @@ class UserControllers {
         );
 
         page.drawImage(image, {
-            x: 430,
+            x: 400,
             y: 10,
             width: image.width * 0.3,
             height: image.height * 0.3,
@@ -253,7 +253,7 @@ class UserControllers {
 
         const currentDate = new Date();
         const date = currentDate.getDate();
-        const month = currentDate.getMonth();
+        const month = currentDate.getMonth() + 1;
         const year = currentDate.getFullYear();
         const dateString = `${date}/${month}/${year}`;
         page.drawText(dateString, {

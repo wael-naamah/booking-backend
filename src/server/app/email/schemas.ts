@@ -51,7 +51,7 @@ const getEmailTemplatesSchema = Joi.object().keys({
 
 const emailContraSchema = Joi.object().keys({
   selected_devices: Joi.string().required(),
-  title: Joi.string(),
+  title: Joi.string().optional().allow(""),
   name: Joi.string().required(),
   street_number: Joi.string().required(),
   year: Joi.string(),
