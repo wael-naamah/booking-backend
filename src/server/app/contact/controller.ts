@@ -174,7 +174,7 @@ class ContactsControllers {
     // #swagger.tags = ['Contact'];
 
     /*
-        #swagger.description = 'Endpoint to delete contact';
+        #swagger.description = 'Endpoint to delete contact and associated appointments';
          #swagger.parameters['obj'] = {
                      in: 'body',
                      schema: {
@@ -184,24 +184,28 @@ class ContactsControllers {
         }
         #swagger.responses[200] = {
             schema: {
-                user: {
-                    iss: "",
-                    aud: "",
-                },
-                refreshToken: '',
-                token: '',
+                status: 'success',
+                deletedAppointments: 0
              }
         }
         */
     const service = (request as any).service as ServiceContainer;
-    const data = await service.contactService.deleteContact(
-      request.params.contactId
-    );
+    const contactId = request.params.contactId;
+
+    // Delete associated appointments
+    const appointments = await service.appointmentService.getAppointmentsByContactId(contactId);
+    let deletedAppointments = 0;
+    for (const appointment of appointments) {
+      await service.appointmentService.deleteAppointment(appointment._id!);
+      deletedAppointments++;
+    }
+
+    const data = await service.contactService.deleteContact(contactId);
 
     if (data) {
-      res.json({ status: "success" });
+      res.json({ status: "success", deletedAppointments });
     } else {
-      res.json({ status: "faild" });
+      res.status(404).json({ status: "failed", message: "Contact not found" });
     }
   }
 
