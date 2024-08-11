@@ -72,16 +72,10 @@ export class AppointmentDaoMongo implements AppointmentDao {
   }
 
 
-  async deleteAppointment(_: string) {
-    const excludedIds = ['66a250bca0db952fefc5269f', '66b362e54b66472155e2a96e', '66b363fd4b66472155e2a9f4'];
-    return this.model.deleteMany({ _id: { $nin: excludedIds } }).then((res) => {
-      console.log(res);
-      return res.deletedCount;
+  async deleteAppointment(id: string) {   
+    return this.model.findByIdAndDelete(id).then((res) => {
+      return res as unknown as Appointment;
     });
-   
-    // return this.model.findByIdAndDelete(id).then((res) => {
-    //   return res as unknown as Appointment;
-    // });
   }
 
   async getDueReminderAppointments() {
