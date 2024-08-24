@@ -53,6 +53,11 @@ export const schema = new mongoose.Schema(
       required: true,
       default: AppointmentStatus.Confirmed,
     },
+    archived: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     brand_of_device: String,
     model: String,
     exhaust_gas_measurement: Boolean,

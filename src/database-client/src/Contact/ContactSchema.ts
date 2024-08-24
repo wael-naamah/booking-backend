@@ -47,6 +47,11 @@ export const schema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    archived: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     // unique: true, TODO: need to discuss the requirements
     note_on_address: String,
     newsletter: Boolean,

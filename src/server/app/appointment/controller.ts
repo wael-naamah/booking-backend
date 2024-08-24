@@ -121,6 +121,7 @@ class AppointmentsControllers {
         remarks: form.remarks || undefined,
         employee_attachments: form.employee_attachments || undefined,
         appointment_status: form.appointment_status || AppointmentStatus.Confirmed,
+        archived: form.archived || false,
         employee_remarks: form.employee_remarks || undefined,
         company_remarks: form.company_remarks || undefined,
         created_by: form.created_by || undefined,

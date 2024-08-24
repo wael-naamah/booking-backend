@@ -22,14 +22,27 @@ const createConnection = (uri: string) => {
 };
 
 let connection: mongoose.Connection;
+let kalendarConnection: mongoose.Connection;
 
-export const getMongo = (): mongoose.Connection => {
-    if (!connection) {
-        const uri = getEnv().env === 'development'? getEnv().mongoUri : `mongodb://${getEnv().mongoUsername}:${getEnv().mongoPassword}@${getEnv().mongoHost}:${getEnv().mongoPort}/${getEnv().database}?directconnection=true&authSource=admin&replicaSet=replicaset&retryWrites=true`;
-        connection = createConnection(uri)
+export const getMongo = (kalender?: boolean): mongoose.Connection => {
+    if (kalender) {
+        if (!kalendarConnection) {
+            const uri = getEnv().env === 'development' ? getEnv().mongoUri : `mongodb://${getEnv().mongoUsername}:${getEnv().mongoPassword}@${getEnv().mongoHost}:${getEnv().mongoPort}/${getEnv().database_kalendar}?directconnection=true&authSource=admin&replicaSet=replicaset&retryWrites=true`;
+            kalendarConnection = createConnection(uri);
+        }
+        if (kalendarConnection) {
+            return kalendarConnection;
+        }
+        throw new ClientError('Kalendar Database connection error: ', 400);
+    } else {
+        if (!connection) {
+            const uri = getEnv().env === 'development' ? getEnv().mongoUri : `mongodb://${getEnv().mongoUsername}:${getEnv().mongoPassword}@${getEnv().mongoHost}:${getEnv().mongoPort}/${getEnv().database}?directconnection=true&authSource=admin&replicaSet=replicaset&retryWrites=true`;
+            connection = createConnection(uri)
+        }
+        if (connection) {
+            return connection;
+        }
+        throw new ClientError('Database connection error: ', 400);
     }
-    if (connection) {
-        return connection;
-    }
-    throw new ClientError('Database connection error: ', 400);
 };
+

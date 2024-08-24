@@ -48,6 +48,7 @@ const addAppointmentSchema = Joi.object().keys({
   appointment_status: Joi.string()
   .valid(...Object.values(AppointmentStatus))
   .optional(),
+  archived: Joi.boolean().optional(),
   remarks: Joi.string().optional(),
   attachments: Joi.array().items(attachmentSchema),
   employee_remarks: Joi.string().optional().allow(""),
@@ -82,6 +83,7 @@ const updateAppointmentSchema = Joi.object().keys({
   appointment_status: Joi.string()
   .valid(...Object.values(AppointmentStatus))
   .optional(),
+  archived: Joi.boolean().optional(),
   remarks: Joi.string().optional(),
   attachments: Joi.array().items(attachmentSchema),
   employee_remarks: Joi.string().optional().allow(""),

@@ -11,6 +11,7 @@ export interface Contact {
   phone_numbber_3?: string;
   email: string;
   password?: string;
+  archived?: boolean;
   contract_link?: string;
   title?: string;
   sign_url?: string;

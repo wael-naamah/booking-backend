@@ -187,6 +187,7 @@ export const configure = (app: express.Router) => {
             employee_remarks: item.Mitarbeiterbemerkungen || item.employee_remarks || undefined,
             company_remarks: item.Firmenbemerkungen || item.company_remarks || undefined,
             appointment_status: item.Status || item.appointment_status || AppointmentStatus.Confirmed,
+            archived: item.Archiviert || item.archived || false,
             ended_at: item.Abgelaufen || item.ended_at || undefined,
             created_by: item.ErstelltVon || item.created_by || undefined,
           });

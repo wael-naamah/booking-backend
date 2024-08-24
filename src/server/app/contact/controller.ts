@@ -8,6 +8,7 @@ import {
 } from "../../../database-client/src/Schema";
 import { PaginatedResponse } from "../category/dto";
 import { hashPassword } from "../middlewares/authMiddleware";
+import { backupDatabase } from "../dbbackup";
 
 class ContactsControllers {
   @tryCatchErrorDecorator
@@ -157,6 +158,12 @@ class ContactsControllers {
     );
 
     if (existingContact) {
+        const appointments = await service.appointmentService.getAppointmentsByContactId(contactId);
+        let updatedAppointments = 0;
+        for (const appointment of appointments) {
+          await service.appointmentService.updateAppointment(appointment._id!, { ...appointment, contact_id: contactId, archived: form.archived });
+          updatedAppointments++;
+        }
       const data = await service.contactService.updateContact(contactId, form);
 
       res.status(200).json(data);
@@ -249,6 +256,16 @@ class ContactsControllers {
     } else {
       res.status(404).json({ messege: "Contact not found" });
     }
+  }
+
+  @tryCatchErrorDecorator
+  static async syncContacts(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const data = backupDatabase();
+    res.status(200).json(data);
   }
 }
 

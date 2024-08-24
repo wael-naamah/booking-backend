@@ -9,6 +9,7 @@ export interface Env {
   mongoHost: string;
   mongoPort: string;
   database: string;
+  database_kalendar: string;
   jwt_secret_key: string;
   jwt_refresh_secret_key: string;
   firebase_project_Id: string;

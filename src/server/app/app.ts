@@ -22,6 +22,7 @@ import { getEnv } from "../env";
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "../swagger/swagger_output.json";
 import reminderJob from "./reminderJob";
+import dbbackup from "./dbbackup";
 
 
 const serviceAccount = {
@@ -36,6 +37,7 @@ const cors = require("cors")({ origin: true });
 export const app = express();
 
 reminderJob();
+dbbackup();
 
 app.use(
   helmet({

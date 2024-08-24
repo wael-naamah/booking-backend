@@ -28,15 +28,15 @@ export interface ServiceContainer {
   emailService: EmailService;
 }
 
-const createContainer = () => {
-  const userDao = new UserDaoMongo(getMongo());
-  const categoryDao = new CategoryDaoMongo(getMongo());
-  const appointmentDao = new AppointmentDaoMongo(getMongo());
-  const contactDao = new ContactDaoMongo(getMongo());
-  const calendarDao = new CalendarDaoMongo(getMongo());
-  const scheduleDao = new ScheduleDaoMongo(getMongo());
-  const emailConfigDao = new EmailConfigDaoMongo(getMongo());
-  const emailTemplateDao = new EmailTemplateDaoMongo(getMongo());
+const createContainer = (kalender?: boolean) => {
+  const userDao = new UserDaoMongo(getMongo(kalender));
+  const categoryDao = new CategoryDaoMongo(getMongo(kalender));
+  const appointmentDao = new AppointmentDaoMongo(getMongo(kalender));
+  const contactDao = new ContactDaoMongo(getMongo(kalender));
+  const calendarDao = new CalendarDaoMongo(getMongo(kalender));
+  const scheduleDao = new ScheduleDaoMongo(getMongo(kalender));
+  const emailConfigDao = new EmailConfigDaoMongo(getMongo(kalender));
+  const emailTemplateDao = new EmailTemplateDaoMongo(getMongo(kalender));
 
 
   const authService = new AuthService(userDao, contactDao, calendarDao);
@@ -68,7 +68,12 @@ const createContainer = () => {
 };
 
 const service = createContainer();
+const serviceKalender = createContainer(true);
 
 export const getService = () => {
   return service;
+};
+
+export const getServiceKalender = () => {
+  return serviceKalender;
 };
