@@ -48,9 +48,9 @@ export const configure = (app: express.Router) => {
     // checkAuth,
     ContactsControllers.sendContactCredentials
   );
-  app.get(
-    "/contacts/sync",
+  app.post(
+    "/contacts-sync",
     injectService,
-    ContactsControllers.syncContacts,
+    ContactsControllers.syncContacts
   );
 };
