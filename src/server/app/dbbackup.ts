@@ -3,7 +3,8 @@ import { exec } from "child_process";
 import { getEnv } from "../env";
 
 // Function to perform database backup
-export const backupDatabase = () => {
+export const backupDatabase = async () => {
+  console.info("Backup started...");
   const sourceDb = getEnv().database;
   const targetDb = getEnv().database_kalendar;
 
@@ -22,14 +23,19 @@ export const backupDatabase = () => {
   }:${getEnv().mongoPassword}@${getEnv().mongoHost}:${getEnv().mongoPort}/${
     getEnv().database
   }?directconnection=true&authSource=admin&replicaSet=replicaset&retryWrites=true" --db=${targetDb} --archive --drop`;
+  console.log(backupCommand);
 
   exec(backupCommand, (error, stdout, stderr) => {
     if (error) {
       console.error(`Database backup error: ${error}`);
-      return { status: "error", message: error };
     }
-    console.error(`Database backup stderr: ${stderr}`);
-    return { status: "success", message: stderr };
+    console.log(`Database backup stderr: ${stderr}`);
+  }).on("exit", (code) => {
+    if (code === 0) {
+      console.info("Backup completed successfully.");
+    } else {
+      console.error(`Backup failed with code ${code}`);
+    }
   });
 };
 

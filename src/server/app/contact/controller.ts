@@ -264,8 +264,8 @@ class ContactsControllers {
     res: Response,
     next: NextFunction
   ) {
-    const data = backupDatabase();
-    res.status(200).json(data);
+    await backupDatabase();
+    res.status(200).json({ status: "success", message: "Database backup completed" });
   }
 }
 
