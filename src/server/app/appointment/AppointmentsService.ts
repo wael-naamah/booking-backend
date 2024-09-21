@@ -190,6 +190,17 @@ export class AppointmentsService {
       });
   }
 
+  async deleteAllAppointments() {
+    return this.appointmentDao
+      .deleteAllAppointments()
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        throw new ClientError(err, 500);
+      });
+  }
+
   async getTimeSlots(date: string, category_id?: string, service_id?: string) {
     let serviseDuration = 60;
     if (category_id && service_id) {

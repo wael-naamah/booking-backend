@@ -555,6 +555,44 @@ class AppointmentsControllers {
       res.status(200).json([]);
     }
   }
+
+  @tryCatchErrorDecorator
+  static async deleteAllAppointments(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    // #swagger.tags = ['Appointment'];
+
+    /*
+        #swagger.description = 'Endpoint to delete all appointments';
+         #swagger.parameters['obj'] = {
+                     in: 'body',
+                     schema: {
+                        $email: '',
+                        $password: '',
+                    },
+        }
+        #swagger.responses[200] = {
+            schema: {
+                user: {
+                    iss: "",
+                    aud: "",
+                },
+                refreshToken: '',
+                token: '',
+             }
+        }
+        */
+    const service = (request as any).service as ServiceContainer;
+    const data = await service.appointmentService.deleteAllAppointments();
+
+    if (data) {
+      res.json({ status: "success" });
+    } else {
+      res.json({ status: "faild" });
+    }
+  }
 }
 
 export default AppointmentsControllers;

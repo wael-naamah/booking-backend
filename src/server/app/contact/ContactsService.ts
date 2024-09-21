@@ -54,6 +54,21 @@ export class ContactsService {
       });
   }
 
+  async deleteAllContacts() {
+    return this.contactDao
+      .deleteAllContacts()
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        throw new ClientError(
+          err,
+          500
+        );
+     });
+  }
+
+
   async getContacts(page: number, limit: number, search?: string) {
     const [data, count] = await Promise.all([
       this.contactDao.getContacts(page, limit, search).then((data) => {

@@ -111,6 +111,10 @@ export class ContactDaoMongo implements ContactDao {
       });
   }
 
+  async deleteAllContacts() {
+    return this.model.deleteMany({});
+  }
+
   async deleteContact(id: string) {
     return this.model.findByIdAndDelete(id).then((res) => {
       return res as unknown as Contact;

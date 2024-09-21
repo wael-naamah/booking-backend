@@ -267,6 +267,22 @@ class ContactsControllers {
     await backupDatabase();
     res.status(200).json({ status: "success", message: "Database backup completed" });
   }
+
+  @tryCatchErrorDecorator
+  static async deleteAllContacts(
+    request: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const service = (request as any).service as ServiceContainer;
+    const data = await service.contactService.deleteAllContacts();
+
+    if (data) {
+      res.json({ status: "success" });
+    } else {
+      res.json({ status: "faild" });
+    }
+  }
 }
 
 export default ContactsControllers;

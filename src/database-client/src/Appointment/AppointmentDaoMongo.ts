@@ -78,6 +78,10 @@ export class AppointmentDaoMongo implements AppointmentDao {
     });
   }
 
+  async deleteAllAppointments() {
+    return this.model.deleteMany({});
+  }
+
   async getDueReminderAppointments() {
     const today = moment().startOf("day");
     const tomorrow = moment().add(1, "days").startOf("day");

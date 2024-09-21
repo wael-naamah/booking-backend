@@ -53,4 +53,9 @@ export const configure = (app: express.Router) => {
     injectService,
     ContactsControllers.syncContacts
   );
+  app.delete(
+    "/contacts-delete-all",
+    injectService,
+    ContactsControllers.deleteAllContacts
+  );
 };

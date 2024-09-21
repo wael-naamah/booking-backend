@@ -56,4 +56,9 @@ export const configure = (app: express.Router) => {
     ValidateSchema.prepare(schemas.getTimeSlotsSchema, "query"),
     AppointmentsControllers.getTimeSlots
   );
+  app.delete(
+    "/appointments-delete-all",
+    injectService,
+    AppointmentsControllers.deleteAllAppointments
+  );
 };
