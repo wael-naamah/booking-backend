@@ -83,7 +83,7 @@ class AppointmentsControllers {
       if (newContact && newContact._id) {
         conatctId = newContact._id;
         // @ts-ignore
-        contactObg = newContact._doc;
+        contactObg = newContact;
         getService().emailService.sendMail({
           to: contact.email,
           subject: newContactSubject,
@@ -134,7 +134,8 @@ class AppointmentsControllers {
 
       // @ts-ignore
       const dataObject = { ...data._doc };
-      const contactObject = { ...contactObg };
+      // @ts-ignore
+      const contactObject = { ...contactObg._doc };
 
       const dataWithContact = {
         ...dataObject,
